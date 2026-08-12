@@ -10,8 +10,8 @@ export default function Home() {
     <>
       <Hero />
       <AboutStrip />
-      <UpcomingEvents />
       <SmallGroupsPreview />
+      <UpcomingEvents />
       <ScriptureBanner />
       <CallToAction />
     </>

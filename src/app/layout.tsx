@@ -3,6 +3,9 @@ import localFont from "next/font/local";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { brand } from "@/lib/brand";
+import { SmoothScroll } from "@/components/animation/SmoothScroll";
+import { LightOrb } from "@/components/animation/LightOrb";
+import { ScrollProgress } from "@/components/animation/ScrollProgress";
 import "./globals.css";
 
 const aileron = localFont({
@@ -47,9 +50,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={aileron.variable}>
       <body className="min-h-screen bg-slu-offwhite text-slu-black antialiased">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <ScrollProgress />
+        <LightOrb />
+        <SmoothScroll>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </SmoothScroll>
       </body>
     </html>
   );

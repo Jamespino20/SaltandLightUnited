@@ -25,7 +25,12 @@ const footerLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-slu-gray-800 bg-slu-black text-white">
+    <footer className="relative isolate overflow-hidden border-t border-slu-gray-800 bg-slu-black text-white">
+      {/* returning light at the very end of the journey */}
+      <div
+        aria-hidden
+        className="absolute left-1/2 top-0 -z-10 h-64 w-64 -translate-x-1/2 rounded-full bg-amber-200/20 blur-3xl"
+      />
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {/* Brand */}
@@ -67,8 +72,13 @@ export function Footer() {
           ))}
         </div>
 
+        {/* Final narrative echo — the loop closes */}
+        <p className="mt-10 text-center text-sm font-semibold tracking-wide text-amber-100/90">
+          Be the Light. &nbsp; Be the Salt.
+        </p>
+
         {/* Bottom */}
-        <div className="mt-10 border-t border-slu-gray-800 pt-6 text-center text-xs text-slu-gray-500">
+        <div className="mt-4 border-t border-slu-gray-800 pt-6 text-center text-xs text-slu-gray-500">
           <p>
             &copy; {new Date().getFullYear()} {brand.name}. All rights reserved.
           </p>
