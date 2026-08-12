@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-slu-blue: #0770BD;
+  --color-slu-blue-light: #0A8FE0;
+  --color-slu-blue-dark: #055A94;
+  --color-slu-offwhite: #F0F0F0;
+  --color-slu-black: #0A0A0A;
+  --font-sans: var(--font-aileron), system-ui, sans-serif;
+  --font-display: var(--font-aileron), system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Aileron font fallback — self-host or use Google Fonts */
+@font-face {
+  font-family: "Aileron";
+  src: local("Aileron");
+  font-weight: 100 900;
+  font-display: swap;
+}

@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("SALTANDLIGHTUNITED_DATABASE_URL")
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  date        DateTime
+  location    String?
+  imageUrl    String?
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  pubmats     Pubmat[]
+}
+
+model Devotional {
+  id            String   @id @default(cuid())
+  title         String
+  content       String
+  author        String?
+  scriptureRef  String?
+  imageUrl      String?
+  publishedAt   DateTime?
+  createdAt     DateTime @default(now())
+}
+
+model Testimony {
+  id          String   @id @default(cuid())
+  authorName  String
+  authorAge   Int?
+  content     String
+  imageUrl    String?
+  approved    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Pubmat {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  imageUrl    String
+  category    String?
+  eventId     String?
+  event       Event?   @relation(fields: [eventId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Group {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  meetingSchedule String?
+  leader          String?
+  imageUrl        String?
+  createdAt       DateTime @default(now())
+}
+
+model Resource {
+  id           String   @id @default(cuid())
+  title        String
+  type         String
+  content      String?
+  fileUrl      String?
+  thumbnailUrl String?
+  createdAt    DateTime @default(now())
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      String   @default("editor")
+  authyId   String?
+  createdAt DateTime @default(now())
+  sessions  Session[]
+  auditLogs AuditLog[]
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  token        String   @unique
+  expiresAt    DateTime
+  lastActiveAt DateTime @default(now())
+  createdAt    DateTime @default(now())
+}
+
+model ChatHistory {
+  id        String   @id @default(cuid())
+  sessionId String
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  action      String
+  targetTable String?
+  targetId    String?
+  ipAddress   String?
+  country     String?
+  city        String?
+  userAgent   String?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+}
+
+model VisitorLog {
+  id        String   @id @default(cuid())
+  sessionId String?
+  path      String?
+  ipAddress String?
+  country   String?
+  city      String?
+  referrer  String?
+  userAgent String?
+  createdAt DateTime @default(now())
+}
+
+model SiteSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
