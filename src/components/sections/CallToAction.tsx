@@ -26,7 +26,7 @@ export function CallToAction() {
         <div className="mt-10 flex justify-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/brand/WhiteBluePill.svg"
+            src="/images/WhiteBluePill.svg"
             alt="Salt and Light United"
             className="h-12 w-auto opacity-90 drop-shadow-[0_0_24px_rgba(255,221,150,0.45)]"
           />

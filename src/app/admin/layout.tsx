@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { SessionProvider, useSession, signOut } from "next-auth/react";
 import {
   House,
   CalendarBlank,
@@ -30,6 +31,30 @@ const sidebarLinks = [
   { href: "/admin/settings", label: "Settings", icon: GearSix },
 ];
 
+function AdminUserChip() {
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  return (
+    <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 rounded-lg bg-slu-gray-100 px-3 py-1.5">
+        <User size={18} className="text-slu-gray-500" />
+        <span className="text-sm font-medium text-slu-gray-700">
+          {user?.name || user?.email || "Admin User"}
+        </span>
+      </div>
+      <button
+        type="button"
+        onClick={() => signOut({ callbackUrl: "/login" })}
+        className="inline-flex items-center gap-2 rounded-lg border border-slu-gray-200 px-3 py-1.5 text-sm font-medium text-slu-gray-600 transition-colors hover:bg-slu-gray-100"
+      >
+        <SignOut size={16} />
+        Sign out
+      </button>
+    </div>
+  );
+}
+
 export default function AdminLayout({
   children,
 }: {
@@ -39,7 +64,8 @@ export default function AdminLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slu-gray-100">
+    <SessionProvider>
+      <div className="flex h-screen overflow-hidden bg-slu-gray-100">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -127,12 +153,7 @@ export default function AdminLayout({
           </button>
 
           <div className="ml-auto flex items-center gap-3">
-            <div className="flex items-center gap-2 rounded-lg bg-slu-gray-100 px-3 py-1.5">
-              <User size={18} className="text-slu-gray-500" />
-              <span className="text-sm font-medium text-slu-gray-700">
-                Admin User
-              </span>
-            </div>
+            <AdminUserChip />
           </div>
         </header>
 
@@ -142,5 +163,6 @@ export default function AdminLayout({
         </main>
       </div>
     </div>
+    </SessionProvider>
   );
 }
