@@ -16,8 +16,9 @@ const COLORS = {
 const WAVE =
   "M-200,42 C40,92 280,2 520,46 C760,92 1000,2 1240,46 C1400,76 1520,22 1640,46 L1640,120 L-200,120 Z";
 
-export function WaveTransition({ to, className = "" }: WaveTransitionProps) {
-  const fill = COLORS[to];
+export function WaveTransition({ from, to, className = "" }: WaveTransitionProps) {
+  const fromColor = COLORS[from];
+  const toColor = COLORS[to];
 
   return (
     <div className={`relative -mt-px ${className}`} aria-hidden>
@@ -29,10 +30,10 @@ export function WaveTransition({ to, className = "" }: WaveTransitionProps) {
         shapeRendering="auto"
       >
         <g className="parallax">
-          <path d={WAVE} fill={fill} fillOpacity="0.35" />
-          <path d={WAVE} fill={fill} fillOpacity="0.55" transform="translate(0,8)" />
-          <path d={WAVE} fill={fill} fillOpacity="0.75" transform="translate(0,16)" />
-          <path d={WAVE} fill={fill} transform="translate(0,24)" />
+          <path d={WAVE} fill={fromColor} fillOpacity="0.35" />
+          <path d={WAVE} fill={fromColor} fillOpacity="0.55" transform="translate(0,8)" />
+          <path d={WAVE} fill={toColor} fillOpacity="0.75" transform="translate(0,16)" />
+          <path d={WAVE} fill={toColor} transform="translate(0,24)" />
         </g>
       </svg>
     </div>

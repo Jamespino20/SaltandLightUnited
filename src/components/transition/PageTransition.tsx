@@ -128,7 +128,7 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
       <div
         ref={overlayRef}
         aria-hidden
-        className="slu-page-transition-overlay pointer-events-none fixed inset-x-0 top-0 z-[120] h-screen"
+        className="slu-page-transition-overlay pointer-events-none fixed inset-0 z-[120] overflow-hidden"
       >
         {/* Solid flood body */}
         <div className="absolute inset-0 bg-slu-blue" />

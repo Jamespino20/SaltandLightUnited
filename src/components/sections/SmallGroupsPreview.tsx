@@ -116,7 +116,7 @@ export function SmallGroupsPreview() {
 
         {/* Card-fan carousel */}
         <div
-          className="relative mx-auto mt-12 h-[300px] max-w-3xl sm:mt-16 sm:h-[360px]"
+          className="relative mx-auto mt-20 h-[300px] max-w-3xl sm:mt-24 sm:h-[360px]"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onMouseEnter={() => setPaused(true)}

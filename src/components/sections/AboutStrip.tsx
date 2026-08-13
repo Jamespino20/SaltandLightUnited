@@ -7,15 +7,15 @@ export function AboutStrip() {
   return (
     <section
       id="about"
-      className="relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden bg-transparent"
+      className="relative isolate flex min-h-[100svh] items-center justify-center bg-transparent"
     >
-      {/* Background photo — stretched to fill the section (image already has
-          its own top vignette + white fade baked in) */}
-      <div className="absolute inset-0 -z-20">
+      {/* Background photo — show the full image including its baked-in
+          white fade at bottom and transparent vignette at top */}
+      <div className="absolute inset-0 -z-20 flex items-center justify-center">
         <img
           src="/images/history/seventh_pic.png"
           alt="SLU group gathering"
-          className="h-full w-full object-cover"
+          className="h-full w-full object-contain"
         />
       </div>
 
