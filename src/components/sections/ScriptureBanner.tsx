@@ -3,44 +3,92 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Reveal } from "@/components/animation/Reveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const verseLines = [
-  "For God so loved the world",
-  "that he gave his one and only Son,",
-  "that whoever believes in him shall not perish but have eternal life.",
+const verses = [
+  {
+    title: "Bible Verses",
+    passages: [
+      {
+        text: '"For you created my inmost being; you knit me together in my mother\'s womb. I praise you because I am fearfully and wonderfully made; your works are wonderful, I know that full well."',
+        ref: "Psalm 139:13-14",
+      },
+      {
+        text: '"So God created man in His own image, in the image of God he created him; male and female he created them."',
+        ref: "Genesis 1:27",
+      },
+      {
+        text: '"Before I formed you in your mother\'s body I chose you. Before you were born I set you apart to serve me. I appointed you to be a prophet to the nations."',
+        ref: "Jeremiah 1:5",
+      },
+    ],
+  },
+  {
+    title: "Bible Verses",
+    passages: [
+      {
+        text: '"Trust in the LORD with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight."',
+        ref: "Proverbs 3:5-6",
+      },
+      {
+        text: '"I can do all things through Christ who strengthens me."',
+        ref: "Philippians 4:13",
+      },
+      {
+        text: '"Be strong and courageous. Do not be afraid; do not be discouraged, for the LORD your God will be with you wherever you go."',
+        ref: "Joshua 1:9",
+      },
+    ],
+  },
+  {
+    title: "Bible Verses",
+    passages: [
+      {
+        text: '"For I know the plans I have for you," declares the LORD, "plans to prosper you and not to harm you, plans to give you hope and a future."',
+        ref: "Jeremiah 29:11",
+      },
+      {
+        text: '"The LORD is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters. He restores my soul."',
+        ref: "Psalm 23:1-3",
+      },
+      {
+        text: '"Come to me, all you who are weary and burdened, and I will give you rest."',
+        ref: "Matthew 11:28",
+      },
+    ],
+  },
 ];
 
 export function ScriptureBanner() {
   const root = useRef<HTMLElement>(null);
-  const veil = useRef<HTMLDivElement>(null);
-  const refLabel = useRef<HTMLDivElement>(null);
-  const lines = useRef<HTMLDivElement>(null);
-  const cite = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const el = root.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    const cards = el.querySelectorAll(".scripture-card");
+
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        defaults: { ease: "power2.out" },
-        scrollTrigger: {
-          trigger: el,
-          start: "top 65%",
-          toggleActions: "play none none reverse",
-        },
-      });
-      tl.fromTo(veil.current, { opacity: 0 }, { opacity: 1, duration: 0.9 })
-        .from(refLabel.current, { opacity: 0, y: 14, duration: 0.7 }, "-=0.3")
-        .from(
-          lines.current ? Array.from(lines.current.children) : [],
-          { opacity: 0, y: 18, duration: 0.8, stagger: 0.35 },
-          "-=0.2"
-        )
-        .from(cite.current, { opacity: 0, duration: 0.8 }, "-=0.3");
+      gsap.fromTo(
+        cards,
+        { opacity: 0, y: 30, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          stagger: 0.2,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 65%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
     }, el);
 
     return () => ctx.revert();
@@ -49,48 +97,39 @@ export function ScriptureBanner() {
   return (
     <section
       ref={root}
-      className="relative isolate overflow-hidden bg-[#05070d] py-24 text-center sm:py-32"
+      id="scripture"
+      className="relative isolate overflow-hidden bg-[#0A0A0A] py-24 sm:py-32"
     >
-      <div
-        ref={veil}
-        aria-hidden
-        className="slu-scripture-veil absolute inset-0 -z-10"
-        style={{ opacity: 0 }}
-      />
-      {/* ambient glow behind the verse */}
-      <div
-        aria-hidden
-        className="absolute left-1/2 top-1/2 -z-10 h-[50vmin] w-[50vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(255,221,150,0.18), transparent 70%)",
-          filter: "blur(30px)",
-        }}
-      />
+      <Reveal className="relative mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+        <h2 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+          A little reminder for you to{" "}
+          <span className="text-slu-blue-light">read your Bible today.</span>
+        </h2>
+      </Reveal>
 
-      <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <div
-          ref={refLabel}
-          className="mb-8 font-mono text-sm font-semibold tracking-[0.4em] text-amber-200/80"
-        >
-          JOHN 3:16
-        </div>
-        <div ref={lines} className="space-y-3">
-          {verseLines.map((line, i) => (
-            <p
-              key={i}
-              className="text-2xl font-light leading-relaxed text-white sm:text-3xl"
-            >
-              {line}
-            </p>
-          ))}
-        </div>
-        <cite
-          ref={cite}
-          className="mt-8 block text-base font-medium not-italic text-white/60"
-        >
-          — John 3:16
-        </cite>
+      <div className="mx-auto mt-12 grid max-w-6xl gap-6 px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
+        {verses.map((card, i) => (
+          <div
+            key={i}
+            className="scripture-card rounded-2xl border border-slu-gray-200 bg-[#E8E4D8] p-6 opacity-0 sm:p-8"
+          >
+            <h3 className="mb-4 text-center text-lg font-bold text-[#5A7A6A]">
+              {card.title}
+            </h3>
+            <div className="space-y-4">
+              {card.passages.map((passage, j) => (
+                <div key={j}>
+                  <p className="text-sm italic leading-relaxed text-slu-gray-700">
+                    {passage.text}
+                  </p>
+                  <p className="mt-1 text-center text-sm font-bold text-slu-blue">
+                    {passage.ref}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

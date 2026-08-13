@@ -12,9 +12,7 @@ async function hash(plain: string): Promise<string> {
 }
 
 async function main() {
-  const email = (
-    process.env.ADMIN_EMAIL ?? "admin@saltandlightunited.org"
-  )
+  const email = (process.env.ADMIN_EMAIL ?? "espino.jamesbryant20@gmail.com")
     .toLowerCase()
     .trim();
   const password = process.env.ADMIN_PASSWORD ?? "ChangeMe123!";

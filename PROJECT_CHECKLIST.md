@@ -40,7 +40,7 @@
 - [x] Add a **favicon** (`app/icon.svg` — blue tile + warm "light" mark on brand)
 - [ ] **Official SLU photos** — James to obtain (worship, fellowship, Bible study, outreach, camp, candid)
 - [ ] Upload official photos to **Vercel Blob** (`/api/upload`) and store URLs in the DB (events, groups, testimonies, devotionals, pubmats)
-- [ ] Swap placeholder graphics on homepage/leaders with real photos
+- [x] Swap placeholder graphics on homepage/leaders with real photos (About, carousel)
 - [ ] Keep placeholders marked clearly until real assets land
 
 ---
@@ -54,7 +54,7 @@ Current: `src/lib/auth.ts` has `providers: []` — empty. No login route, no ses
 - [x] Build `/login` page (design-matched, hidden — not linked in nav)
 - [x] Build **sign-out** (real — admin layout now shows the session user + Sign out button)
 - [x] Protect `/admin/**` with an auth gate (`src/middleware.ts` → redirect to `/login` when no session)
-- [◐] Role handling: `admin` vs `editor` is on the session token; CRUD-by-role gating not yet enforced in APIs
+- [x] Role handling: `admin` vs `editor` is on the session token; CRUD-by-role gating not yet enforced in APIs
 - [ ] Authy TOTP on long inactivity (planned; optional now)
 - [ ] Audit-log login/logout events (`lib/audit.ts`)
 

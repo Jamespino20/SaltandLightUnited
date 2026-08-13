@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   MapPin,
   Envelope,
@@ -12,13 +11,6 @@ import {
 import { brand } from "@/lib/brand";
 
 export default function ContactPage() {
-  const [submitted, setSubmitted] = useState(false);
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setSubmitted(true);
-  }
-
   return (
     <>
       {/* Hero */}
@@ -41,7 +33,7 @@ export default function ContactPage() {
       <section className="bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2">
-            {/* Contact Form */}
+            {/* Contact Form (Google Forms embed) */}
             <div>
               <h2 className="text-2xl font-bold text-slu-black">
                 Send Us a Message
@@ -51,73 +43,29 @@ export default function ContactPage() {
                 possible.
               </p>
 
-              {submitted ? (
-                <div className="mt-8 rounded-2xl border border-slu-blue/20 bg-slu-blue/5 p-8 text-center">
-                  <p className="text-lg font-semibold text-slu-blue">
-                    Message sent!
-                  </p>
-                  <p className="mt-2 text-sm text-slu-gray-500">
-                    Thank you for reaching out. We&apos;ll be in touch soon.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="mb-1 block text-sm font-medium text-slu-black"
-                    >
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      required
-                      className="w-full rounded-xl border border-slu-gray-200 px-4 py-3 text-sm text-slu-black placeholder:text-slu-gray-400 focus:border-slu-blue focus:outline-none focus:ring-2 focus:ring-slu-blue/20"
-                      placeholder="Your name"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="mb-1 block text-sm font-medium text-slu-black"
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      className="w-full rounded-xl border border-slu-gray-200 px-4 py-3 text-sm text-slu-black placeholder:text-slu-gray-400 focus:border-slu-blue focus:outline-none focus:ring-2 focus:ring-slu-blue/20"
-                      placeholder="you@example.com"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="message"
-                      className="mb-1 block text-sm font-medium text-slu-black"
-                    >
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={5}
-                      required
-                      className="w-full resize-none rounded-xl border border-slu-gray-200 px-4 py-3 text-sm text-slu-black placeholder:text-slu-gray-400 focus:border-slu-blue focus:outline-none focus:ring-2 focus:ring-slu-blue/20"
-                      placeholder="How can we help you?"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full rounded-xl bg-slu-blue px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-slu-blue-dark hover:shadow-lg"
-                  >
-                    Send Message
-                  </button>
-                </form>
-              )}
+              <div className="mt-8 overflow-hidden rounded-2xl border border-slu-gray-200 bg-slu-offwhite">
+                <iframe
+                  src="https://docs.google.com/forms/d/e/1FAIpQLSfd-uRxe5WYB6gaiH_mSm4rLhGTdmajDXEq3vL1BQssB6Co_A/viewform?embedded=true"
+                  title="Salt and Light United contact form"
+                  className="h-[720px] w-full border-0"
+                  loading="lazy"
+                >
+                  Loading contact form…
+                </iframe>
+              </div>
+
+              <p className="mt-3 text-sm text-slu-gray-400">
+                The form isn&apos;t loading?{" "}
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSfd-uRxe5WYB6gaiH_mSm4rLhGTdmajDXEq3vL1BQssB6Co_A/viewform"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-slu-blue underline-offset-2 hover:underline"
+                >
+                  Open it in a new tab
+                </a>
+                .
+              </p>
             </div>
 
             {/* Location & Social */}

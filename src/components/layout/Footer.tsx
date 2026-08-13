@@ -73,7 +73,7 @@ export function Footer() {
         </div>
 
         {/* Final narrative echo — the loop closes */}
-        <p className="mt-10 text-center text-sm font-semibold tracking-wide text-amber-100/90">
+        <p className="mt-10 text-center text-sm font-semibold tracking-wide text-[#D4A843]">
           Be the Light. &nbsp; Be the Salt.
         </p>
 
