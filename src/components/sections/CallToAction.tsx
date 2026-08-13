@@ -27,20 +27,10 @@ export function CallToAction() {
           Now come be part of it.
         </h2>
 
-        {/* SLU pill logo */}
-        <div className="mt-8 flex justify-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/WhiteBluePill.svg"
-            alt="Salt and Light United"
-            className="h-12 w-auto sm:h-14"
-          />
-        </div>
-
-        <p className="mt-8 text-2xl font-bold tracking-tight text-[#D4A843] sm:text-3xl">
-          Be the Light.
-          <br />
+        <p className="mt-8 text-2xl font-bold tracking-tight text-white sm:text-3xl">
           Be the Salt.
+          <br />
+          Be the Light.
         </p>
 
         <div className="mt-10 flex flex-wrap justify-center gap-4">

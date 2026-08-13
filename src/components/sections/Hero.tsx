@@ -64,30 +64,16 @@ export function Hero() {
         }}
       />
 
-      {/* SLU circle emblem */}
+      {/* SLU pill logo */}
       <div
         ref={emblem}
-        className="relative mb-8 flex h-28 w-28 items-center justify-center rounded-full border-2 border-white/20 bg-slu-blue opacity-0 sm:h-36 sm:w-36"
+        className="relative mb-8 w-36 flex-shrink-0 opacity-0 sm:w-44"
       >
-        <svg
-          viewBox="0 0 100 100"
-          className="h-16 w-16 text-white sm:h-20 sm:w-20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          {/* Cross */}
-          <line x1="30" y1="20" x2="30" y2="55" />
-          <line x1="18" y1="35" x2="42" y2="35" />
-          {/* Waves */}
-          <path d="M50,30 Q57,22 64,30 Q71,38 78,30" />
-          <path d="M50,42 Q57,34 64,42 Q71,50 78,42" />
-          <path d="M50,54 Q57,46 64,54 Q71,62 78,54" />
-          {/* Connection */}
-          <path d="M42,35 C46,35 48,32 50,30" />
-        </svg>
+        <img
+          src="/images/SaltandLightBlueWhite.svg"
+          alt="Salt and Light United"
+          className="h-full w-full object-contain"
+        />
       </div>
 
       {/* Headline */}

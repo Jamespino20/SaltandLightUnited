@@ -60,13 +60,13 @@ export function Header() {
       >
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <span
-            className={`rounded-lg px-2.5 py-1 text-sm font-bold ${
-              isDark ? "bg-slu-blue text-white" : "bg-slu-blue text-white"
-            }`}
-          >
-            {brand.shortName}
-          </span>
+          <div className="h-9 w-9 flex-shrink-0">
+            <img
+              src="/images/BlueWhitePill.svg"
+              alt="Salt and Light United"
+              className="h-full w-full object-contain"
+            />
+          </div>
           <span
             className={`hidden text-sm font-semibold sm:inline ${
               isDark ? "text-white" : "text-slu-black"
