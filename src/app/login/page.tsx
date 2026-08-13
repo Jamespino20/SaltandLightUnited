@@ -1,15 +1,14 @@
 "use client";
 
-import { Suspense, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import { Lock } from "@phosphor-icons/react";
 
 function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/admin";
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -20,20 +19,26 @@ function LoginForm() {
     setError(null);
     setLoading(true);
 
-    const res = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+    try {
+      const res = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
 
-    setLoading(false);
+      setLoading(false);
 
-    if (!res || res.error) {
-      setError("Invalid email or password.");
-      return;
+      if (!res || res.error) {
+        setError("Invalid email or password.");
+        return;
+      }
+
+      window.location.href = callbackUrl;
+    } catch (err) {
+      setLoading(false);
+      setError("An error occurred during login. Please try again.");
+      console.error("Login error:", err);
     }
-
-    window.location.href = callbackUrl;
   }
 
   return (
@@ -118,7 +123,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={null}>
+    <Suspense>
       <LoginForm />
     </Suspense>
   );

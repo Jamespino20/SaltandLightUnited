@@ -10,10 +10,19 @@ const navLinks = [
   { href: "/events", label: "Events" },
   { href: "/groups", label: "Groups" },
   { href: "/resources", label: "Resources" },
+  { href: "/chat", label: "Chat" },
   { href: "/contact", label: "Contact" },
 ];
 
-const sectionIds = ["hero", "about", "events", "facebook", "groups", "scripture", "cta"];
+const sectionIds = [
+  "hero",
+  "about",
+  "events",
+  "facebook",
+  "groups",
+  "scripture",
+  "cta",
+];
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -62,18 +71,11 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2">
           <div className="h-9 w-9 flex-shrink-0">
             <img
-              src="/images/BlueWhitePill.svg"
+              src="/images/SaltandLightBlueWhite.svg"
               alt="Salt and Light United"
               className="h-full w-full object-contain"
             />
           </div>
-          <span
-            className={`hidden text-sm font-semibold sm:inline ${
-              isDark ? "text-white" : "text-slu-black"
-            }`}
-          >
-            {brand.name}
-          </span>
         </Link>
 
         {/* Desktop Nav */}

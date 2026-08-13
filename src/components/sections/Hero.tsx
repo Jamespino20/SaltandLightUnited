@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 
 export function Hero() {
   const root = useRef<HTMLElement>(null);
-  const glow = useRef<HTMLDivElement>(null);
+  const gradient = useRef<HTMLDivElement>(null);
   const emblem = useRef<HTMLDivElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const sub = useRef<HTMLParagraphElement>(null);
@@ -19,21 +19,21 @@ export function Hero() {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       tl.fromTo(
-        glow.current,
-        { scale: 0.3, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 1.8, ease: "power2.out" }
+        gradient.current,
+        { scale: 0.6, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 2.0, ease: "power2.out" }
       )
         .fromTo(
           emblem.current,
-          { scale: 0.5, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 1.2, ease: "back.out(1.4)" },
-          "-=1.0"
+          { scale: 0.7, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 1.6, ease: "power2.out" },
+          "-=1.6"
         )
         .fromTo(
           heading.current,
           { opacity: 0, y: 30 },
           { opacity: 1, y: 0, duration: 1.0 },
-          "-=0.5"
+          "-=0.8"
         )
         .fromTo(
           sub.current,
@@ -52,29 +52,39 @@ export function Hero() {
       id="hero"
       className="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-[#0A0A0A] text-center"
     >
-      {/* Blue atmospheric glow */}
+      {/* Decorative gradients for attractiveness */}
       <div
-        ref={glow}
+        ref={gradient}
         aria-hidden
-        className="absolute left-1/2 top-1/2 -z-10 h-[80vmin] w-[80vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0"
+        className="absolute left-1/2 top-1/2 -z-20 h-[90vmin] w-[90vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0"
         style={{
           background:
-            "radial-gradient(circle, rgba(7,112,189,0.45) 0%, rgba(0,180,255,0.25) 30%, rgba(0,200,255,0.08) 55%, transparent 75%)",
-          filter: "blur(40px)",
+            "radial-gradient(circle at 25% 25%, rgba(7,112,189,0.6) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255,224,160,0.4) 0%, transparent 50%), conic-gradient(from 180deg at 50% 50%, #0A0A0A, #0770BD, #F0F0F0, #0770BD, #0A0A0A)",
+          filter: "blur(60px) brightness(0.8)",
+          animation: "pulse 8s ease-in-out infinite",
         }}
       />
 
-      {/* SLU pill logo */}
+      {/* Blue-white emblem glow — the centrepiece backdrop */}
       <div
         ref={emblem}
-        className="relative mb-8 w-36 flex-shrink-0 opacity-0 sm:w-44"
+        aria-hidden
+        className="absolute left-1/2 top-1/2 -z-10 h-[42vmin] w-[42vmin] -translate-x-1/2 -translate-y-1/2 opacity-0"
       >
+        <div className="absolute inset-0 rounded-full bg-slu-blue/30 blur-3xl" />
         <img
           src="/images/SaltandLightBlueWhite.svg"
-          alt="Salt and Light United"
-          className="h-full w-full object-contain"
+          alt=""
+          className="relative h-full w-full object-contain drop-shadow-[0_0_45px_rgba(7,112,189,0.65)]"
         />
       </div>
+
+      <style jsx>{`
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); opacity: 0.8; }
+          50% { transform: scale(1.05); opacity: 1; }
+        }
+      `}</style>
 
       {/* Headline */}
       <h1

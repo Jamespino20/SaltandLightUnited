@@ -35,8 +35,17 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {/* Brand */}
           <div>
-            <h3 className="text-lg font-bold text-slu-blue">{brand.name}</h3>
-            <p className="mt-2 text-sm text-slu-gray-400">{brand.description}</p>
+            {/* SLU pill badge */}
+            <div className="mt-6 flex justify-center">
+              <img
+                src="/images/BlueWhitePill.svg"
+                alt="Salt and Light United"
+                className="h-12 w-auto opacity-90 drop-shadow-[0_0_24px_rgba(255,221,150,0.45)]"
+              />
+            </div>
+            <p className="mt-2 text-sm text-slu-gray-400">
+              {brand.description}
+            </p>
             <div className="mt-4">
               <Link
                 href={brand.facebookUrl}
@@ -71,11 +80,6 @@ export function Footer() {
             </div>
           ))}
         </div>
-
-        {/* Final narrative echo — the loop closes */}
-        <p className="mt-10 text-center text-sm font-semibold tracking-wide text-[#D4A843]">
-          Be the Light. &nbsp; Be the Salt.
-        </p>
 
         {/* Bottom */}
         <div className="mt-4 border-t border-slu-gray-800 pt-6 text-center text-xs text-slu-gray-500">

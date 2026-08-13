@@ -10,3 +10,6 @@ Skills
 .install.log
 
 node_modules
+
+.vercel
+.env*

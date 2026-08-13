@@ -6,6 +6,9 @@ import { brand } from "@/lib/brand";
 import { SmoothScroll } from "@/components/animation/SmoothScroll";
 import { LightOrb } from "@/components/animation/LightOrb";
 import { ScrollProgress } from "@/components/animation/ScrollProgress";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { PageTransition } from "@/components/transition/PageTransition";
 import "./globals.css";
 
 const aileron = localFont({
@@ -54,9 +57,13 @@ export default function RootLayout({
         <LightOrb />
         <SmoothScroll>
           <Header />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1">
+            <PageTransition>{children}</PageTransition>
+          </main>
           <Footer />
         </SmoothScroll>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

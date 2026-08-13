@@ -9,30 +9,34 @@ import {
   YoutubeLogo,
 } from "@phosphor-icons/react";
 import { brand } from "@/lib/brand";
+import { Reveal } from "@/components/animation/Reveal";
+import { WaveTransition } from "@/components/sections/WaveTransition";
 
 export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-slu-blue">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h1 className="text-4xl font-bold leading-tight text-white sm:text-5xl">
-              Get in Touch
-            </h1>
-            <p className="mt-4 text-lg text-white/80">
-              We&apos;d love to hear from you. Reach out anytime.
-            </p>
-          </div>
+      <section className="relative isolate overflow-hidden bg-[#0A0A0A]">
+        <div
+          aria-hidden
+          className="absolute left-1/2 top-0 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-slu-blue/30 blur-3xl"
+        />
+        <div className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 sm:py-32 lg:px-8">
+          <h1 className="text-4xl font-bold text-white sm:text-5xl">
+            Get in Touch
+          </h1>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-white/70">
+            We&apos;d love to hear from you. Reach out anytime.
+          </p>
         </div>
-        <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-slu-blue-dark/30 blur-3xl" />
-        <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-slu-blue-light/20 blur-3xl" />
       </section>
 
+      <WaveTransition from="dark" to="light" />
+
       {/* Form + Info */}
-      <section className="bg-white py-16 sm:py-20">
+      <section className="bg-[#F0F0F0] py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-2">
+          <Reveal className="grid gap-12 lg:grid-cols-2">
             {/* Contact Form (Google Forms embed) */}
             <div>
               <h2 className="text-2xl font-bold text-slu-black">
@@ -43,7 +47,7 @@ export default function ContactPage() {
                 possible.
               </p>
 
-              <div className="mt-8 overflow-hidden rounded-2xl border border-slu-gray-200 bg-slu-offwhite">
+              <div className="mt-8 overflow-hidden rounded-2xl border border-slu-gray-200 bg-white">
                 <iframe
                   src="https://docs.google.com/forms/d/e/1FAIpQLSfd-uRxe5WYB6gaiH_mSm4rLhGTdmajDXEq3vL1BQssB6Co_A/viewform?embedded=true"
                   title="Salt and Light United contact form"
@@ -71,9 +75,7 @@ export default function ContactPage() {
             {/* Location & Social */}
             <div className="space-y-8">
               <div>
-                <h2 className="text-2xl font-bold text-slu-black">
-                  Find Us
-                </h2>
+                <h2 className="text-2xl font-bold text-slu-black">Find Us</h2>
                 <div className="mt-6 space-y-4">
                   <div className="flex items-start gap-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slu-blue/10 text-slu-blue">
@@ -83,9 +85,7 @@ export default function ContactPage() {
                       <p className="font-semibold text-slu-black">
                         We&apos;re based in Baliwag City
                       </p>
-                      <p className="text-sm text-slu-gray-500">
-                        {brand.city}
-                      </p>
+                      <p className="text-sm text-slu-gray-500">{brand.city}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -114,9 +114,7 @@ export default function ContactPage() {
               </div>
 
               <div>
-                <h3 className="text-lg font-bold text-slu-black">
-                  Follow Us
-                </h3>
+                <h3 className="text-lg font-bold text-slu-black">Follow Us</h3>
                 <p className="mt-2 text-sm text-slu-gray-500">
                   Stay updated on events and announcements.
                 </p>
@@ -147,8 +145,32 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
+      </section>
+
+      <WaveTransition from="light" to="dark" />
+
+      {/* CTA */}
+      <section className="bg-[#0A0A0A] py-16 sm:py-20">
+        <Reveal className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-white sm:text-4xl">
+            We&apos;d love to meet you
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-white/70">
+            Whether you have a question, need prayer, or just want to say hello —
+            reach out. You&apos;re always welcome at Salt and Light United.
+          </p>
+          <a
+            href={brand.facebookUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex items-center gap-2 rounded-xl bg-slu-blue px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
+          >
+            <FacebookLogo size={18} />
+            Message us on Facebook
+          </a>
+        </Reveal>
       </section>
     </>
   );

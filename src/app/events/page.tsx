@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { CalendarBlank, CaretDown, CaretUp } from "@phosphor-icons/react";
+import { Reveal } from "@/components/animation/Reveal";
+import { WaveTransition } from "@/components/sections/WaveTransition";
 
 const upcomingEvents = [
   {
@@ -69,32 +71,39 @@ export default function EventsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-slu-blue">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h1 className="text-4xl font-bold leading-tight text-white sm:text-5xl">
-              Upcoming Events
-            </h1>
-            <p className="mt-4 text-lg text-white/80">
-              Stay connected with what&apos;s happening at SLU
-            </p>
-          </div>
+      <section className="relative isolate overflow-hidden bg-[#0A0A0A]">
+        <div
+          aria-hidden
+          className="absolute left-1/2 top-0 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-slu-blue/30 blur-3xl"
+        />
+        <div className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 sm:py-32 lg:px-8">
+          <h1 className="text-4xl font-bold text-white sm:text-5xl">
+            Upcoming Events
+          </h1>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-white/70">
+            Stay connected with what&apos;s happening at SLU
+          </p>
         </div>
-        <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-slu-blue-dark/30 blur-3xl" />
-        <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-slu-blue-light/20 blur-3xl" />
       </section>
 
+      <WaveTransition from="dark" to="light" />
+
       {/* Upcoming Events */}
-      <section className="bg-white py-16 sm:py-20">
+      <section className="bg-[#F0F0F0] py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-slu-black sm:text-3xl">
-            What&apos;s Coming Up
-          </h2>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <Reveal>
+            <h2 className="text-2xl font-bold text-slu-black sm:text-3xl">
+              What&apos;s Coming Up
+            </h2>
+          </Reveal>
+          <Reveal
+            className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            stagger
+          >
             {upcomingEvents.map((event) => (
               <div
                 key={event.id}
-                className="rounded-2xl border border-slu-gray-200 bg-slu-offwhite p-6 transition-all hover:shadow-md"
+                className="rounded-2xl border border-slu-gray-200 bg-white p-6 transition-all hover:shadow-md"
               >
                 <div className="mb-3 flex items-center gap-2 text-sm font-medium text-slu-blue">
                   <CalendarBlank size={16} />
@@ -108,52 +117,57 @@ export default function EventsPage() {
                 </p>
               </div>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
+      <WaveTransition from="light" to="dark" />
+
       {/* Past Events */}
-      <section className="bg-slu-offwhite py-16 sm:py-20">
+      <section className="bg-[#0A0A0A] py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <button
             onClick={() => setShowPast(!showPast)}
-            className="flex w-full items-center justify-between rounded-2xl border border-slu-gray-200 bg-white px-6 py-4 text-left transition-all hover:shadow-md"
+            className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-left transition-all hover:bg-white/10"
           >
             <div>
-              <h2 className="text-2xl font-bold text-slu-black sm:text-3xl">
+              <h2 className="text-2xl font-bold text-white sm:text-3xl">
                 Past Events
               </h2>
-              <p className="mt-1 text-sm text-slu-gray-500">
+              <p className="mt-1 text-sm text-white/50">
                 {pastEvents.length} previous events
               </p>
             </div>
             {showPast ? (
-              <CaretUp size={24} className="text-slu-gray-400" />
+              <CaretUp size={24} className="text-slu-blue-light" />
             ) : (
-              <CaretDown size={24} className="text-slu-gray-400" />
+              <CaretDown size={24} className="text-slu-blue-light" />
             )}
           </button>
 
           {showPast && (
-            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <Reveal
+              className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              stagger
+            >
               {pastEvents.map((event) => (
                 <div
                   key={event.id}
-                  className="rounded-2xl border border-slu-gray-200 bg-white p-6"
+                  className="rounded-2xl border border-white/10 bg-white/5 p-6"
                 >
-                  <div className="mb-3 flex items-center gap-2 text-sm text-slu-gray-400">
+                  <div className="mb-3 flex items-center gap-2 text-sm text-white/50">
                     <CalendarBlank size={16} />
                     {event.date}
                   </div>
-                  <h3 className="text-lg font-bold text-slu-black">
+                  <h3 className="text-lg font-bold text-white">
                     {event.title}
                   </h3>
-                  <p className="mt-2 text-sm text-slu-gray-500">
+                  <p className="mt-2 text-sm text-white/60">
                     {event.description}
                   </p>
                 </div>
               ))}
-            </div>
+            </Reveal>
           )}
         </div>
       </section>

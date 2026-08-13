@@ -37,6 +37,14 @@ const slides = [
   },
 ];
 
+function wrapOffset(index: number, current: number, total: number) {
+  let offset = index - current;
+  const half = Math.floor(total / 2);
+  if (offset > half) offset -= total;
+  if (offset < -half) offset += total;
+  return offset;
+}
+
 export function SmallGroupsPreview() {
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -53,7 +61,7 @@ export function SmallGroupsPreview() {
 
   useEffect(() => {
     if (paused) return;
-    timerRef.current = setInterval(next, 4000);
+    timerRef.current = setInterval(next, 4500);
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
@@ -106,47 +114,61 @@ export function SmallGroupsPreview() {
           </h2>
         </Reveal>
 
-        {/* Carousel */}
+        {/* Card-fan carousel */}
         <div
-          className="relative mx-auto max-w-3xl overflow-hidden rounded-2xl"
+          className="relative mx-auto h-[300px] max-w-3xl sm:h-[360px]"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
+          style={{ perspective: "1400px" }}
         >
-          {/* Slide */}
-          <div className="relative aspect-[16/9] bg-slu-gray-200">
-            {slides.map((slide, i) => (
+          {slides.map((slide, i) => {
+            const offset = wrapOffset(i, current, slides.length);
+            const abs = Math.abs(offset);
+            const visible = abs <= 2;
+            const translateX = offset * 46;
+            const rotate = offset * 9;
+            const scale = 1 - abs * 0.08;
+            const zIndex = 50 - abs * 10;
+
+            return (
               <div
                 key={slide.id}
-                className={`absolute inset-0 transition-opacity duration-700 ${
-                  i === current
-                    ? "opacity-100"
-                    : "opacity-0 pointer-events-none"
-                }`}
+                className="absolute left-1/2 top-1/2 w-[78%] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out"
+                style={{
+                  transform: `translate(calc(-50% + ${translateX}%), -50%) rotate(${rotate}deg) scale(${scale})`,
+                  zIndex,
+                  opacity: visible ? 1 : 0,
+                  pointerEvents: visible ? "auto" : "none",
+                }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={slide.image}
-                  alt={slide.label}
-                  className="h-full w-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 p-6">
-                  <span className="inline-block rounded-full bg-slu-blue px-3 py-1 text-xs font-semibold text-white">
-                    {slide.label}
-                  </span>
-                  <p className="mt-2 text-sm text-white/80">{slide.caption}</p>
+                <div className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-slu-gray-200">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={slide.image}
+                    alt={slide.label}
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute bottom-0 left-0 p-5">
+                    <span className="inline-block rounded-full bg-slu-blue px-3 py-1 text-xs font-semibold text-white">
+                      {slide.label}
+                    </span>
+                    <p className="mt-2 text-sm text-white/85">
+                      {slide.caption}
+                    </p>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
 
           {/* Controls */}
           <button
             type="button"
             onClick={prev}
-            className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
+            className="absolute left-0 top-1/2 z-[60] -translate-y-1/2 rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
             aria-label="Previous slide"
           >
             <CaretLeft size={20} />
@@ -154,7 +176,7 @@ export function SmallGroupsPreview() {
           <button
             type="button"
             onClick={next}
-            className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
+            className="absolute right-0 top-1/2 z-[60] -translate-y-1/2 rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
             aria-label="Next slide"
           >
             <CaretRight size={20} />
@@ -164,26 +186,26 @@ export function SmallGroupsPreview() {
           <button
             type="button"
             onClick={() => setPaused(!paused)}
-            className="absolute right-3 top-3 rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
+            className="absolute right-2 top-2 z-[60] rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
             aria-label={paused ? "Resume autoplay" : "Pause autoplay"}
           >
             {paused ? <Play size={16} /> : <Pause size={16} />}
           </button>
+        </div>
 
-          {/* Dots */}
-          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => setCurrent(i)}
-                className={`h-2 rounded-full transition-all ${
-                  i === current ? "w-6 bg-white" : "w-2 bg-white/50"
-                }`}
-                aria-label={`Go to slide ${i + 1}`}
-              />
-            ))}
-          </div>
+        {/* Dots */}
+        <div className="mt-6 flex justify-center gap-1.5">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setCurrent(i)}
+              className={`h-2 rounded-full transition-all ${
+                i === current ? "w-6 bg-slu-blue" : "w-2 bg-slu-blue/30"
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
         </div>
       </div>
     </section>

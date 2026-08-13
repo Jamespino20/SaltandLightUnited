@@ -7,22 +7,20 @@ export function AboutStrip() {
   return (
     <section
       id="about"
-      className="relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden"
+      className="relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden bg-[#0A0A0A]"
     >
-      {/* Background photo with dark overlay */}
+      {/* Background photo — shown as-is (transparent top, white-fade bottom) */}
       <div className="absolute inset-0 -z-20">
         <img
-          src="/images/history/seventh_pic.jpg"
+          src="/images/history/seventh_pic.png"
           alt="SLU group gathering"
-          className="h-full w-full object-cover"
+          className="h-full w-full object-contain"
         />
       </div>
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#0A0A0A]/70 via-[#0A0A0A]/50 to-[#0A0A0A]/80" />
 
       <Reveal className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
         <h2 className="text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
-          We don&apos;t walk{" "}
-          <span className="text-slu-blue-light">alone.</span>
+          We don&apos;t walk <span className="text-slu-blue-light">alone.</span>
         </h2>
 
         <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/80 sm:text-lg">

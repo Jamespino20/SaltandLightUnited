@@ -27,10 +27,10 @@ export function CallToAction() {
           Now come be part of it.
         </h2>
 
-        <p className="mt-8 text-2xl font-bold tracking-tight text-white sm:text-3xl">
-          Be the Salt.
+        <p className="mt-8 text-2xl font-bold tracking-tight sm:text-3xl">
+          <span className="text-white">Be the Salt.</span>
           <br />
-          Be the Light.
+          <span className="text-slu-blue-light">Be the Light.</span>
         </p>
 
         <div className="mt-10 flex flex-wrap justify-center gap-4">

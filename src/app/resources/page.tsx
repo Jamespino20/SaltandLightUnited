@@ -2,11 +2,16 @@
 
 import { useState } from "react";
 import { BookOpen, Headphones, Heart } from "@phosphor-icons/react";
+import { Reveal } from "@/components/animation/Reveal";
+import { WaveTransition } from "@/components/sections/WaveTransition";
 
 const tabs = ["Sermons", "Devotionals", "Testimonies"] as const;
 type Tab = (typeof tabs)[number];
 
-const resources: Record<Tab, { id: string; title: string; description: string; date: string }[]> = {
+const resources: Record<
+  Tab,
+  { id: string; title: string; description: string; date: string }[]
+> = {
   Sermons: [
     {
       id: "s1",
@@ -40,8 +45,7 @@ const resources: Record<Tab, { id: string; title: string; description: string; d
     {
       id: "d2",
       title: "Walking by Faith",
-      description:
-        "Trusting God even when the path ahead is unclear.",
+      description: "Trusting God even when the path ahead is unclear.",
       date: "August 3, 2026",
     },
     {
@@ -89,27 +93,28 @@ export default function ResourcesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-slu-blue">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h1 className="text-4xl font-bold leading-tight text-white sm:text-5xl">
-              Resources
-            </h1>
-            <p className="mt-4 text-lg text-white/80">
-              Grow deeper in your faith with sermons, devotionals, and
-              testimonies.
-            </p>
-          </div>
+      <section className="relative isolate overflow-hidden bg-[#0A0A0A]">
+        <div
+          aria-hidden
+          className="absolute left-1/2 top-0 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-slu-blue/30 blur-3xl"
+        />
+        <div className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 sm:py-32 lg:px-8">
+          <h1 className="text-4xl font-bold text-white sm:text-5xl">
+            Resources
+          </h1>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-white/70">
+            Grow deeper in your faith with sermons, devotionals, and testimonies.
+          </p>
         </div>
-        <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-slu-blue-dark/30 blur-3xl" />
-        <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-slu-blue-light/20 blur-3xl" />
       </section>
 
+      <WaveTransition from="dark" to="light" />
+
       {/* Tabs + Grid */}
-      <section className="bg-white py-16 sm:py-20">
+      <section className="bg-[#F0F0F0] py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Tab Navigation */}
-          <div className="mb-10 flex flex-wrap gap-2">
+          <Reveal className="mb-10 flex flex-wrap gap-2">
             {tabs.map((tab) => (
               <button
                 key={tab}
@@ -117,21 +122,25 @@ export default function ResourcesPage() {
                 className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all ${
                   activeTab === tab
                     ? "bg-slu-blue text-white shadow-md"
-                    : "border border-slu-gray-200 text-slu-gray-500 hover:border-slu-blue hover:text-slu-blue"
+                    : "border border-slu-gray-200 bg-white text-slu-gray-500 hover:border-slu-blue hover:text-slu-blue"
                 }`}
               >
                 {tabIcons[tab]}
                 {tab}
               </button>
             ))}
-          </div>
+          </Reveal>
 
           {/* Resource Grid */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <Reveal
+            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            stagger
+            key={activeTab}
+          >
             {resources[activeTab].map((item) => (
               <div
                 key={item.id}
-                className="rounded-2xl border border-slu-gray-200 bg-slu-offwhite p-6 transition-all hover:shadow-md"
+                className="rounded-2xl border border-slu-gray-200 bg-white p-6 transition-all hover:shadow-md"
               >
                 <p className="mb-2 text-xs font-medium text-slu-blue">
                   {item.date}
@@ -144,7 +153,7 @@ export default function ResourcesPage() {
                 </p>
               </div>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
     </>

@@ -6,50 +6,36 @@ interface WaveTransitionProps {
   className?: string;
 }
 
-export function WaveTransition({ from, to, className = "" }: WaveTransitionProps) {
-  if (from === "dark" && to === "light") {
-    return (
-      <div className={`relative -mt-px ${className}`} aria-hidden>
-        <svg
-          viewBox="0 0 1440 120"
-          preserveAspectRatio="none"
-          className="block h-16 w-full sm:h-24"
-        >
-          <path
-            d="M0,0 C240,100 480,0 720,60 C960,120 1200,20 1440,80 L1440,120 L0,120 Z"
-            fill="#F0F0F0"
-          />
-          <path
-            d="M0,40 C300,110 600,10 900,70 C1100,110 1300,30 1440,60 L1440,120 L0,120 Z"
-            fill="#0770BD"
-            opacity="0.15"
-          />
-        </svg>
-      </div>
-    );
-  }
+const COLORS = {
+  dark: "#0A0A0A",
+  light: "#F0F0F0",
+} as const;
 
-  if (from === "light" && to === "dark") {
-    return (
-      <div className={`relative -mt-px ${className}`} aria-hidden>
-        <svg
-          viewBox="0 0 1440 120"
-          preserveAspectRatio="none"
-          className="block h-16 w-full sm:h-24"
-        >
-          <path
-            d="M0,120 C240,20 480,120 720,60 C960,0 1200,100 1440,40 L1440,0 L0,0 Z"
-            fill="#0A0A0A"
-          />
-          <path
-            d="M0,120 C300,50 600,110 900,50 C1100,10 1300,90 1440,60 L1440,0 L0,0 Z"
-            fill="#0770BD"
-            opacity="0.2"
-          />
-        </svg>
-      </div>
-    );
-  }
+export function WaveTransition({ to, className = "" }: WaveTransitionProps) {
+  const fill = COLORS[to];
 
-  return null;
+  return (
+    <div className={`relative -mt-px ${className}`} aria-hidden>
+      <svg
+        className="slu-wave block h-16 w-full sm:h-24"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 24 150 28"
+        preserveAspectRatio="none"
+        shapeRendering="auto"
+      >
+        <defs>
+          <path
+            id="gentle-wave"
+            d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+          />
+        </defs>
+        <g className="parallax">
+          <use href="#gentle-wave" x="48" y="0" fill={fill} fillOpacity="0.7" />
+          <use href="#gentle-wave" x="48" y="3" fill={fill} fillOpacity="0.5" />
+          <use href="#gentle-wave" x="48" y="5" fill={fill} fillOpacity="0.3" />
+          <use href="#gentle-wave" x="48" y="7" fill={fill} />
+        </g>
+      </svg>
+    </div>
+  );
 }

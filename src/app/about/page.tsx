@@ -1,14 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Target,
-  Eye,
-  BookOpen,
-  FacebookLogo,
-  Phone,
-} from "@phosphor-icons/react";
+import { Target, Eye, BookOpen, FacebookLogo, Phone } from "@phosphor-icons/react";
 import { brand } from "@/lib/brand";
+import { Reveal } from "@/components/animation/Reveal";
+import { WaveTransition } from "@/components/sections/WaveTransition";
 
 const leaders = [
   {
@@ -37,24 +33,26 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-slu-blue">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h1 className="text-4xl font-bold leading-tight text-white sm:text-5xl">
-              About {brand.name}
-            </h1>
-            <p className="mt-4 text-lg text-white/80">
-              Discover who we are, what we believe, and why we exist.
-            </p>
-          </div>
+      <section className="relative isolate overflow-hidden bg-[#0A0A0A]">
+        <div
+          aria-hidden
+          className="absolute left-1/2 top-0 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-slu-blue/30 blur-3xl"
+        />
+        <div className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 sm:py-32 lg:px-8">
+          <h1 className="text-4xl font-bold text-white sm:text-5xl">
+            About {brand.name}
+          </h1>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-white/70">
+            Discover who we are, what we believe, and why we exist.
+          </p>
         </div>
-        <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-slu-blue-dark/30 blur-3xl" />
-        <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-slu-blue-light/20 blur-3xl" />
       </section>
 
+      <WaveTransition from="dark" to="light" />
+
       {/* About Us */}
-      <section className="bg-white py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <section className="bg-[#F0F0F0] py-16 sm:py-20">
+        <Reveal className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <h2 className="mb-6 text-3xl font-bold text-slu-black sm:text-4xl">
             About Us
           </h2>
@@ -74,14 +72,17 @@ export default function AboutPage() {
               for a place to grow, you&apos;re welcome here.
             </p>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Mission & Vision */}
-      <section className="bg-slu-offwhite py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="bg-white py-16 sm:py-20">
+        <Reveal
+          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+          stagger
+        >
           <div className="grid gap-8 lg:grid-cols-2">
-            <div className="rounded-2xl border border-slu-gray-200 bg-white p-8">
+            <div className="rounded-2xl border border-slu-gray-200 bg-[#F0F0F0] p-8">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-slu-blue/10 text-slu-blue">
                 <Target size={24} />
               </div>
@@ -92,7 +93,7 @@ export default function AboutPage() {
                 salt and light in their schools, families, and communities.
               </p>
             </div>
-            <div className="rounded-2xl border border-slu-gray-200 bg-white p-8">
+            <div className="rounded-2xl border border-slu-gray-200 bg-[#F0F0F0] p-8">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-slu-blue/10 text-slu-blue">
                 <Eye size={24} />
               </div>
@@ -104,19 +105,21 @@ export default function AboutPage() {
               </p>
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
-      {/* Story */}
-      <section className="bg-white py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-slu-blue/10 text-slu-blue">
+      <WaveTransition from="light" to="dark" />
+
+      {/* Our Story */}
+      <section className="bg-[#0A0A0A] py-16 sm:py-20">
+        <Reveal className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-slu-blue/15 text-slu-blue-light">
             <BookOpen size={24} />
           </div>
-          <h2 className="text-3xl font-bold text-slu-black sm:text-4xl">
+          <h2 className="text-3xl font-bold text-white sm:text-4xl">
             Our Story
           </h2>
-          <div className="mt-6 space-y-4 leading-relaxed text-slu-gray-600">
+          <div className="mt-6 space-y-4 leading-relaxed text-white/70">
             <p>
               {brand.name} began as a small gathering of young people in Baliwag
               who shared a common heart — to know God more deeply and to live
@@ -130,21 +133,23 @@ export default function AboutPage() {
               become who God created them to be.
             </p>
           </div>
-        </div>
+        </Reveal>
       </section>
 
+      <WaveTransition from="dark" to="light" />
+
       {/* Leaders */}
-      <section className="bg-slu-offwhite py-16 sm:py-20">
+      <section className="bg-[#F0F0F0] py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-10 text-center">
+          <Reveal className="mb-10 text-center">
             <h2 className="text-3xl font-bold text-slu-black sm:text-4xl">
               Our Leaders
             </h2>
             <p className="mt-2 text-slu-gray-500">
               The people who shepherd and guide our fellowship
             </p>
-          </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          </Reveal>
+          <Reveal className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" stagger>
             {leaders.map((leader) => (
               <div
                 key={leader.name}
@@ -163,13 +168,15 @@ export default function AboutPage() {
                 <p className="mt-1 text-sm text-slu-blue">{leader.role}</p>
               </div>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
+      <WaveTransition from="light" to="dark" />
+
       {/* Reach Us */}
-      <section className="bg-slu-blue py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+      <section className="bg-[#0A0A0A] py-16 sm:py-20">
+        <Reveal className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-white sm:text-4xl">
             Reach Us Today!
           </h2>
@@ -212,13 +219,13 @@ export default function AboutPage() {
             <FacebookLogo size={18} />
             Visit our Facebook page
           </Link>
-        </div>
+        </Reveal>
       </section>
 
       {/* Independence Note */}
-      <section className="bg-slu-offwhite pb-12 pt-8">
+      <section className="bg-[#0A0A0A] pb-12 pt-4">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-          <p className="text-xs leading-relaxed text-slu-gray-500">
+          <p className="text-xs leading-relaxed text-white/40">
             *{brand.independenceNote}
           </p>
         </div>

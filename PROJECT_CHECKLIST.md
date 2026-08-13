@@ -53,15 +53,16 @@ Current: `src/lib/auth.ts` has `providers: []` — empty. No login route, no ses
 - [x] Add password hashing (`src/lib/password.ts`, node crypto — no new dep) + seed admin account (`prisma/seed.ts`, run `npm run db:seed`)
 - [x] Build `/login` page (design-matched, hidden — not linked in nav)
 - [x] Build **sign-out** (real — admin layout now shows the session user + Sign out button)
-- [x] Protect `/admin/**` with an auth gate (`src/middleware.ts` → redirect to `/login` when no session)
+- [x] Protect `/admin/**` with an auth gate — server-side `auth()` check in `src/app/admin/layout.tsx` redirects to `/login`. Edge `src/middleware.ts` was **removed** after diagnosis: the Vercel Edge runtime can't decrypt next-auth JWE cookies (`jose` needs `CompressionStream`, unavailable in Edge), so `getToken()` always returned `null` → infinite login loop. Node-runtime layout check fixes it.
 - [x] Role handling: `admin` vs `editor` is on the session token; CRUD-by-role gating not yet enforced in APIs
+- [x] `useSearchParams` on `/login` wrapped in `<Suspense>` — was failing production prerender ("missing-suspense-with-csr-bailout")
 - [ ] Authy TOTP on long inactivity (planned; optional now)
 - [ ] Audit-log login/logout events (`lib/audit.ts`)
 
 **Runtime setup still required (cannot run without the DB/env):**
-- [ ] Set `AUTH_SECRET` in `.env.local` + Vercel (middleware + JWT sessions need it)
-- [ ] `npm run db:push` (or `db:migrate`) to add `User.passwordHash`
-- [ ] `npm run db:seed` to create the first admin (override with `ADMIN_EMAIL` / `ADMIN_PASSWORD` / `ADMIN_NAME` / `ADMIN_ROLE`)
+- [x] Set `AUTH_SECRET` in `.env.local` + Vercel (Production + Preview) — verified present in both; confirmed working production login
+- [x] `npm run db:push` (or `db:migrate`) to add `User.passwordHash`
+- [x] `npm run db:seed` to create the first admin (override with `ADMIN_EMAIL` / `ADMIN_PASSWORD` / `ADMIN_NAME` / `ADMIN_ROLE`)
 
 ---
 

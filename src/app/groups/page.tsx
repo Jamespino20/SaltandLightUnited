@@ -1,4 +1,6 @@
 import { Users, Clock, User, CheckCircle } from "@phosphor-icons/react";
+import { Reveal } from "@/components/animation/Reveal";
+import { WaveTransition } from "@/components/sections/WaveTransition";
 
 const groups = [
   {
@@ -59,29 +61,34 @@ export default function GroupsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-slu-blue">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h1 className="text-4xl font-bold leading-tight text-white sm:text-5xl">
-              Our Groups
-            </h1>
-            <p className="mt-4 text-lg text-white/80">
-              Find your community. Grow in faith. Serve together.
-            </p>
-          </div>
+      <section className="relative isolate overflow-hidden bg-[#0A0A0A]">
+        <div
+          aria-hidden
+          className="absolute left-1/2 top-0 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-slu-blue/30 blur-3xl"
+        />
+        <div className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 sm:py-32 lg:px-8">
+          <h1 className="text-4xl font-bold text-white sm:text-5xl">
+            Our Groups
+          </h1>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-white/70">
+            Find your community. Grow in faith. Serve together.
+          </p>
         </div>
-        <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-slu-blue-dark/30 blur-3xl" />
-        <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-slu-blue-light/20 blur-3xl" />
       </section>
 
+      <WaveTransition from="dark" to="light" />
+
       {/* Group Cards */}
-      <section className="bg-white py-16 sm:py-20">
+      <section className="bg-[#F0F0F0] py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-6 sm:grid-cols-2">
+          <Reveal
+            className="grid gap-6 sm:grid-cols-2"
+            stagger
+          >
             {groups.map((group) => (
               <div
                 key={group.id}
-                className="rounded-2xl border border-slu-gray-200 bg-slu-offwhite p-6 transition-all hover:shadow-md"
+                className="rounded-2xl border border-slu-gray-200 bg-white p-6 transition-all hover:shadow-md"
               >
                 <h3 className="text-xl font-bold text-slu-black">
                   {group.name}
@@ -101,45 +108,47 @@ export default function GroupsPage() {
                 </div>
               </div>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
+      <WaveTransition from="light" to="dark" />
+
       {/* How to Join */}
-      <section className="bg-slu-offwhite py-16 sm:py-20">
+      <section className="bg-[#0A0A0A] py-16 sm:py-20">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-10 text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-slu-blue/10 text-slu-blue">
+          <Reveal className="mb-10 text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-slu-blue/15 text-slu-blue-light">
               <Users size={24} />
             </div>
-            <h2 className="text-3xl font-bold text-slu-black sm:text-4xl">
+            <h2 className="text-3xl font-bold text-white sm:text-4xl">
               How to Join
             </h2>
-            <p className="mt-2 text-slu-gray-500">
+            <p className="mt-2 text-white/50">
               Getting involved is simple — here&apos;s how
             </p>
-          </div>
-          <div className="grid gap-6 sm:grid-cols-3">
+          </Reveal>
+          <Reveal className="grid gap-6 sm:grid-cols-3" stagger>
             {steps.map((step) => (
               <div
                 key={step.number}
-                className="rounded-2xl border border-slu-gray-200 bg-white p-6 text-center"
+                className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center"
               >
                 <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-slu-blue text-sm font-bold text-white">
                   {step.number}
                 </div>
-                <h3 className="text-lg font-bold text-slu-black">
+                <h3 className="text-lg font-bold text-white">
                   {step.title}
                 </h3>
-                <p className="mt-2 text-sm text-slu-gray-500">
+                <p className="mt-2 text-sm text-white/60">
                   {step.description}
                 </p>
               </div>
             ))}
-          </div>
+          </Reveal>
           <div className="mt-10 text-center">
-            <p className="flex items-center justify-center gap-2 text-sm text-slu-gray-500">
-              <CheckCircle size={16} className="text-slu-blue" />
+            <p className="flex items-center justify-center gap-2 text-sm text-white/50">
+              <CheckCircle size={16} className="text-slu-blue-light" />
               No sign-up required — just show up and belong.
             </p>
           </div>
