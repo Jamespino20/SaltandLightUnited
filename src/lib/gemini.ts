@@ -1,6 +1,6 @@
 import { ChatMessage } from "@/types";
 
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-lite:generateContent";
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent";
 
 const SYSTEM_PROMPT = `You are the Salt and Light United assistant. You ONLY answer questions about SLU — our events, groups, beliefs, schedule, mission, and contact info. If asked about anything else, politely redirect: "I'm here to help with Salt and Light United questions." Do not answer questions about politics, other organizations, personal advice, or any topic not directly related to SLU.`;
 

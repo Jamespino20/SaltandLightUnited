@@ -108,10 +108,10 @@ export default function AboutPage() {
         </Reveal>
       </section>
 
-      <WaveTransition from="light" to="dark" />
+      <WaveTransition from="light" to="blue" />
 
       {/* Our Story */}
-      <section className="bg-[#0A0A0A] py-16 sm:py-20">
+      <section className="bg-slu-blue py-16 sm:py-20">
         <Reveal className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-slu-blue/15 text-slu-blue-light">
             <BookOpen size={24} />
@@ -172,10 +172,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <WaveTransition from="light" to="dark" />
+      <WaveTransition from="light" to="blue" />
 
       {/* Reach Us */}
-      <section className="bg-[#0A0A0A] py-16 sm:py-20">
+      <section className="bg-slu-blue py-16 sm:py-20">
         <Reveal className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-white sm:text-4xl">
             Reach Us Today!

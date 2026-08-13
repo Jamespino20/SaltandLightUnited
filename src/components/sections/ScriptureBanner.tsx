@@ -30,18 +30,19 @@ export function ScriptureBanner() {
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const card = el.querySelector(".scripture-card");
+    const cards = el.querySelectorAll<HTMLElement>(".scripture-card");
 
     const ctx = gsap.context(() => {
-      if (!card) return;
+      if (!cards.length) return;
       gsap.fromTo(
-        card,
+        cards,
         { opacity: 0, y: 30, scale: 0.95 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
           duration: 0.8,
+          stagger: 0.12,
           ease: "power2.out",
           scrollTrigger: {
             trigger: el,
@@ -72,7 +73,7 @@ export function ScriptureBanner() {
         {verses.map((verse, i) => (
           <div
             key={i}
-            className="scripture-card rounded-2xl border border-slu-gray-200 bg-[#E8E4D8] p-8 opacity-0 shadow-lg"
+            className="scripture-card rounded-2xl border border-slu-gray-200 bg-[#E8E4D8] p-8 shadow-lg"
           >
             <p className="text-center text-base italic leading-relaxed text-slu-gray-700">
               {verse.text}

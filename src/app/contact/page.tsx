@@ -149,10 +149,10 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <WaveTransition from="light" to="dark" />
+      <WaveTransition from="light" to="blue" />
 
       {/* CTA */}
-      <section className="bg-[#0A0A0A] py-16 sm:py-20">
+      <section className="bg-slu-blue py-16 sm:py-20">
         <Reveal className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-white sm:text-4xl">
             We&apos;d love to meet you

@@ -8,60 +8,60 @@ import { WaveTransition } from "@/components/sections/WaveTransition";
 const upcomingEvents = [
   {
     id: "1",
-    title: "Friday Fellowship Night",
+    title: "Friday Hangout",
     date: "Every Friday, 6:00 PM",
-    description: "Join us for worship, Word, and fellowship every Friday evening.",
+    description: "A relaxed evening to catch up, talk about life, and spend time together.",
   },
   {
     id: "2",
-    title: "Sunday Worship Service",
-    date: "Every Sunday, 9:00 AM",
-    description: "Start your week with praise and worship at our Sunday service.",
+    title: "Creative Night",
+    date: "Monthly · Date announced soon",
+    description: "Music, art, games, and whatever the community wants to make together.",
   },
   {
     id: "3",
-    title: "Youth Camp 2026",
-    date: "December 15–18, 2026",
+    title: "School Break Meetup",
+    date: "Next school break · Details soon",
     description:
-      "Our annual youth camp — three days of spiritual growth, outdoor activities, and community building.",
+      "A casual day out for food, conversation, and meeting new friends from SLU.",
   },
   {
     id: "4",
-    title: "Worship Night Under the Stars",
+    title: "Open Mic & Hangout",
     date: "September 25, 2026",
     description:
-      "An outdoor worship night featuring live praise, testimony, and fellowship with friends.",
+      "Bring a song, poem, game, or story and make the evening your own.",
   },
   {
     id: "5",
-    title: "Back-to-School Prayer Rally",
+    title: "Back-to-School Meetup",
     date: "August 15, 2026",
     description:
-      "Kick off the school year with prayer. We gather to seek God's blessing and guidance for the semester ahead.",
+      "Start the semester with familiar faces, new friends, and a little encouragement.",
   },
 ];
 
 const pastEvents = [
   {
     id: "6",
-    title: "Easter Celebration 2026",
+    title: "Summer Community Day",
     date: "April 5, 2026",
     description:
-      "A special worship service celebrating the resurrection of Jesus with praise, drama, and fellowship.",
+      "A simple day of food, games, and time together.",
   },
   {
     id: "7",
-    title: "Valentine's Fellowship",
+    title: "Game Night",
     date: "February 14, 2026",
     description:
-      "A love-themed fellowship night exploring God's love and how we share it with others.",
+      "Board games, group games, snacks, and a lot of friendly competition.",
   },
   {
     id: "8",
-    title: "Year-End Thanksgiving Service",
+    title: "Year-End Hangout",
     date: "December 28, 2025",
     description:
-      "Looking back on a year of God's faithfulness and stepping into the new year with praise.",
+      "A low-key year-end gathering to look back, laugh, and look ahead together.",
   },
 ];
 
@@ -78,10 +78,10 @@ export default function EventsPage() {
         />
         <div className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 sm:py-32 lg:px-8">
           <h1 className="text-4xl font-bold text-white sm:text-5xl">
-            Upcoming Events
+            SLU Gatherings
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-white/70">
-            Stay connected with what&apos;s happening at SLU
+            This is a hangout fellowship, not a church service calendar. Join us when you can.
           </p>
         </div>
       </section>

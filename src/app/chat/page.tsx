@@ -8,8 +8,10 @@ import {
   Users,
   Calendar,
   SpinnerGap,
+  SealCheck,
 } from "@phosphor-icons/react";
 import { brand } from "@/lib/brand";
+import { WaveTransition } from "@/components/sections/WaveTransition";
 
 interface Message {
   id: string;
@@ -96,29 +98,56 @@ export default function ChatPage() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-slu-blue">
+      {/* Hero — matches the landing page treatment */}
+      <section className="relative overflow-hidden bg-[#0A0A0A]">
+        <div
+          aria-hidden
+          className="absolute left-1/2 top-1/2 h-[85vmin] w-[85vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-90"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(7,112,189,0.55) 0%, rgba(0,180,255,0.3) 30%, rgba(0,200,255,0.1) 55%, transparent 75%)",
+            filter: "blur(40px)",
+          }}
+        />
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h1 className="text-4xl font-bold leading-tight text-white sm:text-5xl">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-white/90">
+              <Sparkle size={14} /> AI Assistant
+            </span>
+            <h1 className="mt-4 text-4xl font-bold leading-tight text-white sm:text-5xl">
               Chat with {brand.shortName}
             </h1>
             <p className="mt-4 text-lg text-white/80">
-              Ask questions about our fellowship, events, and community.
+              Ask anything about our fellowship, events, groups, and community.
             </p>
           </div>
         </div>
-        <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-slu-blue-dark/30 blur-3xl" />
-        <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-slu-blue-light/20 blur-3xl" />
       </section>
 
+      <WaveTransition from="dark" to="light" />
+
       {/* Chat Interface */}
-      <section className="bg-white py-12 sm:py-16">
+      <section className="bg-slu-offwhite py-12 sm:py-16">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
           {/* Chat Window */}
-          <div className="overflow-hidden rounded-2xl border border-slu-gray-200 bg-slu-offwhite">
+          <div className="overflow-hidden rounded-3xl border border-slu-gray-200 bg-white shadow-sm">
+            {/* Window header */}
+            <div className="flex items-center gap-3 border-b border-slu-gray-200 bg-slu-blue px-5 py-4 text-white">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
+                <Sparkle size={18} />
+              </div>
+              <div>
+                <p className="text-sm font-semibold leading-tight">
+                  {brand.name} Assistant
+                </p>
+                <p className="flex items-center gap-1 text-xs text-white/70">
+                  <SealCheck size={12} /> Here to help with SLU questions
+                </p>
+              </div>
+            </div>
+
             {/* Messages */}
-            <div className="h-96 overflow-y-auto p-6">
+            <div className="h-[26rem] overflow-y-auto p-5">
               {messages.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center text-center">
                   <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-slu-blue/10 text-slu-blue">
@@ -140,11 +169,16 @@ export default function ChatPage() {
                         msg.role === "user" ? "justify-end" : "justify-start"
                       }`}
                     >
+                      {msg.role === "assistant" && (
+                        <div className="mr-2 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slu-blue/10 text-slu-blue">
+                          <Sparkle size={16} />
+                        </div>
+                      )}
                       <div
-                        className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                        className={`max-w-[78%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                           msg.role === "user"
-                            ? "bg-slu-blue text-white"
-                            : "border border-slu-gray-200 bg-white text-slu-black"
+                            ? "rounded-br-sm bg-slu-blue text-white"
+                            : "rounded-bl-sm border border-slu-gray-200 bg-slu-offwhite text-slu-black"
                         }`}
                       >
                         {msg.content}
@@ -153,7 +187,7 @@ export default function ChatPage() {
                   ))}
                   {isLoading && (
                     <div className="flex justify-start">
-                      <div className="flex items-center gap-2 rounded-2xl border border-slu-gray-200 bg-white px-4 py-3 text-sm text-slu-gray-500">
+                      <div className="flex items-center gap-2 rounded-2xl rounded-bl-sm border border-slu-gray-200 bg-slu-offwhite px-4 py-3 text-sm text-slu-gray-500">
                         <SpinnerGap size={16} className="animate-spin" />
                         Thinking...
                       </div>
@@ -166,19 +200,19 @@ export default function ChatPage() {
             {/* Input */}
             <form
               onSubmit={handleSubmit}
-              className="flex items-center gap-3 border-t border-slu-gray-200 bg-white px-4 py-3"
+              className="flex items-center gap-2 border-t border-slu-gray-200 bg-slu-offwhite px-3 py-3"
             >
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type your message..."
-                className="flex-1 bg-transparent text-sm text-slu-black placeholder:text-slu-gray-400 focus:outline-none"
+                className="flex-1 rounded-full bg-white px-4 py-2.5 text-sm text-slu-black placeholder:text-slu-gray-400 focus:outline-none focus:ring-2 focus:ring-slu-blue/40"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isLoading}
-                className="flex h-9 w-9 items-center justify-center rounded-xl bg-slu-blue text-white transition-all hover:bg-slu-blue-dark disabled:opacity-40 disabled:hover:bg-slu-blue"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slu-blue text-white transition-all hover:bg-slu-blue-dark disabled:opacity-40 disabled:hover:bg-slu-blue"
               >
                 {isLoading ? (
                   <SpinnerGap size={16} className="animate-spin" />
@@ -212,3 +246,4 @@ export default function ChatPage() {
     </>
   );
 }
+

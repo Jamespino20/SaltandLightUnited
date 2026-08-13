@@ -10,7 +10,7 @@ const footerLinks = [
     links: [
       { href: "/about", label: "About Us" },
       { href: "/events", label: "Events" },
-      { href: "/groups", label: "Small Groups" },
+      { href: "/groups", label: "Community" },
       { href: "/resources", label: "Resources" },
     ],
   },
@@ -36,7 +36,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             {/* SLU pill badge */}
-            <div className="mt-6 flex justify-center">
+            <div className="flex justify-start">
               <img
                 src="/images/BlueWhitePill.svg"
                 alt="Salt and Light United"

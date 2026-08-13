@@ -9,12 +9,39 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const overlayRef = useRef<HTMLDivElement>(null);
   const animating = useRef(false);
+  const pending = useRef(false);
 
   // Keep the wave panel parked below the viewport when idle.
   useEffect(() => {
     const el = overlayRef.current;
     if (el) gsap.set(el, { yPercent: 100 });
   }, []);
+
+  // Retract the wave only after the destination route has actually mounted.
+  useEffect(() => {
+    if (!pending.current) return;
+    pending.current = false;
+
+    const el = overlayRef.current;
+    if (!el) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(el, { yPercent: 100 });
+      el.style.pointerEvents = "none";
+      animating.current = false;
+      return;
+    }
+
+    gsap.to(el, {
+      yPercent: -100,
+      duration: 0.6,
+      ease: "power2.out",
+      onComplete: () => {
+        animating.current = false;
+        el.style.pointerEvents = "none";
+      },
+    });
+  }, [pathname]);
 
   function onClickCapture(e: React.MouseEvent) {
     if (animating.current) {
@@ -47,6 +74,12 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
     if (url.origin !== window.location.origin) return;
 
     const target = url.pathname + url.search + url.hash;
+
+    // Never run the wave transition inside the admin panel.
+    if (pathname.startsWith("/admin") || target.startsWith("/admin")) {
+      return;
+    }
+
     if (target === pathname) {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -73,31 +106,29 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
     el.style.pointerEvents = "auto";
     gsap.set(el, { yPercent: 100 });
 
-    const tl = gsap.timeline({
+    gsap.to(el, {
+      yPercent: 0,
+      duration: 0.55,
+      ease: "power2.in",
       onComplete: () => {
-        animating.current = false;
-        el.style.pointerEvents = "none";
-      },
-    });
-
-    tl.to(el, { yPercent: 0, duration: 0.55, ease: "power2.in" })
-      .add(() => {
+        pending.current = true;
         router.push(path);
         window.scrollTo(0, 0);
-      })
-      .to(el, { yPercent: -100, duration: 0.6, ease: "power2.out", delay: 0.08 });
+      },
+    });
   }
 
   return (
     <div onClickCapture={onClickCapture}>
       {children}
 
-      {/* Wave flood overlay — sits above everything (incl. the fixed header) */}
+      {/* Wave flood overlay — sits above everything (incl. the fixed header).
+          No inline transform here: React re-renders on navigation would
+          overwrite GSAP's transform and snap the wave back to hidden. */}
       <div
         ref={overlayRef}
         aria-hidden
-        className="pointer-events-none fixed inset-x-0 top-0 z-[120] h-screen"
-        style={{ transform: "translateY(100%)" }}
+        className="slu-page-transition-overlay pointer-events-none fixed inset-x-0 top-0 z-[120] h-screen"
       >
         {/* Solid flood body */}
         <div className="absolute inset-0 bg-slu-blue" />

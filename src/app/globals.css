@@ -153,6 +153,42 @@ body {
   font-display: swap;
 }
 
+/* ---------- Hero moving gradient (shared by Hero + About) ---------- */
+@keyframes slu-hero-gradient {
+  0%,
+  100% {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+    opacity: 0.82;
+  }
+  50% {
+    transform: translate3d(2%, 1%, 0) scale(1.08);
+    opacity: 1;
+  }
+}
+.slu-hero-gradient {
+  animation: slu-hero-gradient 16s ease-in-out infinite alternate;
+  transform-origin: 50% 35%;
+}
+
+@keyframes slu-hero-glow-drift {
+  0%,
+  100% {
+    transform: translate3d(-4%, -2%, 0) scale(0.96);
+  }
+  50% {
+    transform: translate3d(4%, 3%, 0) scale(1.08);
+  }
+}
+
+.slu-hero-glow {
+  animation: slu-hero-glow-drift 11s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.slu-page-transition-overlay {
+  transform: translate3d(0, 100%, 0);
+}
+
 /* ---------- Animated wave transition (parallax SVG) ---------- */
 @keyframes slu-wave-move {
   0% {
@@ -163,22 +199,9 @@ body {
   }
 }
 
-.slu-wave .parallax use {
-  animation: slu-wave-move 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
-}
-.slu-wave .parallax use:nth-child(1) {
-  animation-delay: -2s;
-  animation-duration: 7s;
-}
-.slu-wave .parallax use:nth-child(2) {
-  animation-delay: -3s;
-  animation-duration: 10s;
-}
-.slu-wave .parallax use:nth-child(3) {
-  animation-delay: -4s;
-  animation-duration: 13s;
-}
-.slu-wave .parallax use:nth-child(4) {
-  animation-delay: -5s;
-  animation-duration: 20s;
+.slu-wave .parallax {
+  animation: slu-wave-move 12s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite alternate;
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform;
 }

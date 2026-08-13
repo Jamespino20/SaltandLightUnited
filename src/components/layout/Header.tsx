@@ -28,33 +28,45 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
-  const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
-    for (const entry of entries) {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        if (id === "events" || id === "facebook" || id === "groups") {
-          setTheme("light");
-        } else {
-          setTheme("dark");
-        }
-        break;
-      }
-    }
-  }, []);
+  const sectionTheme: Record<string, "dark" | "light"> = {
+    hero: "dark",
+    about: "dark",
+    events: "light",
+    facebook: "light",
+    groups: "light",
+    scripture: "dark",
+    cta: "dark",
+  };
 
   useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, {
-      rootMargin: "-40% 0px -55% 0px",
-      threshold: 0,
-    });
-
-    for (const id of sectionIds) {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    }
-
-    return () => observer.disconnect();
-  }, [handleObserver]);
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const probe = 90;
+      let current: "dark" | "light" = "dark";
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const r = el.getBoundingClientRect();
+        if (r.top <= probe && r.bottom > probe) {
+          current = sectionTheme[id] ?? "dark";
+          break;
+        }
+      }
+      setTheme(current);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
 
   const isDark = theme === "dark";
 

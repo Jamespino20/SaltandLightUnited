@@ -7,21 +7,21 @@ import { Reveal } from "@/components/animation/Reveal";
 const sampleEvents = [
   {
     id: "1",
-    title: "Friday Fellowship Night",
+    title: "Friday Hangout",
     date: "Every Friday, 6:00 PM",
-    description: "Join us for worship, the Word, and fellowship every Friday evening.",
+    description: "A relaxed evening to catch up, talk about life, and spend time together.",
   },
   {
     id: "2",
-    title: "Sunday Worship Service",
-    date: "Every Sunday, 9:00 AM",
-    description: "Start your week with praise and worship at our Sunday service.",
+    title: "Creative Night",
+    date: "Monthly · Date announced soon",
+    description: "Music, art, games, and whatever the community wants to make together.",
   },
   {
     id: "3",
-    title: "Youth Camp 2026",
-    date: "December 15–18, 2026",
-    description: "Our annual youth camp — three days of spiritual growth and fun.",
+    title: "School Break Meetup",
+    date: "Next school break · Details soon",
+    description: "A casual day out for food, conversation, and meeting new friends from SLU.",
   },
 ];
 
@@ -116,8 +116,8 @@ export function UpcomingEvents() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal className="mb-12 text-center lg:text-left">
           <h2 className="text-3xl font-bold text-slu-black sm:text-4xl lg:text-5xl">
-            Mark your calendars.{" "}
-            <span className="text-slu-blue">Keep the date.</span>
+            Make room for community.{" "}
+            <span className="text-slu-blue">Keep an eye out.</span>
           </h2>
         </Reveal>
 

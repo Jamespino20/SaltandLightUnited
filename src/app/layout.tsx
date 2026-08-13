@@ -9,6 +9,7 @@ import { ScrollProgress } from "@/components/animation/ScrollProgress";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { PageTransition } from "@/components/transition/PageTransition";
+import { LampyButton } from "@/components/layout/LampyButton";
 import "./globals.css";
 
 const aileron = localFont({
@@ -56,11 +57,12 @@ export default function RootLayout({
         <ScrollProgress />
         <LightOrb />
         <SmoothScroll>
-          <Header />
-          <main className="flex-1">
-            <PageTransition>{children}</PageTransition>
-          </main>
-          <Footer />
+          <PageTransition>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <LampyButton />
+          </PageTransition>
         </SmoothScroll>
         <Analytics />
         <SpeedInsights />

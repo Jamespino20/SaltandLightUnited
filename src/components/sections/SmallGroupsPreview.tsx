@@ -7,32 +7,32 @@ import { Reveal } from "@/components/animation/Reveal";
 const slides = [
   {
     id: "1",
-    label: "Teens for Christ",
-    caption: "Ages 13–17 · Growing in faith together",
+    label: "Teen Nights",
+    caption: "Ages 13–17 · Hanging out and growing together",
     image: "/images/history/first_pic.jpg",
   },
   {
     id: "2",
-    label: "Tweens of Light",
-    caption: "Ages 10–12 · Building a strong foundation",
+    label: "Tween Hangout",
+    caption: "Ages 10–12 · Games, faith, and friendships",
     image: "/images/history/second_pic.jpg",
   },
   {
     id: "3",
-    label: "Worship Team",
-    caption: "Leading praise through music and song",
+    label: "Jam Sessions",
+    caption: "Music, songs, and creative worship",
     image: "/images/history/third_pic.jpg",
   },
   {
     id: "4",
-    label: "Bible Study",
-    caption: "Diving deep into God's Word together",
+    label: "Real Talk",
+    caption: "Deep conversations about faith and life",
     image: "/images/history/fourth_pic.webp",
   },
   {
     id: "5",
-    label: "Outreach Ministry",
-    caption: "Serving the community with Christ's love",
+    label: "Street Team",
+    caption: "Serving the community together",
     image: "/images/history/fifth_pic.jpg",
   },
 ];
@@ -116,7 +116,7 @@ export function SmallGroupsPreview() {
 
         {/* Card-fan carousel */}
         <div
-          className="relative mx-auto h-[300px] max-w-3xl sm:h-[360px]"
+          className="relative mx-auto mt-12 h-[300px] max-w-3xl sm:mt-16 sm:h-[360px]"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onMouseEnter={() => setPaused(true)}

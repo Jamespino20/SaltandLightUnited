@@ -1,15 +1,20 @@
 "use client";
 
 interface WaveTransitionProps {
-  from: "dark" | "light";
-  to: "dark" | "light";
+  from: "dark" | "light" | "blue";
+  to: "dark" | "light" | "blue";
   className?: string;
 }
 
 const COLORS = {
   dark: "#0A0A0A",
   light: "#F0F0F0",
+  blue: "#0770BD",
 } as const;
+
+// Wide, tileable wave so the parallax drift never reveals a gap.
+const WAVE =
+  "M-200,42 C40,92 280,2 520,46 C760,92 1000,2 1240,46 C1400,76 1520,22 1640,46 L1640,120 L-200,120 Z";
 
 export function WaveTransition({ to, className = "" }: WaveTransitionProps) {
   const fill = COLORS[to];
@@ -17,25 +22,20 @@ export function WaveTransition({ to, className = "" }: WaveTransitionProps) {
   return (
     <div className={`relative -mt-px ${className}`} aria-hidden>
       <svg
-        className="slu-wave block h-16 w-full sm:h-24"
+        className="slu-wave block h-20 w-full sm:h-28"
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 24 150 28"
+        viewBox="0 0 1440 120"
         preserveAspectRatio="none"
         shapeRendering="auto"
       >
-        <defs>
-          <path
-            id="gentle-wave"
-            d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
-          />
-        </defs>
         <g className="parallax">
-          <use href="#gentle-wave" x="48" y="0" fill={fill} fillOpacity="0.7" />
-          <use href="#gentle-wave" x="48" y="3" fill={fill} fillOpacity="0.5" />
-          <use href="#gentle-wave" x="48" y="5" fill={fill} fillOpacity="0.3" />
-          <use href="#gentle-wave" x="48" y="7" fill={fill} />
+          <path d={WAVE} fill={fill} fillOpacity="0.35" />
+          <path d={WAVE} fill={fill} fillOpacity="0.55" transform="translate(0,8)" />
+          <path d={WAVE} fill={fill} fillOpacity="0.75" transform="translate(0,16)" />
+          <path d={WAVE} fill={fill} transform="translate(0,24)" />
         </g>
       </svg>
     </div>
   );
 }
+
