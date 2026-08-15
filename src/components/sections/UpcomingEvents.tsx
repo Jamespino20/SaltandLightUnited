@@ -114,36 +114,34 @@ export function UpcomingEvents() {
   return (
     <section id="events" className="bg-[#F0F0F0] py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal className="mb-12 text-center lg:text-left">
+        <Reveal className="mb-12 text-center">
           <h2 className="text-3xl font-bold text-slu-black sm:text-4xl lg:text-5xl">
             Make room for community.{" "}
             <span className="text-slu-blue">Keep an eye out.</span>
           </h2>
         </Reveal>
 
-        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-          {/* Calendar */}
-          <Reveal>
-            <Calendar selectedDate={selectedDate} onSelect={setSelectedDate} />
-          </Reveal>
+        {/* Calendar — centered single column */}
+        <Reveal className="mx-auto max-w-md">
+          <Calendar selectedDate={selectedDate} onSelect={setSelectedDate} />
+        </Reveal>
 
-          {/* Events */}
-          <Reveal stagger className="space-y-4">
-            {sampleEvents.map((event, i) => (
-              <div
-                key={event.id}
-                className="rounded-2xl border border-slu-gray-200 bg-white p-6 transition-all hover:shadow-md"
-              >
-                <div className="mb-1 text-xs font-semibold tracking-wide text-slu-blue">
-                  EVENT {i + 1}
-                </div>
-                <h3 className="text-lg font-bold text-slu-black">{event.title}</h3>
-                <p className="mt-1 text-sm text-slu-gray-500">{event.date}</p>
-                <p className="mt-2 text-sm text-slu-gray-600">{event.description}</p>
+        {/* Events — grid below calendar */}
+        <Reveal stagger className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {sampleEvents.map((event, i) => (
+            <div
+              key={event.id}
+              className="rounded-2xl border border-slu-gray-200 bg-white p-6 transition-all hover:shadow-md"
+            >
+              <div className="mb-1 text-xs font-semibold tracking-wide text-slu-blue">
+                EVENT {i + 1}
               </div>
-            ))}
-          </Reveal>
-        </div>
+              <h3 className="text-lg font-bold text-slu-black">{event.title}</h3>
+              <p className="mt-1 text-sm text-slu-gray-500">{event.date}</p>
+              <p className="mt-2 text-sm text-slu-gray-600">{event.description}</p>
+            </div>
+          ))}
+        </Reveal>
       </div>
     </section>
   );

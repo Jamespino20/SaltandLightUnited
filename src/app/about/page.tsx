@@ -8,19 +8,9 @@ import { WaveTransition } from "@/components/sections/WaveTransition";
 
 const leaders = [
   {
-    name: "Bro. Michael Santos",
-    role: "Youth Pastor",
-    image: "/images/leaders/pastor-michael.jpg",
-  },
-  {
-    name: "Sis. Anna Reyes",
-    role: "Worship Director",
-    image: "/images/leaders/sis-anna.jpg",
-  },
-  {
-    name: "Kuya Josh Dela Cruz",
-    role: "Small Groups Coordinator",
-    image: "/images/leaders/kuya-josh.jpg",
+    name: "Community-Led",
+    role: "SLU is led by its community of young people serving together",
+    image: "/images/history/first_pic.jpg",
   },
 ];
 
@@ -52,25 +42,40 @@ export default function AboutPage() {
 
       {/* About Us */}
       <section className="bg-[#F0F0F0] py-16 sm:py-20">
-        <Reveal className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <h2 className="mb-6 text-3xl font-bold text-slu-black sm:text-4xl">
-            About Us
-          </h2>
-          <div className="space-y-4 leading-relaxed text-slu-gray-600">
-            <p>
-              We are {brand.name}! A Christ-centered community of students and
-              young people based in Baliwag City who desire to know Jesus, grow
-              in His Word, and live out our faith together.
-            </p>
-            <p>
-              We believe that lives are transformed through Christ, and that
-              every believer is called to be the salt of the earth and the light
-              of the world (Matthew 5:13–16).
-            </p>
-            <p>
-              Whether you&apos;re exploring faith, returning to God, or looking
-              for a place to grow, you&apos;re welcome here.
-            </p>
+        <Reveal className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-2">
+            <div>
+              <h2 className="mb-6 text-3xl font-bold text-slu-black sm:text-4xl">
+                About Us
+              </h2>
+              <div className="space-y-4 leading-relaxed text-slu-gray-600">
+                <p>
+                  We are {brand.name}! A Christ-centered community of students and
+                  young people based in Baliwag City who desire to know Jesus, grow
+                  in His Word, and live out our faith together.
+                </p>
+                <p>
+                  We believe that lives are transformed through Christ, and that
+                  every believer is called to be the salt of the earth and the light
+                  of the world (Matthew 5:13–16).
+                </p>
+                <p>
+                  Whether you&apos;re exploring faith, returning to God, or looking
+                  for a place to grow, you&apos;re welcome here.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center justify-center">
+              <div className="rounded-2xl border border-slu-blue/20 bg-slu-blue/5 p-8 text-center">
+                <p className="text-lg font-semibold italic leading-relaxed text-slu-black">
+                  &ldquo;You are the salt of the earth. But if the salt loses its
+                  saltiness, how can it be made salty again?&rdquo;
+                </p>
+                <p className="mt-4 text-sm font-semibold text-slu-blue">
+                  — Matthew 5:13
+                </p>
+              </div>
+            </div>
           </div>
         </Reveal>
       </section>
@@ -143,31 +148,30 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal className="mb-10 text-center">
             <h2 className="text-3xl font-bold text-slu-black sm:text-4xl">
-              Our Leaders
+              Who Runs SLU?
             </h2>
             <p className="mt-2 text-slu-gray-500">
-              The people who shepherd and guide our fellowship
+              No pastors or formal leaders — just a community serving together
             </p>
           </Reveal>
-          <Reveal className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" stagger>
-            {leaders.map((leader) => (
-              <div
-                key={leader.name}
-                className="rounded-2xl border border-slu-gray-200 bg-white p-6 text-center transition-all hover:shadow-md"
-              >
-                <div className="mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full bg-slu-gray-200">
-                  <img
-                    src={leader.image}
-                    alt={leader.name}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <h3 className="text-lg font-bold text-slu-black">
-                  {leader.name}
-                </h3>
-                <p className="mt-1 text-sm text-slu-blue">{leader.role}</p>
+          <Reveal className="mx-auto max-w-2xl text-center" stagger>
+            <div className="rounded-2xl border border-slu-gray-200 bg-white p-8 transition-all hover:shadow-md">
+              <div className="mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full bg-slu-gray-200">
+                <img
+                  src="/images/history/first_pic.jpg"
+                  alt="SLU community"
+                  className="h-full w-full object-cover"
+                />
               </div>
-            ))}
+              <h3 className="text-lg font-bold text-slu-black">
+                You decide what SLU becomes
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-slu-gray-500">
+                We&apos;re not a church with a pastor. We&apos;re a hangout fellowship
+                where everyone pitches in, organizes events, and shapes the community
+                together.
+              </p>
+            </div>
           </Reveal>
         </div>
       </section>

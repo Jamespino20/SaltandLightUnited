@@ -11,11 +11,11 @@ export function AboutStrip() {
     >
       {/* Background photo — show the full image including its baked-in
           white fade at bottom and transparent vignette at top */}
-      <div className="absolute inset-0 -z-20 flex items-center justify-center">
+      <div className="absolute inset-0 -z-20">
         <img
           src="/images/history/seventh_pic.png"
           alt="SLU group gathering"
-          className="h-full w-full object-contain"
+          className="h-full w-full object-cover"
         />
       </div>
 

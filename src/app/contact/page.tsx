@@ -2,11 +2,8 @@
 
 import {
   MapPin,
-  Envelope,
   Phone,
-  InstagramLogo,
   FacebookLogo,
-  YoutubeLogo,
 } from "@phosphor-icons/react";
 import { brand } from "@/lib/brand";
 import { Reveal } from "@/components/animation/Reveal";
@@ -90,17 +87,6 @@ export default function ContactPage() {
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slu-blue/10 text-slu-blue">
-                      <Envelope size={20} />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-slu-black">Email</p>
-                      <p className="text-sm text-slu-gray-500">
-                        Reach us on Facebook or call us directly.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slu-blue/10 text-slu-blue">
                       <Phone size={20} />
                     </div>
                     <div>
@@ -120,13 +106,6 @@ export default function ContactPage() {
                 </p>
                 <div className="mt-4 flex gap-3">
                   <a
-                    href="#"
-                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-slu-gray-200 text-slu-gray-500 transition-all hover:border-slu-blue hover:text-slu-blue"
-                    aria-label="Instagram"
-                  >
-                    <InstagramLogo size={20} />
-                  </a>
-                  <a
                     href={brand.facebookUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -134,13 +113,6 @@ export default function ContactPage() {
                     aria-label="Facebook"
                   >
                     <FacebookLogo size={20} />
-                  </a>
-                  <a
-                    href="#"
-                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-slu-gray-200 text-slu-gray-500 transition-all hover:border-slu-blue hover:text-slu-blue"
-                    aria-label="YouTube"
-                  >
-                    <YoutubeLogo size={20} />
                   </a>
                 </div>
               </div>

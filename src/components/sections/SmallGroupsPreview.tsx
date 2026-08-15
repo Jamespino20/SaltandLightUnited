@@ -109,14 +109,14 @@ export function SmallGroupsPreview() {
           <h2 className="text-3xl font-bold text-slu-black sm:text-4xl lg:text-5xl">
             Want to see us wave?{" "}
             <span className="text-slu-blue">
-              Here&apos;s the Salters for you.
+              Here&apos;s the Salt and Lighters for you.
             </span>
           </h2>
         </Reveal>
 
         {/* Card-fan carousel */}
         <div
-          className="relative mx-auto mt-20 h-[300px] max-w-3xl sm:mt-24 sm:h-[360px]"
+          className="relative mx-auto mt-20 h-[300px] max-w-2xl px-12 sm:mt-24 sm:h-[360px]"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onMouseEnter={() => setPaused(true)}
@@ -135,7 +135,7 @@ export function SmallGroupsPreview() {
             return (
               <div
                 key={slide.id}
-                className="absolute left-1/2 top-1/2 w-[78%] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out"
+                className="absolute left-1/2 top-1/2 w-[85%] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out"
                 style={{
                   transform: `translate(calc(-50% + ${translateX}%), -50%) rotate(${rotate}deg) scale(${scale})`,
                   zIndex,
@@ -168,7 +168,7 @@ export function SmallGroupsPreview() {
           <button
             type="button"
             onClick={prev}
-            className="absolute left-0 top-1/2 z-[60] -translate-y-1/2 rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
+            className="absolute left-2 top-1/2 z-[60] -translate-y-1/2 rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
             aria-label="Previous slide"
           >
             <CaretLeft size={20} />
@@ -176,7 +176,7 @@ export function SmallGroupsPreview() {
           <button
             type="button"
             onClick={next}
-            className="absolute right-0 top-1/2 z-[60] -translate-y-1/2 rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
+            className="absolute right-2 top-1/2 z-[60] -translate-y-1/2 rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
             aria-label="Next slide"
           >
             <CaretRight size={20} />

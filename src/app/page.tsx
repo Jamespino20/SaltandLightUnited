@@ -32,7 +32,6 @@ export default function Home() {
       <WaveTransition from="blue" to="light" />
       <SmallGroupsPreview />
       <ScriptureBanner />
-      <WaveTransition from="light" to="dark" />
       <CallToAction />
     </>
   );

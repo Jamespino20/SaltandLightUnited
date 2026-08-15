@@ -9,7 +9,7 @@ import { ScrollProgress } from "@/components/animation/ScrollProgress";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { PageTransition } from "@/components/transition/PageTransition";
-import { LampyButton } from "@/components/layout/LampyButton";
+import { LampyWidget } from "@/components/layout/LampyWidget";
 import "./globals.css";
 
 const aileron = localFont({
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     "tweens",
   ],
   openGraph: {
-    title: `${brand.name} | Youth Fellowship`,
+    title: `SLU Fellowship`,
     description: brand.description,
     type: "website",
   },
@@ -61,9 +61,9 @@ export default function RootLayout({
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
-            <LampyButton />
           </PageTransition>
         </SmoothScroll>
+        <LampyWidget />
         <Analytics />
         <SpeedInsights />
       </body>

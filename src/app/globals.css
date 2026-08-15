@@ -15,6 +15,10 @@ html {
   overflow-x: hidden;
 }
 
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
 /* Lenis smooth scroll */
 html.lenis,
 html.lenis body {
@@ -187,7 +191,7 @@ body {
 }
 
 .slu-page-transition-overlay {
-  transform: translate3d(0, 100%, 0);
+  will-change: transform;
 }
 
 /* ---------- Animated wave transition (parallax SVG) ---------- */

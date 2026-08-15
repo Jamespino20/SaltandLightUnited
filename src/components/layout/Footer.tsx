@@ -18,7 +18,6 @@ const footerLinks = [
     title: "Connect",
     links: [
       { href: "/contact", label: "Contact Us" },
-      { href: "/chat", label: "Chat with Us" },
     ],
   },
 ];

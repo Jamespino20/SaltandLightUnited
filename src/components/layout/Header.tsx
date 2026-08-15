@@ -8,9 +8,8 @@ import { brand } from "@/lib/brand";
 const navLinks = [
   { href: "/about", label: "About" },
   { href: "/events", label: "Events" },
-  { href: "/groups", label: "Groups" },
+  { href: "/groups", label: "Community" },
   { href: "/resources", label: "Resources" },
-  { href: "/chat", label: "Chat" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -83,7 +82,7 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2">
           <div className="h-9 w-9 flex-shrink-0">
             <img
-              src="/images/SaltandLightBlueWhite.svg"
+              src={isDark ? "/images/SaltandLightWhiteTransparent.svg" : "/images/SaltandLightBlueTransparent.svg"}
               alt="Salt and Light United"
               className="h-full w-full object-contain"
             />
