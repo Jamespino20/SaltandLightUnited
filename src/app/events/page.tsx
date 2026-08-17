@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CalendarBlank, CaretDown, CaretUp } from "@phosphor-icons/react";
 import { Reveal } from "@/components/animation/Reveal";
 import { WaveTransition } from "@/components/sections/WaveTransition";
+import { useTranslations } from "next-intl";
 
 const upcomingEvents = [
   {
@@ -66,6 +67,7 @@ const pastEvents = [
 ];
 
 export default function EventsPage() {
+  const t = useTranslations("events");
   const [showPast, setShowPast] = useState(false);
 
   return (
@@ -78,10 +80,10 @@ export default function EventsPage() {
         />
         <div className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 sm:py-32 lg:px-8">
           <h1 className="text-4xl font-bold text-white sm:text-5xl">
-            SLU Gatherings
+            {t("title")}
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-white/70">
-            This is a hangout fellowship, not a church service calendar. Join us when you can.
+            {t("subtitle")}
           </p>
         </div>
       </section>
@@ -93,7 +95,7 @@ export default function EventsPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <h2 className="text-2xl font-bold text-slu-black sm:text-3xl">
-              What&apos;s Coming Up
+              {t("upcoming")}
             </h2>
           </Reveal>
           <Reveal
@@ -132,7 +134,7 @@ export default function EventsPage() {
           >
             <div>
               <h2 className="text-2xl font-bold text-white sm:text-3xl">
-                Past Events
+                {t("past")}
               </h2>
               <p className="mt-1 text-sm text-white/50">
                 {pastEvents.length} previous events

@@ -114,79 +114,85 @@ export function SmallGroupsPreview() {
           </h2>
         </Reveal>
 
-        {/* Card-fan carousel */}
-        <div
-          className="relative mx-auto mt-20 h-[300px] max-w-2xl px-12 sm:mt-24 sm:h-[360px]"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-          style={{ perspective: "1400px" }}
-        >
-          {slides.map((slide, i) => {
-            const offset = wrapOffset(i, current, slides.length);
-            const abs = Math.abs(offset);
-            const visible = abs <= 2;
-            const translateX = offset * 46;
-            const rotate = offset * 9;
-            const scale = 1 - abs * 0.08;
-            const zIndex = 50 - abs * 10;
-
-            return (
-              <div
-                key={slide.id}
-                className="absolute left-1/2 top-1/2 w-[85%] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out"
-                style={{
-                  transform: `translate(calc(-50% + ${translateX}%), -50%) rotate(${rotate}deg) scale(${scale})`,
-                  zIndex,
-                  opacity: visible ? 1 : 0,
-                  pointerEvents: visible ? "auto" : "none",
-                }}
-              >
-                <div className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-slu-gray-200">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={slide.image}
-                    alt={slide.label}
-                    className="h-full w-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  <div className="absolute bottom-0 left-0 p-5">
-                    <span className="inline-block rounded-full bg-slu-blue px-3 py-1 text-xs font-semibold text-white">
-                      {slide.label}
-                    </span>
-                    <p className="mt-2 text-sm text-white/85">
-                      {slide.caption}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-
-          {/* Controls */}
+        {/* Carousel with outer arrows */}
+        <div className="relative">
+          {/* Arrows at outer edges of the section */}
           <button
             type="button"
             onClick={prev}
-            className="absolute left-2 top-1/2 z-[60] -translate-y-1/2 rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
+            className="absolute -left-2 top-[180px] z-[60] rounded-full bg-white p-3 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:top-[200px] sm:p-4"
             aria-label="Previous slide"
           >
-            <CaretLeft size={20} />
+            <CaretLeft size={24} />
           </button>
           <button
             type="button"
             onClick={next}
-            className="absolute right-2 top-1/2 z-[60] -translate-y-1/2 rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
+            className="absolute -right-2 top-[180px] z-[60] rounded-full bg-white p-3 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:top-[200px] sm:p-4"
             aria-label="Next slide"
           >
-            <CaretRight size={20} />
+            <CaretRight size={24} />
           </button>
+
+          {/* Card-fan carousel */}
+          <div
+            className="relative mx-auto mt-20 max-w-3xl sm:mt-24"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            style={{ perspective: "1400px" }}
+          >
+            <div className="relative h-[300px] sm:h-[360px]">
+              {slides.map((slide, i) => {
+                const offset = wrapOffset(i, current, slides.length);
+                const abs = Math.abs(offset);
+                const visible = abs <= 2;
+                const translateX = offset * 46;
+                const rotate = offset * 9;
+                const scale = 1 - abs * 0.08;
+                const zIndex = 50 - abs * 10;
+
+                return (
+                  <div
+                    key={slide.id}
+                    className="absolute top-1/2 w-[85%] max-w-md -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out"
+                    style={{
+                      left: "50%",
+                      transform: `translate(calc(-50% + ${translateX}%), -50%) rotate(${rotate}deg) scale(${scale})`,
+                      zIndex,
+                      opacity: visible ? 1 : 0,
+                      pointerEvents: visible ? "auto" : "none",
+                    }}
+                  >
+                    <div className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-slu-gray-200">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={slide.image}
+                        alt={slide.label}
+                        className="h-full w-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                      <div className="absolute bottom-0 left-0 p-5">
+                        <span className="inline-block rounded-full bg-slu-blue px-3 py-1 text-xs font-semibold text-white">
+                          {slide.label}
+                        </span>
+                        <p className="mt-2 text-sm text-white/85">
+                          {slide.caption}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
           {/* Pause/Play */}
           <button
             type="button"
             onClick={() => setPaused(!paused)}
-            className="absolute right-2 top-2 z-[60] rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
+            className="absolute right-0 top-0 z-[60] rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
             aria-label={paused ? "Resume autoplay" : "Pause autoplay"}
           >
             {paused ? <Play size={16} /> : <Pause size={16} />}

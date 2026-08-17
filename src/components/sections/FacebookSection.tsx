@@ -3,8 +3,10 @@
 import { Reveal } from "@/components/animation/Reveal";
 import { FacebookLogo } from "@phosphor-icons/react";
 import { brand } from "@/lib/brand";
+import { useTranslations } from "next-intl";
 
 export function FacebookSection() {
+  const t = useTranslations("home.facebook");
   return (
     <section id="facebook" className="bg-slu-blue py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -12,13 +14,10 @@ export function FacebookSection() {
           {/* Copy */}
           <Reveal>
             <h2 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
-              Join the FB page to{" "}
-              <span className="text-slu-blue-light">be updated and to join.</span>
+              {t("title")}
             </h2>
             <p className="mt-6 text-lg text-white/80">
-              Stay connected with Salt and Light United through our official
-              Facebook page. Get the latest updates on events, fellowship
-              nights, and community activities — straight from our feed.
+              {t("description")}
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a

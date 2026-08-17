@@ -1,62 +1,79 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { List, X } from "@phosphor-icons/react";
 import { brand } from "@/lib/brand";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import { useTranslations } from "next-intl";
 
 const navLinks = [
-  { href: "/about", label: "About" },
-  { href: "/events", label: "Events" },
-  { href: "/groups", label: "Community" },
-  { href: "/resources", label: "Resources" },
-  { href: "/contact", label: "Contact" },
+  { href: "/about", key: "about" },
+  { href: "/events", key: "events" },
+  { href: "/groups", key: "community" },
+  { href: "/resources", key: "resources" },
+  { href: "/bible", key: "bible" },
+  { href: "/contact", key: "contact" },
 ];
 
-const sectionIds = [
-  "hero",
-  "about",
-  "events",
-  "facebook",
-  "groups",
-  "scripture",
-  "cta",
-];
+function getLuminance(hex: string): number {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  const linear = (c: number) =>
+    c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  return 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
+}
+
+function getEffectiveBg(el: HTMLElement | null): string {
+  while (el && el !== document.body) {
+    const bg = getComputedStyle(el).backgroundColor;
+    if (bg && bg !== "rgba(0, 0, 0, 0)" && bg !== "transparent") {
+      const m = bg.match(/[\d.]+/g);
+      if (m && m.length >= 3) {
+        const r = parseInt(m[0]);
+        const g = parseInt(m[1]);
+        const b = parseInt(m[2]);
+        return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+      }
+    }
+    el = el.parentElement;
+  }
+  return "#F0F0F0";
+}
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
-
-  const sectionTheme: Record<string, "dark" | "light"> = {
-    hero: "dark",
-    about: "dark",
-    events: "light",
-    facebook: "light",
-    groups: "light",
-    scripture: "dark",
-    cta: "dark",
-  };
+  const t = useTranslations("nav");
 
   useEffect(() => {
     let raf = 0;
+    const probeY = 90;
+
     const update = () => {
       raf = 0;
-      const probe = 90;
-      let current: "dark" | "light" = "dark";
-      for (const id of sectionIds) {
-        const el = document.getElementById(id);
-        if (!el) continue;
-        const r = el.getBoundingClientRect();
-        if (r.top <= probe && r.bottom > probe) {
-          current = sectionTheme[id] ?? "dark";
+
+      // Walk through all sections and find which one is at the probe Y position
+      const sections = document.querySelectorAll("section");
+      let bg = "#F0F0F0";
+
+      for (const section of Array.from(sections)) {
+        const rect = (section as HTMLElement).getBoundingClientRect();
+        if (rect.top <= probeY && rect.bottom > probeY) {
+          bg = getEffectiveBg(section as HTMLElement);
           break;
         }
       }
-      setTheme(current);
+
+      const lum = getLuminance(bg);
+      setTheme(lum < 0.4 ? "dark" : "light");
     };
+
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update);
     };
+
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
@@ -82,7 +99,11 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2">
           <div className="h-9 w-9 flex-shrink-0">
             <img
-              src={isDark ? "/images/SaltandLightWhiteTransparent.svg" : "/images/SaltandLightBlueTransparent.svg"}
+              src={
+                isDark
+                  ? "/images/SaltandLightWhiteTransparent.svg"
+                  : "/images/SaltandLightBlueTransparent.svg"
+              }
               alt="Salt and Light United"
               className="h-full w-full object-contain"
             />
@@ -101,9 +122,14 @@ export function Header() {
                   : "text-slu-gray-600 hover:bg-slu-blue/10 hover:text-slu-blue"
               }`}
             >
-              {link.label}
+              {t(link.key)}
             </Link>
           ))}
+          <div
+            className={`ml-2 border-l ${isDark ? "border-white/20" : "border-slu-gray-200"}`}
+          >
+            <LanguageSwitcher isDark={isDark} />
+          </div>
         </nav>
 
         {/* Mobile Toggle */}
@@ -141,9 +167,14 @@ export function Header() {
               }`}
               onClick={() => setMobileOpen(false)}
             >
-              {link.label}
+              {t(link.key)}
             </Link>
           ))}
+          <div
+            className={`mt-2 border-t ${isDark ? "border-white/20" : "border-slu-gray-200"} pt-2`}
+          >
+            <LanguageSwitcher isDark={isDark} />
+          </div>
         </nav>
       )}
     </div>

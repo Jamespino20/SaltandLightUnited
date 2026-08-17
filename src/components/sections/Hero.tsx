@@ -2,8 +2,10 @@
 
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
+import { useTranslations } from "next-intl";
 
 export function Hero() {
+  const t = useTranslations("home.hero");
   const root = useRef<HTMLElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const sub = useRef<HTMLParagraphElement>(null);
@@ -54,8 +56,8 @@ export function Hero() {
         ref={heading}
         className="relative z-10 text-4xl font-bold leading-tight tracking-tight opacity-0 sm:text-5xl lg:text-6xl"
       >
-        <span className="text-white">Be the Salt. </span>
-        <span className="text-slu-blue-light">Be the Light.</span>
+        <span className="text-white">{t("title1")} </span>
+        <span className="text-slu-blue-light">{t("title2")}</span>
       </h1>
 
       {/* Supporting copy */}
@@ -63,9 +65,7 @@ export function Hero() {
         ref={sub}
         className="relative z-10 mx-auto mt-6 max-w-xl px-4 text-base leading-relaxed text-white/70 sm:text-lg"
       >
-        Salt and Light United is a Christ-centered community of students and
-        young people in Baliwag City, Bulacan, Philippines. We encounter Christ,
-        grow together, and shine His light in our schools and streets.
+        {t("subtitle")}
       </p>
 
       {/* Scroll cue */}

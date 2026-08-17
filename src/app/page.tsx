@@ -25,12 +25,12 @@ export default function Home() {
         <AboutStrip />
       </div>
 
-      <WaveTransition from="dark" to="light" />
       <UpcomingEvents />
       <WaveTransition from="light" to="blue" />
       <FacebookSection />
       <WaveTransition from="blue" to="light" />
       <SmallGroupsPreview />
+      <WaveTransition from="light" to="dark" />
       <ScriptureBanner />
       <CallToAction />
     </>

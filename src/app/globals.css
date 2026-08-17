@@ -15,6 +15,19 @@ html {
   overflow-x: hidden;
 }
 
+/* Disable all scrollbars site-wide */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none;
+}
+html,
+body,
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
 section[id] {
   scroll-margin-top: 5rem;
 }
@@ -204,9 +217,26 @@ body {
   }
 }
 
-.slu-wave .parallax {
-  animation: slu-wave-move 12s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite alternate;
-  transform-box: fill-box;
-  transform-origin: center;
-  will-change: transform;
+.slu-wave .parallax > * {
+  animation: slu-wave-move 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+}
+
+.slu-wave .parallax > *:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+
+.slu-wave .parallax > *:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+
+.slu-wave .parallax > *:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+
+.slu-wave .parallax > *:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
 }

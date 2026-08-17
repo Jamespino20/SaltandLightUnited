@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { brand } from "@/lib/brand";
@@ -46,24 +48,28 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const messages = await getMessages();
+
   return (
     <html lang="en" className={aileron.variable}>
       <body className="min-h-screen bg-slu-offwhite text-slu-black antialiased">
-        <ScrollProgress />
-        <LightOrb />
-        <SmoothScroll>
-          <PageTransition>
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </PageTransition>
-        </SmoothScroll>
-        <LampyWidget />
+        <NextIntlClientProvider messages={messages}>
+          <ScrollProgress />
+          <LightOrb />
+          <SmoothScroll>
+            <PageTransition>
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </PageTransition>
+          </SmoothScroll>
+          <LampyWidget />
+        </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />
       </body>

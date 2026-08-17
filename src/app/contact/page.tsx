@@ -8,8 +8,10 @@ import {
 import { brand } from "@/lib/brand";
 import { Reveal } from "@/components/animation/Reveal";
 import { WaveTransition } from "@/components/sections/WaveTransition";
+import { useTranslations } from "next-intl";
 
 export default function ContactPage() {
+  const t = useTranslations("contact");
   return (
     <>
       {/* Hero */}
@@ -20,10 +22,10 @@ export default function ContactPage() {
         />
         <div className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 sm:py-32 lg:px-8">
           <h1 className="text-4xl font-bold text-white sm:text-5xl">
-            Get in Touch
+            {t("title")}
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-white/70">
-            We&apos;d love to hear from you. Reach out anytime.
+            {t("subtitle")}
           </p>
         </div>
       </section>
@@ -37,11 +39,10 @@ export default function ContactPage() {
             {/* Contact Form (Google Forms embed) */}
             <div>
               <h2 className="text-2xl font-bold text-slu-black">
-                Send Us a Message
+                {t("sendMessage")}
               </h2>
               <p className="mt-2 text-slu-gray-500">
-                Fill out the form and we&apos;ll get back to you as soon as
-                possible.
+                {t("formDescription")}
               </p>
 
               <div className="mt-8 overflow-hidden rounded-2xl border border-slu-gray-200 bg-white">
@@ -51,19 +52,19 @@ export default function ContactPage() {
                   className="h-[720px] w-full border-0"
                   loading="lazy"
                 >
-                  Loading contact form…
+                  {t("formLoading")}
                 </iframe>
               </div>
 
               <p className="mt-3 text-sm text-slu-gray-400">
-                The form isn&apos;t loading?{" "}
+                {t("formFallback")}{" "}
                 <a
                   href="https://docs.google.com/forms/d/e/1FAIpQLSfd-uRxe5WYB6gaiH_mSm4rLhGTdmajDXEq3vL1BQssB6Co_A/viewform"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-medium text-slu-blue underline-offset-2 hover:underline"
                 >
-                  Open it in a new tab
+                  {t("formNewTab")}
                 </a>
                 .
               </p>
@@ -72,7 +73,7 @@ export default function ContactPage() {
             {/* Location & Social */}
             <div className="space-y-8">
               <div>
-                <h2 className="text-2xl font-bold text-slu-black">Find Us</h2>
+                <h2 className="text-2xl font-bold text-slu-black">{t("findUs")}</h2>
                 <div className="mt-6 space-y-4">
                   <div className="flex items-start gap-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slu-blue/10 text-slu-blue">
@@ -80,7 +81,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="font-semibold text-slu-black">
-                        We&apos;re based in Baliwag City
+                        {t("basedIn")}
                       </p>
                       <p className="text-sm text-slu-gray-500">{brand.city}</p>
                     </div>
@@ -100,9 +101,9 @@ export default function ContactPage() {
               </div>
 
               <div>
-                <h3 className="text-lg font-bold text-slu-black">Follow Us</h3>
+                <h3 className="text-lg font-bold text-slu-black">{t("followUs")}</h3>
                 <p className="mt-2 text-sm text-slu-gray-500">
-                  Stay updated on events and announcements.
+                  {t("followDescription")}
                 </p>
                 <div className="mt-4 flex gap-3">
                   <a
@@ -127,11 +128,10 @@ export default function ContactPage() {
       <section className="bg-slu-blue py-16 sm:py-20">
         <Reveal className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-white sm:text-4xl">
-            We&apos;d love to meet you
+            {t("loveToMeet")}
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-white/70">
-            Whether you have a question, need prayer, or just want to say hello —
-            reach out. You&apos;re always welcome at Salt and Light United.
+            {t("loveDescription")}
           </p>
           <a
             href={brand.facebookUrl}
@@ -140,7 +140,7 @@ export default function ContactPage() {
             className="mt-8 inline-flex items-center gap-2 rounded-xl bg-slu-blue px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
           >
             <FacebookLogo size={18} />
-            Message us on Facebook
+            {t("messageFacebook")}
           </a>
         </Reveal>
       </section>

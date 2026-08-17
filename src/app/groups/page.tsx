@@ -1,16 +1,20 @@
+"use client";
+
 import Link from "next/link";
 import { Users } from "@phosphor-icons/react";
 import { WaveTransition } from "@/components/sections/WaveTransition";
+import { useTranslations } from "next-intl";
 
 export default function GroupsPage() {
+  const t = useTranslations("groups");
   return (
     <>
       <section className="relative isolate overflow-hidden bg-[#0A0A0A]">
         <div className="absolute left-1/2 top-0 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-slu-blue/40 blur-3xl" aria-hidden />
         <div className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 sm:py-32 lg:px-8">
-          <h1 className="text-4xl font-bold text-white sm:text-5xl">Community</h1>
+          <h1 className="text-4xl font-bold text-white sm:text-5xl">{t("title")}</h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-white/70">
-            Come as you are. We are building this fellowship together.
+            {t("subtitle")}
           </p>
         </div>
       </section>
@@ -23,13 +27,13 @@ export default function GroupsPage() {
             <Users size={28} />
           </div>
           <h2 className="mt-6 text-3xl font-bold text-slu-black sm:text-4xl">
-            Small groups are not running yet
+            {t("empty")}
           </h2>
           <p className="mt-5 text-base leading-relaxed text-slu-gray-600 sm:text-lg">
-            SLU is currently a hangout fellowship rather than a church or a formal small-group network. We will share updates here if that changes.
+            {t("emptyDescription")}
           </p>
           <p className="mt-4 text-base leading-relaxed text-slu-gray-600 sm:text-lg">
-            For now, follow the events page or come to a gathering when one is announced.
+            {t("emptyNote")}
           </p>
           <Link
             href="/events"

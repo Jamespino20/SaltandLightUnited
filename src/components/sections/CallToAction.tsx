@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react";
 import { Reveal } from "@/components/animation/Reveal";
+import { useTranslations } from "next-intl";
 
 export function CallToAction() {
+  const t = useTranslations("home.cta");
   return (
     <section
       id="cta"
@@ -21,16 +23,16 @@ export function CallToAction() {
       />
 
       <Reveal className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <p className="text-base text-white/50">You&apos;ve seen who we are.</p>
+        <p className="text-base text-white/50">{t("seen")}</p>
 
         <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-          Now come be part of it.
+          {t("title")}
         </h2>
 
         <p className="mt-8 text-2xl font-bold tracking-tight sm:text-3xl">
-          <span className="text-white">Be the Salt.</span>
+          <span className="text-white">{t("salt")}</span>
           <br />
-          <span className="text-slu-blue-light">Be the Light.</span>
+          <span className="text-slu-blue-light">{t("light")}</span>
         </p>
 
         <div className="mt-10 flex flex-wrap justify-center gap-4">

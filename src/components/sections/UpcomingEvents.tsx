@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { Reveal } from "@/components/animation/Reveal";
+import { useTranslations } from "next-intl";
 
 const sampleEvents = [
   {
@@ -109,6 +110,7 @@ function Calendar({ selectedDate, onSelect }: { selectedDate: Date; onSelect: (d
 }
 
 export function UpcomingEvents() {
+  const t = useTranslations("home.events");
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   return (
@@ -116,8 +118,8 @@ export function UpcomingEvents() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal className="mb-12 text-center">
           <h2 className="text-3xl font-bold text-slu-black sm:text-4xl lg:text-5xl">
-            Make room for community.{" "}
-            <span className="text-slu-blue">Keep an eye out.</span>
+            {t("title")}{" "}
+            <span className="text-slu-blue">{t("subtitle")}</span>
           </h2>
         </Reveal>
 

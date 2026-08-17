@@ -1,0 +1,185 @@
+{
+  "common": {
+    "appName": "Salt and Light United",
+    "appShortName": "SLU",
+    "tagline": "Be the Salt. Be the Light.",
+    "description": "A Christ-centered community of students and young people based in Baliwag City, Bulacan, Philippines.",
+    "learnMore": "Learn more about us",
+    "getInTouch": "Get in Touch",
+    "browseGroups": "Browse Groups",
+    "joinFacebook": "Join our Facebook page",
+    "followUs": "Follow us",
+    "messageUs": "Message us",
+    "callUs": "Call Us",
+    "contactUs": "Contact Us",
+    "seeGatherings": "See gatherings",
+    "loading": "Loading...",
+    "back": "Back"
+  },
+  "nav": {
+    "about": "About",
+    "events": "Events",
+    "community": "Community",
+    "resources": "Resources",
+    "bible": "Bible",
+    "contact": "Contact"
+  },
+  "home": {
+    "hero": {
+      "title1": "Be the Salt.",
+      "title2": "Be the Light.",
+      "subtitle": "Salt and Light United is a Christ-centered community of students and young people in Baliwag City, Bulacan, Philippines. We encounter Christ, grow together, and shine His light in our schools and streets."
+    },
+    "about": {
+      "title": "We don't walk alone.",
+      "description": "Salt and Light United is a family of young believers in Baliwag City — united by faith, growing together in Christ, and carrying His light into our schools, homes, and streets. You were never meant to follow Him by yourself."
+    },
+    "events": {
+      "title": "Make room for community.",
+      "subtitle": "Keep an eye out."
+    },
+    "facebook": {
+      "title": "Join the FB page to be updated and to join.",
+      "description": "Stay connected with Salt and Light United through our official Facebook page. Get the latest updates on events, fellowship nights, and community activities — straight from our feed."
+    },
+    "groups": {
+      "title": "Want to see us wave?",
+      "subtitle": "Here's the Salt and Lighters for you."
+    },
+    "scripture": {
+      "title": "A little reminder for you to read your Bible today."
+    },
+    "cta": {
+      "seen": "You've seen who we are.",
+      "title": "Now come be part of it.",
+      "salt": "Be the Salt.",
+      "light": "Be the Light."
+    }
+  },
+  "about": {
+    "title": "About Salt and Light United",
+    "subtitle": "Discover who we are, what we believe, and why we exist.",
+    "us": {
+      "title": "About Us",
+      "p1": "We are Salt and Light United! A Christ-centered community of students and young people based in Baliwag City who desire to know Jesus, grow in His Word, and live out our faith together.",
+      "p2": "We believe that lives are transformed through Christ, and that every believer is called to be the salt of the earth and the light of the world (Matthew 5:13–16).",
+      "p3": "Whether you're exploring faith, returning to God, or looking for a place to grow, you're welcome here."
+    },
+    "mission": "Our Mission",
+    "missionText": "To raise a generation of young people who are rooted in God's Word, empowered by the Holy Spirit, and united in love to be salt and light in their schools, families, and communities.",
+    "vision": "Our Vision",
+    "visionText": "A thriving community of young believers who transform their generation for Christ — living with purpose, walking in faith, and shining God's light wherever they go.",
+    "story": {
+      "title": "Our Story",
+      "p1": "Salt and Light United began as a small gathering of young people in Baliwag who shared a common heart — to know God more deeply and to live out their faith together. What started as a handful of teens meeting after school grew into a vibrant youth fellowship.",
+      "p2": "Named after Jesus' words in Matthew 5:13–16, SLU has always been about more than weekly meetings. It's about building a family where young people feel seen, known, and encouraged to become who God created them to be."
+    },
+    "leaders": {
+      "title": "Who Runs SLU?",
+      "subtitle": "No pastors or formal leaders — just a community serving together",
+      "cardTitle": "Community-Led",
+      "cardText": "SLU is led by its community of young people serving together. We're not a church with a pastor — we're a hangout fellowship where everyone pitches in, organizes events, and shapes the community together."
+    },
+    "reachUs": "Reach Us Today!",
+    "facebook": "Facebook",
+    "independence": "*Salt and Light United (SLU) is not related nor affiliated to any school, college, university, organizations, churches, or denominations; as it is an independent Christian community as of 2026."
+  },
+  "events": {
+    "title": "Events",
+    "subtitle": "This is a hangout fellowship, not a church service calendar. Join us when you can.",
+    "upcoming": "Upcoming Events",
+    "past": "Past Events"
+  },
+  "groups": {
+    "title": "Community",
+    "subtitle": "Come as you are. We are building this fellowship together.",
+    "empty": "Small groups are not running yet",
+    "emptyDescription": "SLU is currently a hangout fellowship rather than a church or a formal small-group network. We will share updates here if that changes.",
+    "emptyNote": "For now, follow the events page or come to a gathering when one is announced."
+  },
+  "resources": {
+    "title": "Resources",
+    "subtitle": "A growing space for SLU devotionals and stories of what God is doing in our lives.",
+    "devotionals": "Devotionals",
+    "testimonies": "Testimonies",
+    "devotionalsFromCommunity": "Devotionals from the community",
+    "devotionalsDescription": "Read a short reflection, then add one of your own. Published submissions appear here after review.",
+    "storiesFromCommunity": "Stories from the community",
+    "storiesDescription": "Share a story of faith, growth, or a moment that encouraged you. Submissions are reviewed before posting.",
+    "nothingPublished": "Nothing published here yet.",
+    "beFirst": "Be the first person to contribute below.",
+    "dropDevotional": "Drop a devotional",
+    "shareTestimony": "Share your testimony",
+    "submissionNote": "Your submission will be reviewed before it appears publicly.",
+    "title": "Title",
+    "yourName": "Your name",
+    "optional": "optional",
+    "scriptureRef": "Scripture reference",
+    "reflection": "Reflection",
+    "sendDevotional": "Send devotional",
+    "yourStory": "Your story",
+    "sendTestimony": "Send testimony",
+    "thanksDevotional": "Thanks. Your devotional was sent for review.",
+    "thanksTestimony": "Thanks. Your testimony was sent for review.",
+    "errorSending": "We could not send that yet. Please try again.",
+    "loadingSubmissions": "Loading submissions...",
+    "shareWithCommunity": "Share with the Community",
+    "pubmats": "Pubmats",
+    "pubmatsDescription": "Event posters, announcements, and creative materials from the community."
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "subtitle": "We'd love to hear from you. Reach out anytime.",
+    "sendMessage": "Send Us a Message",
+    "formDescription": "Fill out the form and we'll get back to you as soon as possible.",
+    "formLoading": "Loading contact form...",
+    "formFallback": "The form isn't loading?",
+    "formNewTab": "Open it in a new tab",
+    "findUs": "Find Us",
+    "basedIn": "We're based in Baliwag City",
+    "followUs": "Follow Us",
+    "followDescription": "Stay updated on events and announcements.",
+    "loveToMeet": "We'd love to meet you",
+    "loveDescription": "Whether you have a question, need prayer, or just want to say hello — reach out. You're always welcome at Salt and Light United.",
+    "messageFacebook": "Message us on Facebook"
+  },
+  "bible": {
+    "title": "Bible Reader",
+    "subtitle": "Read Scripture in English or Tagalog",
+    "selectVersion": "Select Version",
+    "selectBook": "Select Book",
+    "selectChapter": "Chapter",
+    "enterReference": "Enter a reference (e.g., JHN.3.16)",
+    "read": "Read",
+    "loadingPassage": "Loading passage...",
+    "noPassage": "Select a version and enter a Bible reference to start reading.",
+    "verseOfTheDay": "Verse of the Day"
+  },
+  "chat": {
+    "title": "Chat with SLU",
+    "subtitle": "Ask anything about our fellowship, events, groups, and community.",
+    "placeholder": "Type a message...",
+    "thinking": "Thinking...",
+    "howCanWeHelp": "How can we help?",
+    "askAnything": "Ask anything about Salt and Light United.",
+    "close": "Close",
+    "minimize": "Minimize",
+    "expand": "Expand"
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "connect": "Connect",
+    "contactUs": "Contact Us",
+    "aboutUs": "About Us",
+    "events": "Events",
+    "community": "Community",
+    "resources": "Resources",
+    "followFacebook": "Follow us on Facebook",
+    "allRights": "All rights reserved.",
+    "independence": "Salt and Light United (SLU) is not related nor affiliated to any school, college, university, organizations, churches, or denominations; as it is an independent Christian community as of 2026."
+  },
+  "language": {
+    "en": "English",
+    "fil": "Filipino"
+  }
+}

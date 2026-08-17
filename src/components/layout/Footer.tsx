@@ -3,26 +3,28 @@
 import Link from "next/link";
 import { FacebookLogo } from "@phosphor-icons/react";
 import { brand } from "@/lib/brand";
-
-const footerLinks = [
-  {
-    title: "Quick Links",
-    links: [
-      { href: "/about", label: "About Us" },
-      { href: "/events", label: "Events" },
-      { href: "/groups", label: "Community" },
-      { href: "/resources", label: "Resources" },
-    ],
-  },
-  {
-    title: "Connect",
-    links: [
-      { href: "/contact", label: "Contact Us" },
-    ],
-  },
-];
+import { useTranslations } from "next-intl";
 
 export function Footer() {
+  const t = useTranslations("footer");
+  const footerLinks = [
+    {
+      title: t("quickLinks"),
+      links: [
+        { href: "/about", label: t("aboutUs") },
+        { href: "/events", label: t("events") },
+        { href: "/groups", label: t("community") },
+        { href: "/resources", label: t("resources") },
+      ],
+    },
+    {
+      title: t("connect"),
+      links: [
+        { href: "/contact", label: t("contactUs") },
+      ],
+    },
+  ];
+
   return (
     <footer className="relative isolate overflow-hidden border-t border-slu-gray-800 bg-slu-black text-white">
       {/* returning light at the very end of the journey */}
@@ -53,7 +55,7 @@ export function Footer() {
                 className="inline-flex items-center gap-2 text-sm text-slu-gray-400 transition-colors hover:text-slu-blue"
               >
                 <FacebookLogo size={20} />
-                Follow us on Facebook
+                {t("followFacebook")}
               </Link>
             </div>
           </div>
@@ -83,9 +85,9 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-4 border-t border-slu-gray-800 pt-6 text-center text-xs text-slu-gray-500">
           <p>
-            &copy; {new Date().getFullYear()} {brand.name}. All rights reserved.
+            &copy; {new Date().getFullYear()} {brand.name}. {t("allRights")}
           </p>
-          <p className="mt-1">{brand.independenceNote}</p>
+          <p className="mt-1">{t("independence")}</p>
         </div>
       </div>
     </footer>

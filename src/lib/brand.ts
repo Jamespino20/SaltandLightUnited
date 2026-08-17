@@ -3,7 +3,7 @@ export const brand = {
   shortName: "SLU",
   tagline: "Be the Salt. Be the Light",
   description:
-    "A Christ-centered community of students and young people based in Baliwag City who desire to know Jesus, grow in His Word, and live out our faith together.",
+    "A Christ-centered community of students and young people based in Baliwag City, Philippines who desire to know Jesus, grow in His Word, and live out our faith together.",
   city: "Baliwag City, Bulacan, Philippines",
   facebookUrl: "https://www.facebook.com/profile.php?id=61577421402391",
   phones: ["+63 945 442 0780", "+63 942 444 7444"],

@@ -1,5 +1,7 @@
 "use client";
 
+import { useId } from "react";
+
 interface WaveTransitionProps {
   from: "dark" | "light" | "blue";
   to: "dark" | "light" | "blue";
@@ -12,31 +14,45 @@ const COLORS = {
   blue: "#0770BD",
 } as const;
 
-// Wide, tileable wave so the parallax drift never reveals a gap.
-const WAVE =
-  "M-200,42 C40,92 280,2 520,46 C760,92 1000,2 1240,46 C1400,76 1520,22 1640,46 L1640,120 L-200,120 Z";
+const WAVE_PATH =
+  "M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z";
 
-export function WaveTransition({ from, to, className = "" }: WaveTransitionProps) {
+export function WaveTransition({
+  from,
+  to,
+  className = "",
+}: WaveTransitionProps) {
+  const waveId = useId();
   const fromColor = COLORS[from];
   const toColor = COLORS[to];
 
   return (
-    <div className={`relative -mt-px ${className}`} aria-hidden>
+    <div
+      className={`relative ${className}`}
+      style={{ marginTop: "-1px", marginBottom: "-1px" }}
+      aria-hidden
+    >
       <svg
-        className="slu-wave block h-20 w-full sm:h-28"
+        className="slu-wave block w-full"
+        style={{ height: "clamp(50px, 8vh, 90px)" }}
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 1440 120"
+        viewBox="0 24 150 28"
         preserveAspectRatio="none"
-        shapeRendering="auto"
       >
+        <defs>
+          <path id={waveId} d={WAVE_PATH} />
+        </defs>
+
+        {/* Background: fromColor — matches the section above */}
+        <rect x="-160" y="30" width="1200" height="120" fill={fromColor} />
+
         <g className="parallax">
-          <path d={WAVE} fill={fromColor} fillOpacity="0.35" />
-          <path d={WAVE} fill={fromColor} fillOpacity="0.55" transform="translate(0,8)" />
-          <path d={WAVE} fill={toColor} fillOpacity="0.75" transform="translate(0,16)" />
-          <path d={WAVE} fill={toColor} transform="translate(0,24)" />
+          <use href={`#${waveId}`} x="48" y="0" fill={toColor} opacity="0.7" />
+          <use href={`#${waveId}`} x="48" y="3" fill={toColor} opacity="0.5" />
+          <use href={`#${waveId}`} x="48" y="5" fill={toColor} opacity="0.3" />
+          <use href={`#${waveId}`} x="48" y="7" fill={toColor} />
         </g>
       </svg>
     </div>
   );
 }
-

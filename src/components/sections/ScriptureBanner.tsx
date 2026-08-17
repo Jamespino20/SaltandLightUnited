@@ -1,17 +1,15 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Reveal } from "@/components/animation/Reveal";
+import { Sparkle } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const verses = [
-  {
-    text: '"You are the light of the world. A town built on a hill cannot be hidden. In the same way, let your light shine before others, that they may see your good deeds and glorify your Father in heaven."',
-    ref: "Matthew 5:14, 16",
-  },
+const staticVerses = [
   {
     text: '"Your word is a lamp to my feet and a light to my path. I have sworn an oath and confirmed it, to observe your righteous rules."',
     ref: "Psalm 119:105",
@@ -22,8 +20,51 @@ const verses = [
   },
 ];
 
+interface VotdData {
+  text: string;
+  ref: string;
+  loading: boolean;
+  error: boolean;
+}
+
 export function ScriptureBanner() {
+  const t = useTranslations("home.scripture");
   const root = useRef<HTMLElement>(null);
+  const [votd, setVotd] = useState<VotdData>({
+    text: "",
+    ref: "",
+    loading: true,
+    error: false,
+  });
+
+  useEffect(() => {
+    async function fetchVotd() {
+      try {
+        const { fetchVerseOfTheDay } = await import("@/lib/youversion");
+        const result = await fetchVerseOfTheDay();
+        if (!result) throw new Error("No VOTD");
+        const cleanText = result.content
+          .replace(/<[^>]*>/g, "")
+          .replace(/\s+/g, " ")
+          .trim();
+        setVotd({
+          text: `"${cleanText}"`,
+          ref: result.reference,
+          loading: false,
+          error: false,
+        });
+      } catch {
+        setVotd({
+          text: '"For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future."',
+          ref: "Jeremiah 29:11",
+          loading: false,
+          error: true,
+        });
+      }
+    }
+
+    fetchVotd();
+  }, []);
 
   useEffect(() => {
     const el = root.current;
@@ -54,7 +95,17 @@ export function ScriptureBanner() {
     }, el);
 
     return () => ctx.revert();
-  }, []);
+  }, [votd]);
+
+  const allVerses: Array<{ text: string; ref: string; isVotd: boolean }> = [];
+
+  if (votd.text) {
+    allVerses.push({ text: votd.text, ref: votd.ref, isVotd: true });
+  }
+
+  staticVerses.forEach((v) => {
+    allVerses.push({ text: v.text, ref: v.ref, isVotd: false });
+  });
 
   return (
     <section
@@ -64,19 +115,32 @@ export function ScriptureBanner() {
     >
       <Reveal className="relative mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
-          A little reminder for you to{" "}
-          <span className="text-slu-blue-light">read your Bible today.</span>
+          {t("title")}
         </h2>
       </Reveal>
 
       <div className="mx-auto mt-12 grid max-w-5xl gap-6 px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
-        {verses.map((verse, i) => (
+        {allVerses.map((verse, i) => (
           <div
             key={i}
-            className="scripture-card rounded-2xl border border-slu-gray-200 bg-[#E8E4D8] p-8 shadow-lg"
+            className={`scripture-card rounded-2xl border p-8 shadow-lg transition-all hover:shadow-xl ${
+              verse.isVotd
+                ? "border-slu-blue/30 bg-gradient-to-br from-[#E8E4D8] to-[#D4E8F0]"
+                : "border-slu-gray-200 bg-[#E8E4D8]"
+            }`}
           >
+            {verse.isVotd && (
+              <div className="mb-3 flex items-center justify-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slu-blue">
+                <Sparkle size={12} weight="fill" />
+                Verse of the Day
+              </div>
+            )}
             <p className="text-center text-base italic leading-relaxed text-slu-gray-700">
-              {verse.text}
+              {votd.loading && verse.isVotd ? (
+                <span className="inline-block animate-pulse">Loading...</span>
+              ) : (
+                verse.text
+              )}
             </p>
             <p className="mt-4 text-center text-sm font-bold text-slu-blue">
               {verse.ref}
