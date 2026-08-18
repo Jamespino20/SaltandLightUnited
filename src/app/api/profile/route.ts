@@ -1,16 +1,21 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireSession } from "@/lib/api-auth";
+import { auth } from "@/lib/auth";
 import { verifyPassword } from "@/lib/password";
 import { logAudit, AUDIT_ACTIONS } from "@/lib/audit";
 
 export async function GET() {
-  const authResult = await requireSession();
-  if (authResult instanceof NextResponse) return authResult;
+  const session = await auth();
+  if (!session?.user?.id) {
+    return NextResponse.json(
+      { success: false, error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
 
   try {
     const user = await prisma.user.findUnique({
-      where: { id: authResult.session.user.id },
+      where: { id: session.user.id },
       select: {
         id: true,
         email: true,
@@ -40,8 +45,13 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
-  const authResult = await requireSession();
-  if (authResult instanceof NextResponse) return authResult;
+  const session = await auth();
+  if (!session?.user?.id) {
+    return NextResponse.json(
+      { success: false, error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
 
   try {
     const body = await request.json();
@@ -49,7 +59,7 @@ export async function PUT(request: Request) {
 
     if (currentPassword) {
       const user = await prisma.user.findUnique({
-        where: { id: authResult.session.user.id },
+        where: { id: session.user.id },
         select: { passwordHash: true },
       });
 
@@ -70,7 +80,7 @@ export async function PUT(request: Request) {
     }
 
     const updated = await prisma.user.update({
-      where: { id: authResult.session.user.id },
+      where: { id: session.user.id },
       data: {
         ...(name !== undefined && { name }),
         ...(avatarUrl !== undefined && { avatarUrl: avatarUrl || null }),
@@ -88,7 +98,7 @@ export async function PUT(request: Request) {
       },
     });
 
-    await logAudit(authResult.session, {
+    await logAudit(session, {
       action: AUDIT_ACTIONS.UPDATE,
       targetTable: "user",
       targetId: updated.id,

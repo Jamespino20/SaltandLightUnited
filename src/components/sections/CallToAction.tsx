@@ -10,7 +10,7 @@ export function CallToAction() {
   return (
     <section
       id="cta"
-      className="relative isolate overflow-hidden bg-[#0A0A0A] py-24 text-center text-white sm:py-32"
+      className="relative isolate overflow-hidden bg-[#0A0A0A] py-16 text-center text-white sm:py-24 md:py-32"
     >
       {/* Subtle gradient backdrop */}
       <div
@@ -23,9 +23,9 @@ export function CallToAction() {
       />
 
       <Reveal className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <p className="text-base text-white/50">{t("seen")}</p>
+        <p className="text-sm text-white/50 sm:text-base">{t("seen")}</p>
 
-        <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+        <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
           {t("title")}
         </h2>
 
@@ -35,17 +35,17 @@ export function CallToAction() {
           <span className="text-slu-blue-light">{t("light")}</span>
         </p>
 
-        <div className="mt-10 flex flex-wrap justify-center gap-4">
+        <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4">
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-8 py-3 text-sm font-semibold text-white transition-all hover:bg-slu-blue-dark hover:shadow-lg"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-slu-blue px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-slu-blue-dark hover:shadow-lg sm:px-8"
           >
             Get in Touch
             <ArrowRight size={16} />
           </Link>
           <Link
             href="/groups"
-            className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-8 py-3 text-sm font-semibold text-white transition-all hover:border-white hover:bg-white/10"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 px-6 py-3 text-sm font-semibold text-white transition-all hover:border-white hover:bg-white/10 sm:px-8"
           >
             Browse Groups
           </Link>

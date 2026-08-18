@@ -114,10 +114,10 @@ export function UpcomingEvents() {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   return (
-    <section id="events" className="bg-[#F0F0F0] py-16 sm:py-24">
+    <section id="events" className="bg-[#F0F0F0] py-12 sm:py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-slu-black sm:text-4xl lg:text-5xl">
+        <Reveal className="mb-8 text-center sm:mb-12">
+          <h2 className="text-2xl font-bold text-slu-black sm:text-3xl md:text-4xl lg:text-5xl">
             {t("title")}{" "}
             <span className="text-slu-blue">{t("subtitle")}</span>
           </h2>
@@ -129,7 +129,7 @@ export function UpcomingEvents() {
         </Reveal>
 
         {/* Events — grid below calendar */}
-        <Reveal stagger className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <Reveal stagger className="mt-8 grid gap-4 sm:mt-10 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
           {sampleEvents.map((event, i) => (
             <div
               key={event.id}

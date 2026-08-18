@@ -9,7 +9,7 @@ export function AboutStrip() {
   return (
     <section
       id="about"
-      className="relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden bg-[#0A0A0A]"
+      className="relative isolate flex min-h-[70svh] items-center justify-center overflow-hidden bg-[#0A0A0A] sm:min-h-[100svh]"
     >
       {/* Background photo — full bleed, no cropping */}
       <div className="absolute inset-0 -z-20">

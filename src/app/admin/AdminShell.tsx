@@ -60,13 +60,9 @@ function AdminUserChip() {
           {role}
         </span>
       )}
-      <Link
-        href="/admin/settings/profile"
-        className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-medium text-slu-gray-500 transition-colors hover:bg-slu-gray-100 hover:text-slu-gray-700"
-      >
-        <UserCircle size={18} />
-        <span className="hidden lg:inline">{user?.name || user?.email}</span>
-      </Link>
+      <span className="hidden text-sm font-medium text-slu-gray-600 lg:inline">
+        {user?.name || user?.email}
+      </span>
       <button
         type="button"
         onClick={() => signOut({ callbackUrl: "/login" })}
@@ -75,9 +71,21 @@ function AdminUserChip() {
         <SignOut size={16} />
         Sign out
       </button>
-      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slu-blue text-sm font-semibold text-white">
-        {initials}
-      </div>
+      <Link
+        href="/admin/settings/profile"
+        className="flex h-9 w-9 items-center justify-center rounded-full bg-slu-blue text-sm font-semibold text-white ring-2 ring-transparent transition-all hover:ring-slu-blue/30 hover:ring-offset-2"
+        title="Edit Profile"
+      >
+        {user?.avatarUrl ? (
+          <img
+            src={user.avatarUrl}
+            alt={user?.name || "Profile"}
+            className="h-full w-full rounded-full object-cover"
+          />
+        ) : (
+          initials
+        )}
+      </Link>
     </div>
   );
 }

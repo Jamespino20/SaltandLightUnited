@@ -105,8 +105,8 @@ export function SmallGroupsPreview() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal className="mb-10 text-center">
-          <h2 className="text-3xl font-bold text-slu-black sm:text-4xl lg:text-5xl">
+        <Reveal className="mb-6 text-center sm:mb-10">
+          <h2 className="text-2xl font-bold text-slu-black sm:text-3xl md:text-4xl lg:text-5xl">
             Want to see us wave?{" "}
             <span className="text-slu-blue">
               Here&apos;s the Salt and Lighters for you.
@@ -120,30 +120,32 @@ export function SmallGroupsPreview() {
           <button
             type="button"
             onClick={prev}
-            className="absolute -left-2 top-[180px] z-[60] rounded-full bg-white p-3 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:top-[200px] sm:p-4"
+            className="absolute -left-1 top-[120px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:-left-2 sm:top-[180px] sm:p-3 md:top-[200px] md:p-4"
             aria-label="Previous slide"
           >
-            <CaretLeft size={24} />
+            <CaretLeft size={20} className="sm:hidden" />
+            <CaretLeft size={24} className="hidden sm:block" />
           </button>
           <button
             type="button"
             onClick={next}
-            className="absolute -right-2 top-[180px] z-[60] rounded-full bg-white p-3 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:top-[200px] sm:p-4"
+            className="absolute -right-1 top-[120px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:-right-2 sm:top-[180px] sm:p-3 md:top-[200px] md:p-4"
             aria-label="Next slide"
           >
-            <CaretRight size={24} />
+            <CaretRight size={20} className="sm:hidden" />
+            <CaretRight size={24} className="hidden sm:block" />
           </button>
 
           {/* Card-fan carousel */}
           <div
-            className="relative mx-auto mt-20 max-w-3xl sm:mt-24"
+            className="relative mx-auto mt-12 max-w-3xl sm:mt-20 md:mt-24"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             style={{ perspective: "1400px" }}
           >
-            <div className="relative h-[300px] sm:h-[360px]">
+            <div className="relative h-[220px] sm:h-[300px] md:h-[360px]">
               {slides.map((slide, i) => {
                 const offset = wrapOffset(i, current, slides.length);
                 const abs = Math.abs(offset);
@@ -156,7 +158,7 @@ export function SmallGroupsPreview() {
                 return (
                   <div
                     key={slide.id}
-                    className="absolute top-1/2 w-[85%] max-w-md -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out"
+                    className="absolute top-1/2 w-[90%] max-w-md -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out sm:w-[85%]"
                     style={{
                       left: "50%",
                       transform: `translate(calc(-50% + ${translateX}%), -50%) rotate(${rotate}deg) scale(${scale})`,
@@ -173,11 +175,11 @@ export function SmallGroupsPreview() {
                         className="h-full w-full object-cover"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                      <div className="absolute bottom-0 left-0 p-5">
-                        <span className="inline-block rounded-full bg-slu-blue px-3 py-1 text-xs font-semibold text-white">
+                      <div className="absolute bottom-0 left-0 p-3 sm:p-4 md:p-5">
+                        <span className="inline-block rounded-full bg-slu-blue px-2 py-0.5 text-[10px] font-semibold text-white sm:px-3 sm:py-1 sm:text-xs">
                           {slide.label}
                         </span>
-                        <p className="mt-2 text-sm text-white/85">
+                        <p className="mt-1 text-xs text-white/85 sm:mt-2 sm:text-sm">
                           {slide.caption}
                         </p>
                       </div>
@@ -200,7 +202,7 @@ export function SmallGroupsPreview() {
         </div>
 
         {/* Dots */}
-        <div className="mt-6 flex justify-center gap-1.5">
+        <div className="mt-4 flex justify-center gap-1 sm:mt-6 sm:gap-1.5">
           {slides.map((_, i) => (
             <button
               key={i}

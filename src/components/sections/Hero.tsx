@@ -38,12 +38,12 @@ export function Hero() {
     <section
       ref={root}
       id="hero"
-      className="relative isolate flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-transparent text-center"
+      className="relative isolate flex min-h-[80svh] flex-col items-center justify-center overflow-hidden bg-transparent text-center sm:min-h-[100svh]"
     >
       {/* Intense blue atmospheric glow — the moving backdrop */}
       <div
         aria-hidden
-        className="slu-hero-glow absolute left-1/2 top-1/2 -z-20 h-[92vmin] w-[92vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        className="slu-hero-glow absolute left-1/2 top-1/2 -z-20 h-[60vmin] w-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full sm:h-[75vmin] sm:w-[75vmin] md:h-[92vmin] md:w-[92vmin]"
         style={{
           background:
             "radial-gradient(circle, rgba(93,255,255,0.58) 0%, rgba(0,205,255,0.5) 18%, rgba(7,112,189,0.42) 42%, rgba(0,95,170,0.18) 62%, transparent 80%)",

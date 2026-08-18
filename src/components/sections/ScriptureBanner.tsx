@@ -111,19 +111,19 @@ export function ScriptureBanner() {
     <section
       ref={root}
       id="scripture"
-      className="relative isolate overflow-hidden bg-[#0A0A0A] py-24 sm:py-32"
+      className="relative isolate overflow-hidden bg-[#0A0A0A] py-16 sm:py-24 md:py-32"
     >
       <Reveal className="relative mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+        <h2 className="text-2xl font-bold text-white sm:text-3xl md:text-4xl lg:text-5xl">
           {t("title")}
         </h2>
       </Reveal>
 
-      <div className="mx-auto mt-12 grid max-w-5xl gap-6 px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
+      <div className="mx-auto mt-8 grid max-w-5xl gap-4 px-4 sm:mt-12 sm:gap-6 sm:px-6 md:grid-cols-2 lg:grid-cols-3 lg:px-8">
         {allVerses.map((verse, i) => (
           <div
             key={i}
-            className={`scripture-card rounded-2xl border p-8 shadow-lg transition-all hover:shadow-xl ${
+            className={`scripture-card rounded-2xl border p-5 shadow-lg transition-all hover:shadow-xl sm:p-6 md:p-8 ${
               verse.isVotd
                 ? "border-slu-blue/30 bg-gradient-to-br from-[#E8E4D8] to-[#D4E8F0]"
                 : "border-slu-gray-200 bg-[#E8E4D8]"

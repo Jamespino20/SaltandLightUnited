@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <>
       {/* Hero + About share one continuous moving gradient backdrop */}
-      <div className="relative bg-[#0A0A0A]">
+      <div className="relative overflow-hidden bg-[#0A0A0A]">
         <div
           aria-hidden
           className="slu-hero-gradient pointer-events-none absolute inset-0 -z-10 h-[200svh]"
