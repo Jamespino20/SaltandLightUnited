@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Check, Spinner } from "@phosphor-icons/react";
 import Link from "next/link";
+import FileUpload from "@/components/ui/FileUpload";
 
 export default function PubmatEditPage() {
   const router = useRouter();
@@ -166,23 +167,12 @@ export default function PubmatEditPage() {
           </div>
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium text-slu-gray-700">Image URL</label>
-          <input
-            type="url"
-            value={form.imageUrl}
-            onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-            placeholder="https://..."
-            className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
-          />
-          {form.imageUrl && (
-            <img
-              src={form.imageUrl}
-              alt="Preview"
-              className="mt-2 h-32 w-auto rounded-lg border border-slu-gray-200 object-cover"
-            />
-          )}
-        </div>
+        <FileUpload
+          value={form.imageUrl}
+          onChange={(url) => setForm({ ...form, imageUrl: url })}
+          folder="pubmats"
+          label="Image"
+        />
 
         <div className="flex items-center gap-3 pt-2">
           <button

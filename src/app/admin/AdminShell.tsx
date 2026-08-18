@@ -17,6 +17,8 @@ import {
   X,
   SignOut,
   CaretLeft,
+  Database,
+  UserCircle,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +29,7 @@ const sidebarLinks = [
   { href: "/admin/testimonies", label: "Testimonies", icon: Heart },
   { href: "/admin/pubmats", label: "Pubmats", icon: Images },
   { href: "/admin/groups", label: "Groups", icon: Users },
+  { href: "/admin/database", label: "Database", icon: Database },
   { href: "/admin/audit", label: "Audit Log", icon: ShieldCheck },
   { href: "/admin/settings", label: "Settings", icon: GearSix },
 ];
@@ -44,17 +47,24 @@ function AdminUserChip() {
 
   const roleColors: Record<string, string> = {
     admin: "bg-rose-100 text-rose-700",
-    editor: "bg-white/20 text-white",
-    viewer: "bg-white/10 text-white/70",
+    editor: "bg-emerald-100 text-emerald-700",
+    viewer: "bg-slu-gray-100 text-slu-gray-600",
   };
 
   return (
     <div className="flex items-center gap-3">
       {role && (
-        <span className={`hidden rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide sm:inline-block ${roleColors[role] || roleColors.viewer}`}>
+        <span className={`hidden rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide sm:inline-block ${roleColors[role] || roleColors.viewer}`}>
           {role}
         </span>
       )}
+      <Link
+        href="/admin/settings/profile"
+        className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-medium text-slu-gray-500 transition-colors hover:bg-slu-gray-100 hover:text-slu-gray-700"
+      >
+        <UserCircle size={18} />
+        <span className="hidden lg:inline">{user?.name || user?.email}</span>
+      </Link>
       <button
         type="button"
         onClick={() => signOut({ callbackUrl: "/login" })}
@@ -63,7 +73,7 @@ function AdminUserChip() {
         <SignOut size={16} />
         Sign out
       </button>
-      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-sm font-semibold text-slu-blue">
+      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slu-blue text-sm font-semibold text-white">
         {initials}
       </div>
     </div>
@@ -80,7 +90,7 @@ export default function AdminShell({
 
   return (
     <SessionProvider>
-      <div className="flex h-screen overflow-hidden bg-slate-50">
+      <div className="flex h-screen overflow-hidden bg-slu-gray-50">
         {sidebarOpen && (
           <div
             className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden"
@@ -90,7 +100,7 @@ export default function AdminShell({
 
         <aside
           className={cn(
-            "fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-slu-blue transition-transform duration-200 lg:static lg:translate-x-0",
+            "fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-gradient-to-b from-slu-blue-dark to-slu-blue transition-transform duration-200 lg:static lg:translate-x-0",
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
           )}
         >
@@ -130,9 +140,9 @@ export default function AdminShell({
                       href={link.href}
                       onClick={() => setSidebarOpen(false)}
                       className={cn(
-                        "group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                        "group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150",
                         isActive
-                          ? "bg-white/15 text-white"
+                          ? "bg-white/15 text-white shadow-sm"
                           : "text-white/60 hover:bg-white/10 hover:text-white"
                       )}
                     >
@@ -169,7 +179,7 @@ export default function AdminShell({
         </aside>
 
         <div className="flex flex-1 flex-col overflow-hidden">
-          <header className="flex h-14 shrink-0 items-center justify-between border-b border-slu-gray-200 bg-white px-4 sm:px-6">
+          <header className="flex h-14 shrink-0 items-center justify-between border-b border-slu-gray-200 bg-white px-4 shadow-sm sm:px-6">
             <button
               type="button"
               className="rounded-lg p-2 text-slu-gray-500 hover:bg-slu-gray-100 lg:hidden"

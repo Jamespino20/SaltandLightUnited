@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Check, Spinner } from "@phosphor-icons/react";
 import Link from "next/link";
+import FileUpload from "@/components/ui/FileUpload";
 
 export default function DevotionalEditPage() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function DevotionalEditPage() {
     content: "",
     author: "",
     scriptureRef: "",
+    imageUrl: "",
   });
 
   useEffect(() => {
@@ -33,6 +35,7 @@ export default function DevotionalEditPage() {
             content: d.content || "",
             author: d.author || "",
             scriptureRef: d.scriptureRef || "",
+            imageUrl: d.imageUrl || "",
           });
         } else {
           setError("Devotional not found");
@@ -52,6 +55,7 @@ export default function DevotionalEditPage() {
       content: form.content,
       author: form.author || undefined,
       scriptureRef: form.scriptureRef || undefined,
+      imageUrl: form.imageUrl || undefined,
     };
 
     try {
@@ -156,6 +160,13 @@ export default function DevotionalEditPage() {
             />
           </div>
         </div>
+
+        <FileUpload
+          value={form.imageUrl}
+          onChange={(url) => setForm({ ...form, imageUrl: url })}
+          folder="devotionals"
+          label="Devotional Image"
+        />
 
         <div className="flex items-center gap-3 pt-2">
           <button

@@ -29,21 +29,50 @@ body {
 /* Admin scrollable areas — show thin scrollbar */
 .admin-scrollable::-webkit-scrollbar {
   display: block;
-  width: 6px;
+  width: 5px;
 }
 .admin-scrollable::-webkit-scrollbar-track {
   background: transparent;
 }
 .admin-scrollable::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 3px;
+  background: #cbd5e1;
+  border-radius: 9999px;
 }
 .admin-scrollable::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+  background: #94a3b8;
 }
 .admin-scrollable {
   scrollbar-width: thin;
-  scrollbar-color: #d1d5db transparent;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+/* Admin table density */
+.admin-scrollable table {
+  border-collapse: collapse;
+}
+.admin-scrollable table th {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.admin-scrollable table td,
+.admin-scrollable table th {
+  padding: 0.5rem 0.75rem;
+}
+.admin-scrollable tbody tr {
+  transition: background-color 0.1s ease;
+}
+.admin-scrollable tbody tr:hover {
+  background-color: rgba(7, 112, 189, 0.03);
+}
+
+/* Admin focus ring consistency */
+.admin-scrollable input:focus,
+.admin-scrollable select:focus,
+.admin-scrollable textarea:focus {
+  outline: none;
+  border-color: #0770BD;
+  box-shadow: 0 0 0 3px rgba(7, 112, 189, 0.12);
 }
 
 section[id] {

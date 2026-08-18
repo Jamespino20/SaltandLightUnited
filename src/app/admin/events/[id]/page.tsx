@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Check, Spinner } from "@phosphor-icons/react";
 import Link from "next/link";
+import FileUpload from "@/components/ui/FileUpload";
 
 export default function EventEditPage() {
   const router = useRouter();
@@ -20,6 +21,7 @@ export default function EventEditPage() {
     date: "",
     time: "",
     location: "",
+    imageUrl: "",
     featured: false,
   });
 
@@ -37,6 +39,7 @@ export default function EventEditPage() {
             date: dt.toISOString().split("T")[0],
             time: dt.toTimeString().slice(0, 5),
             location: d.location || "",
+            imageUrl: d.imageUrl || "",
             featured: d.featured || false,
           });
         } else {
@@ -63,6 +66,7 @@ export default function EventEditPage() {
       description: form.description || undefined,
       date: dateTime,
       location: form.location || undefined,
+      imageUrl: form.imageUrl || undefined,
       featured: form.featured,
     };
 
@@ -178,6 +182,13 @@ export default function EventEditPage() {
             className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
           />
         </div>
+
+        <FileUpload
+          value={form.imageUrl}
+          onChange={(url) => setForm({ ...form, imageUrl: url })}
+          folder="events"
+          label="Event Image"
+        />
 
         <div className="flex items-center gap-3">
           <button
