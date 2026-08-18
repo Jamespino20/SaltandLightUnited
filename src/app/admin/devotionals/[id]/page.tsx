@@ -1,37 +1,94 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { ArrowLeft, Check } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { ArrowLeft, Check, Spinner } from "@phosphor-icons/react";
 import Link from "next/link";
 
-const mockDevotional = {
-  id: "1",
-  title: "Walking in Faith",
-  content: "Faith is not about seeing the path ahead. It is about trusting the One who leads us. In Hebrews 11:1, we are reminded that faith is the substance of things hoped for, the evidence of things not seen.",
-  author: "Pastor James",
-  scriptureRef: "Hebrews 11:1",
-};
-
-export default function DevotionalEditPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function DevotionalEditPage() {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
+  const isNew = id === "new";
 
+  const [loading, setLoading] = useState(!isNew);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
-    title: mockDevotional.title,
-    content: mockDevotional.content,
-    author: mockDevotional.author,
-    scriptureRef: mockDevotional.scriptureRef,
+    title: "",
+    content: "",
+    author: "",
+    scriptureRef: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (isNew) return;
+    fetch(`/api/devotionals/${id}`)
+      .then((r) => r.json())
+      .then((res) => {
+        if (res.success && res.data) {
+          const d = res.data;
+          setForm({
+            title: d.title || "",
+            content: d.content || "",
+            author: d.author || "",
+            scriptureRef: d.scriptureRef || "",
+          });
+        } else {
+          setError("Devotional not found");
+        }
+      })
+      .catch(() => setError("Failed to load devotional"))
+      .finally(() => setLoading(false));
+  }, [id, isNew]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Saved! (Mock — real save coming later)");
-    router.push("/admin/devotionals");
+    setSaving(true);
+    setError("");
+
+    const body = {
+      title: form.title,
+      content: form.content,
+      author: form.author || undefined,
+      scriptureRef: form.scriptureRef || undefined,
+    };
+
+    try {
+      const url = isNew ? "/api/devotionals" : `/api/devotionals/${id}`;
+      const method = isNew ? "POST" : "PUT";
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || "Failed to save");
+      router.push("/admin/devotionals");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to save");
+    } finally {
+      setSaving(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-2xl space-y-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 w-48 rounded bg-slu-gray-100" />
+          <div className="rounded-2xl border border-slu-gray-200 bg-white p-6 space-y-4">
+            <div className="h-10 rounded-xl bg-slu-gray-100" />
+            <div className="h-40 rounded-xl bg-slu-gray-100" />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="h-10 rounded-xl bg-slu-gray-100" />
+              <div className="h-10 rounded-xl bg-slu-gray-100" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
@@ -42,19 +99,26 @@ export default function DevotionalEditPage({
         >
           <ArrowLeft size={20} />
         </Link>
-        <h1 className="text-2xl font-bold text-slu-black">Edit Devotional</h1>
+        <h1 className="text-2xl font-bold text-slu-black">
+          {isNew ? "New Devotional" : "Edit Devotional"}
+        </h1>
       </div>
+
+      {error && (
+        <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+          {error}
+        </div>
+      )}
 
       <form
         onSubmit={handleSubmit}
         className="space-y-5 rounded-2xl border border-slu-gray-200 bg-white p-6 shadow-sm"
       >
         <div>
-          <label className="mb-1 block text-sm font-medium text-slu-gray-700">
-            Title
-          </label>
+          <label className="mb-1 block text-sm font-medium text-slu-gray-700">Title</label>
           <input
             type="text"
+            required
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
             className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
@@ -62,11 +126,10 @@ export default function DevotionalEditPage({
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-slu-gray-700">
-            Content
-          </label>
+          <label className="mb-1 block text-sm font-medium text-slu-gray-700">Content</label>
           <textarea
             rows={10}
+            required
             value={form.content}
             onChange={(e) => setForm({ ...form, content: e.target.value })}
             className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
@@ -75,9 +138,7 @@ export default function DevotionalEditPage({
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1 block text-sm font-medium text-slu-gray-700">
-              Author
-            </label>
+            <label className="mb-1 block text-sm font-medium text-slu-gray-700">Author</label>
             <input
               type="text"
               value={form.author}
@@ -86,15 +147,11 @@ export default function DevotionalEditPage({
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-slu-gray-700">
-              Scripture Reference
-            </label>
+            <label className="mb-1 block text-sm font-medium text-slu-gray-700">Scripture Reference</label>
             <input
               type="text"
               value={form.scriptureRef}
-              onChange={(e) =>
-                setForm({ ...form, scriptureRef: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, scriptureRef: e.target.value })}
               className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
             />
           </div>
@@ -103,10 +160,11 @@ export default function DevotionalEditPage({
         <div className="flex items-center gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
+            disabled={saving}
+            className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark disabled:opacity-50"
           >
-            <Check size={18} />
-            Save Devotional
+            {saving ? <Spinner size={18} className="animate-spin" /> : <Check size={18} />}
+            {saving ? "Saving..." : "Save Devotional"}
           </button>
           <Link
             href="/admin/devotionals"

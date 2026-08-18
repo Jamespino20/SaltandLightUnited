@@ -1,114 +1,72 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Funnel, ArrowClockwise } from "@phosphor-icons/react";
-import type { AuditLog } from "@/types";
 
-const mockAuditLogs: AuditLog[] = [
-  {
-    id: "1",
-    userId: "u1",
-    userName: "Admin User",
-    action: "event.create",
-    targetTable: "Event",
-    targetId: "ev-1",
-    ipAddress: "192.168.1.100",
-    country: "PH",
-    city: "Baliwag",
-    userAgent: "Chrome/126.0",
-    metadata: null,
-    createdAt: "2026-06-12T14:30:00Z",
-  },
-  {
-    id: "2",
-    userId: "u1",
-    userName: "Admin User",
-    action: "testimony.approve",
-    targetTable: "Testimony",
-    targetId: "t-3",
-    ipAddress: "192.168.1.100",
-    country: "PH",
-    city: "Baliwag",
-    userAgent: "Chrome/126.0",
-    metadata: null,
-    createdAt: "2026-06-12T10:15:00Z",
-  },
-  {
-    id: "3",
-    userId: "u2",
-    userName: "Staff Ana",
-    action: "devotional.publish",
-    targetTable: "Devotional",
-    targetId: "d-2",
-    ipAddress: "10.0.0.55",
-    country: "PH",
-    city: "Manila",
-    userAgent: "Firefox/128.0",
-    metadata: null,
-    createdAt: "2026-06-11T16:45:00Z",
-  },
-  {
-    id: "4",
-    userId: "u1",
-    userName: "Admin User",
-    action: "event.update",
-    targetTable: "Event",
-    targetId: "ev-2",
-    ipAddress: "192.168.1.100",
-    country: "PH",
-    city: "Baliwag",
-    userAgent: "Chrome/126.0",
-    metadata: null,
-    createdAt: "2026-06-10T09:00:00Z",
-  },
-  {
-    id: "5",
-    userId: "u3",
-    userName: "Staff Mark",
-    action: "group.update",
-    targetTable: "Group",
-    targetId: "g-1",
-    ipAddress: "172.16.0.10",
-    country: "PH",
-    city: "Bulacan",
-    userAgent: "Safari/17.5",
-    metadata: null,
-    createdAt: "2026-06-09T11:20:00Z",
-  },
-  {
-    id: "6",
-    userId: "u1",
-    userName: "Admin User",
-    action: "testimony.reject",
-    targetTable: "Testimony",
-    targetId: "t-5",
-    ipAddress: "192.168.1.100",
-    country: "PH",
-    city: "Baliwag",
-    userAgent: "Chrome/126.0",
-    metadata: null,
-    createdAt: "2026-06-08T14:00:00Z",
-  },
-];
+interface AuditLogEntry {
+  id: string;
+  userId: string | null;
+  action: string;
+  targetTable: string | null;
+  targetId: string | null;
+  ipAddress: string | null;
+  country: string | null;
+  city: string | null;
+  user?: { name?: string | null; email?: string | null } | null;
+  createdAt: string;
+}
+
+interface AuditApiResponse {
+  success: boolean;
+  data: AuditLogEntry[];
+  pagination: { page: number; limit: number; total: number; pages: number };
+}
 
 export default function AuditPage() {
+  const [logs, setLogs] = useState<AuditLogEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState({ page: 1, limit: 50, total: 0, pages: 0 });
+
   const [filter, setFilter] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [page, setPage] = useState(1);
 
-  const filteredLogs = mockAuditLogs.filter((log) => {
-    const matchesFilter =
-      !filter ||
-      log.action.toLowerCase().includes(filter.toLowerCase()) ||
-      log.userName?.toLowerCase().includes(filter.toLowerCase()) ||
-      log.targetTable?.toLowerCase().includes(filter.toLowerCase());
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
 
-    const logDate = new Date(log.createdAt).toISOString().split("T")[0];
-    const matchesDateFrom = !dateFrom || logDate >= dateFrom;
-    const matchesDateTo = !dateTo || logDate <= dateTo;
+    const params = new URLSearchParams();
+    if (filter) params.set("search", filter);
+    if (dateFrom) params.set("from", dateFrom);
+    if (dateTo) params.set("to", dateTo);
+    params.set("page", String(page));
 
-    return matchesFilter && matchesDateFrom && matchesDateTo;
-  });
+    fetch(`/api/audit?${params.toString()}`)
+      .then((r) => r.json())
+      .then((json: AuditApiResponse) => {
+        if (!cancelled) {
+          setLogs(json.success ? json.data : []);
+          setPagination(json.pagination);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setLogs([]);
+          setLoading(false);
+        }
+      });
+
+    return () => { cancelled = true; };
+  }, [filter, dateFrom, dateTo, page]);
+
+  function resetFilters() {
+    setFilter("");
+    setDateFrom("");
+    setDateTo("");
+    setPage(1);
+  }
 
   return (
     <div className="space-y-6">
@@ -130,7 +88,7 @@ export default function AuditPage() {
             type="text"
             placeholder="Search action, user, or target..."
             value={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={(e) => { setFilter(e.target.value); setPage(1); }}
             className="w-full rounded-xl border border-slu-gray-200 px-4 py-2 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
           />
         </div>
@@ -139,7 +97,7 @@ export default function AuditPage() {
           <input
             type="date"
             value={dateFrom}
-            onChange={(e) => setDateFrom(e.target.value)}
+            onChange={(e) => { setDateFrom(e.target.value); setPage(1); }}
             className="rounded-xl border border-slu-gray-200 px-3 py-2 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
           />
         </div>
@@ -148,17 +106,13 @@ export default function AuditPage() {
           <input
             type="date"
             value={dateTo}
-            onChange={(e) => setDateTo(e.target.value)}
+            onChange={(e) => { setDateTo(e.target.value); setPage(1); }}
             className="rounded-xl border border-slu-gray-200 px-3 py-2 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
           />
         </div>
         <button
           type="button"
-          onClick={() => {
-            setFilter("");
-            setDateFrom("");
-            setDateTo("");
-          }}
+          onClick={resetFilters}
           className="rounded-xl border border-slu-gray-200 px-3 py-2 text-sm text-slu-gray-600 transition-colors hover:bg-slu-gray-100"
         >
           <ArrowClockwise size={16} />
@@ -171,67 +125,63 @@ export default function AuditPage() {
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-slu-gray-200 bg-slu-gray-100">
-                <th className="px-4 py-3 font-semibold text-slu-gray-700">
-                  Timestamp
-                </th>
-                <th className="px-4 py-3 font-semibold text-slu-gray-700">
-                  User
-                </th>
-                <th className="px-4 py-3 font-semibold text-slu-gray-700">
-                  Action
-                </th>
-                <th className="px-4 py-3 font-semibold text-slu-gray-700">
-                  Target
-                </th>
-                <th className="px-4 py-3 font-semibold text-slu-gray-700">
-                  IP
-                </th>
-                <th className="px-4 py-3 font-semibold text-slu-gray-700">
-                  Location
-                </th>
+                <th className="px-4 py-3 font-semibold text-slu-gray-700">Timestamp</th>
+                <th className="px-4 py-3 font-semibold text-slu-gray-700">User</th>
+                <th className="px-4 py-3 font-semibold text-slu-gray-700">Action</th>
+                <th className="px-4 py-3 font-semibold text-slu-gray-700">Target</th>
+                <th className="px-4 py-3 font-semibold text-slu-gray-700">IP</th>
+                <th className="px-4 py-3 font-semibold text-slu-gray-700">Location</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slu-gray-100">
-              {filteredLogs.map((log) => (
-                <tr key={log.id} className="transition-colors hover:bg-slu-gray-50">
-                  <td className="whitespace-nowrap px-4 py-3 text-slu-gray-600">
-                    {new Date(log.createdAt).toLocaleString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </td>
-                  <td className="px-4 py-3 font-medium text-slu-black">
-                    {log.userName ?? "System"}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="inline-flex rounded-full bg-slu-gray-100 px-2.5 py-0.5 text-xs font-medium text-slu-gray-700">
-                      {log.action}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-slu-gray-600">
-                    {log.targetTable}
-                    {log.targetId && (
-                      <span className="ml-1 text-slu-gray-400">
-                        #{log.targetId}
+              {loading &&
+                Array.from({ length: 5 }).map((_, i) => (
+                  <tr key={`skel-${i}`}>
+                    {Array.from({ length: 6 }).map((__, j) => (
+                      <td key={j} className="px-4 py-3">
+                        <div className="h-4 w-full animate-pulse rounded bg-slu-gray-200" />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+
+              {!loading &&
+                logs.map((log) => (
+                  <tr key={log.id} className="transition-colors hover:bg-slu-gray-50">
+                    <td className="whitespace-nowrap px-4 py-3 text-slu-gray-600">
+                      {new Date(log.createdAt).toLocaleString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </td>
+                    <td className="px-4 py-3 font-medium text-slu-black">
+                      {log.user?.name || log.user?.email || "System"}
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="inline-flex rounded-full bg-slu-gray-100 px-2.5 py-0.5 text-xs font-medium text-slu-gray-700">
+                        {log.action}
                       </span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 font-mono text-xs text-slu-gray-500">
-                    {log.ipAddress ?? "—"}
-                  </td>
-                  <td className="px-4 py-3 text-slu-gray-600">
-                    {[log.city, log.country].filter(Boolean).join(", ") || "—"}
-                  </td>
-                </tr>
-              ))}
-              {filteredLogs.length === 0 && (
+                    </td>
+                    <td className="px-4 py-3 text-slu-gray-600">
+                      {log.targetTable}
+                      {log.targetId && (
+                        <span className="ml-1 text-slu-gray-400">#{log.targetId}</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 font-mono text-xs text-slu-gray-500">
+                      {log.ipAddress ?? "—"}
+                    </td>
+                    <td className="px-4 py-3 text-slu-gray-600">
+                      {[log.city, log.country].filter(Boolean).join(", ") || "—"}
+                    </td>
+                  </tr>
+                ))}
+
+              {!loading && logs.length === 0 && (
                 <tr>
-                  <td
-                    colSpan={6}
-                    className="px-4 py-8 text-center text-sm text-slu-gray-400"
-                  >
+                  <td colSpan={6} className="px-4 py-8 text-center text-sm text-slu-gray-400">
                     No audit logs found.
                   </td>
                 </tr>
@@ -240,6 +190,33 @@ export default function AuditPage() {
           </table>
         </div>
       </div>
+
+      {/* Pagination */}
+      {!loading && pagination.pages > 1 && (
+        <div className="flex items-center justify-between text-sm text-slu-gray-500">
+          <span>
+            Page {pagination.page} of {pagination.pages} ({pagination.total} total)
+          </span>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              disabled={page <= 1}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              className="rounded-xl border border-slu-gray-200 px-3 py-1.5 text-sm disabled:opacity-40 hover:bg-slu-gray-100"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              disabled={page >= pagination.pages}
+              onClick={() => setPage((p) => p + 1)}
+              className="rounded-xl border border-slu-gray-200 px-3 py-1.5 text-sm disabled:opacity-40 hover:bg-slu-gray-100"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

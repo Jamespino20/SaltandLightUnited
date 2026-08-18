@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { Prisma } from "@prisma/client";
-import { db } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
 import { getGeoFromIP } from "@/lib/geo";
 
 interface AuditParams {
@@ -46,7 +46,7 @@ export async function logAudit({
     }
   }
 
-  await db.auditLog.create({
+  await prisma.auditLog.create({
     data: {
       userId,
       action,

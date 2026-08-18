@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
 import { randomBytes, scrypt } from "node:crypto";
 import { promisify } from "node:util";
 
@@ -17,7 +17,7 @@ async function main() {
     .trim();
   const password = process.env.ADMIN_PASSWORD ?? "ChangeMe123!";
   const name = process.env.ADMIN_NAME ?? "SLU Admin";
-  const role = process.env.ADMIN_ROLE ?? "admin";
+  const role = (process.env.ADMIN_ROLE ?? "admin") as Role;
 
   const passwordHash = await hash(password);
 

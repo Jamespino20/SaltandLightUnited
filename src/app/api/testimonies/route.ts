@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const testimonies = await db.testimony.findMany({
-      where: { approved: true },
+    const { searchParams } = new URL(request.url);
+    const all = searchParams.get("all") === "true";
+
+    const testimonies = await prisma.testimony.findMany({
+      where: all ? {} : { approved: true },
       orderBy: { createdAt: "desc" },
     });
     return NextResponse.json({ success: true, data: testimonies });
@@ -28,7 +31,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const testimony = await db.testimony.create({
+    const testimony = await prisma.testimony.create({
       data: { authorName, authorAge, content, imageUrl },
     });
 

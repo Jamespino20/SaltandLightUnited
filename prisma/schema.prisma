@@ -7,6 +7,12 @@ datasource db {
   url      = env("SALTANDLIGHTUNITED_DATABASE_URL")
 }
 
+enum Role {
+  admin
+  editor
+  viewer
+}
+
 model Event {
   id          String   @id @default(cuid())
   title       String
@@ -77,7 +83,7 @@ model User {
   email        String   @unique
   name         String?
   passwordHash String?
-  role         String   @default("editor")
+  role         Role     @default(editor)
   authyId      String?
   createdAt    DateTime @default(now())
   sessions  Session[]

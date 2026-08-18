@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
+import { requireSession } from "@/lib/api-auth";
 
 export async function GET() {
   try {
-    const devotionals = await db.devotional.findMany({
+    const devotionals = await prisma.devotional.findMany({
       orderBy: { createdAt: "desc" },
     });
     return NextResponse.json({ success: true, data: devotionals });
@@ -16,6 +17,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const authResult = await requireSession();
+  if (authResult instanceof NextResponse) return authResult;
+
   try {
     const body = await request.json();
     const { title, content, author, scriptureRef, imageUrl, publishedAt } = body;
@@ -27,7 +31,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const devotional = await db.devotional.create({
+    const devotional = await prisma.devotional.create({
       data: {
         title,
         content,

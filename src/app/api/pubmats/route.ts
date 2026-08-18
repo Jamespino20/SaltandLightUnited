@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
+import { requireSession } from "@/lib/api-auth";
 
 export async function GET() {
   try {
-    const pubmats = await db.pubmat.findMany({
+    const pubmats = await prisma.pubmat.findMany({
       orderBy: { createdAt: "desc" },
     });
     return NextResponse.json({ success: true, data: pubmats });
@@ -16,6 +17,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const authResult = await requireSession();
+  if (authResult instanceof NextResponse) return authResult;
+
   try {
     const body = await request.json();
     const { title, description, imageUrl, category, eventId } = body;
@@ -27,7 +31,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const pubmat = await db.pubmat.create({
+    const pubmat = await prisma.pubmat.create({
       data: { title, description, imageUrl, category, eventId },
     });
 

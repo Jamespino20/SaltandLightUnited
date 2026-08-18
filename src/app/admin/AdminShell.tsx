@@ -34,6 +34,7 @@ const sidebarLinks = [
 function AdminUserChip() {
   const { data: session } = useSession();
   const user = session?.user;
+  const role = user?.role;
   const initials = (user?.name || user?.email || "A")
     .split(" ")
     .map((w) => w[0])
@@ -41,8 +42,19 @@ function AdminUserChip() {
     .slice(0, 2)
     .toUpperCase();
 
+  const roleColors: Record<string, string> = {
+    admin: "bg-rose-100 text-rose-700",
+    editor: "bg-white/20 text-white",
+    viewer: "bg-white/10 text-white/70",
+  };
+
   return (
     <div className="flex items-center gap-3">
+      {role && (
+        <span className={`hidden rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide sm:inline-block ${roleColors[role] || roleColors.viewer}`}>
+          {role}
+        </span>
+      )}
       <button
         type="button"
         onClick={() => signOut({ callbackUrl: "/login" })}
@@ -51,7 +63,7 @@ function AdminUserChip() {
         <SignOut size={16} />
         Sign out
       </button>
-      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slu-blue text-sm font-semibold text-white">
+      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-sm font-semibold text-slu-blue">
         {initials}
       </div>
     </div>
@@ -69,7 +81,6 @@ export default function AdminShell({
   return (
     <SessionProvider>
       <div className="flex h-screen overflow-hidden bg-slate-50">
-        {/* Mobile overlay */}
         {sidebarOpen && (
           <div
             className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden"
@@ -77,36 +88,35 @@ export default function AdminShell({
           />
         )}
 
-        {/* Sidebar */}
         <aside
           className={cn(
-            "fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-slu-black transition-transform duration-200 lg:static lg:translate-x-0",
+            "fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-slu-blue transition-transform duration-200 lg:static lg:translate-x-0",
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
           )}
         >
-          {/* Brand */}
           <div className="flex h-16 items-center gap-3 border-b border-white/10 px-5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slu-blue text-xs font-bold text-white">
-              SLU
-            </div>
+            <img
+              src="/images/SaltandLightWhiteTransparent.svg"
+              alt="SLU"
+              className="h-8 w-auto"
+            />
             <div className="flex flex-col">
               <span className="text-sm font-semibold leading-tight text-white">
                 Salt & Light
               </span>
-              <span className="text-[11px] leading-tight text-slu-gray-500">
+              <span className="text-[11px] leading-tight text-white/60">
                 Admin Panel
               </span>
             </div>
             <button
               type="button"
-              className="ml-auto rounded-lg p-1 text-slu-gray-400 hover:text-white lg:hidden"
+              className="ml-auto rounded-lg p-1 text-white/60 hover:text-white lg:hidden"
               onClick={() => setSidebarOpen(false)}
             >
               <X size={20} />
             </button>
           </div>
 
-          {/* Nav links */}
           <nav className="admin-scrollable flex-1 overflow-y-auto px-3 py-3">
             <ul className="space-y-0.5">
               {sidebarLinks.map((link) => {
@@ -122,19 +132,21 @@ export default function AdminShell({
                       className={cn(
                         "group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                         isActive
-                          ? "bg-white/10 text-white"
-                          : "text-slu-gray-400 hover:bg-white/5 hover:text-slu-gray-200"
+                          ? "bg-white/15 text-white"
+                          : "text-white/60 hover:bg-white/10 hover:text-white"
                       )}
                     >
                       {isActive && (
-                        <div className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-r-full bg-slu-blue" />
+                        <div className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-r-full bg-white" />
                       )}
                       <link.icon
                         size={18}
                         weight={isActive ? "fill" : "regular"}
                         className={cn(
                           "shrink-0 transition-colors",
-                          isActive ? "text-slu-blue" : "text-slu-gray-500 group-hover:text-slu-gray-300"
+                          isActive
+                            ? "text-white"
+                            : "text-white/40 group-hover:text-white/80"
                         )}
                       />
                       {link.label}
@@ -145,11 +157,10 @@ export default function AdminShell({
             </ul>
           </nav>
 
-          {/* Footer */}
           <div className="border-t border-white/10 px-3 py-3">
             <Link
               href="/"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slu-gray-500 transition-colors hover:bg-white/5 hover:text-slu-gray-300"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-white/50 transition-colors hover:bg-white/10 hover:text-white/80"
             >
               <CaretLeft size={18} />
               Back to Site
@@ -157,9 +168,7 @@ export default function AdminShell({
           </div>
         </aside>
 
-        {/* Main area */}
         <div className="flex flex-1 flex-col overflow-hidden">
-          {/* Top bar */}
           <header className="flex h-14 shrink-0 items-center justify-between border-b border-slu-gray-200 bg-white px-4 sm:px-6">
             <button
               type="button"
@@ -172,7 +181,6 @@ export default function AdminShell({
             <AdminUserChip />
           </header>
 
-          {/* Page content */}
           <main className="admin-scrollable flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
             {children}
           </main>

@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
+import { requireSession } from "@/lib/api-auth";
 
 export async function GET() {
   try {
-    const groups = await db.group.findMany({
+    const groups = await prisma.group.findMany({
       orderBy: { name: "asc" },
     });
     return NextResponse.json({ success: true, data: groups });
@@ -16,6 +17,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const authResult = await requireSession();
+  if (authResult instanceof NextResponse) return authResult;
+
   try {
     const body = await request.json();
     const { name, description, meetingSchedule, leader, imageUrl } = body;
@@ -27,7 +31,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const group = await db.group.create({
+    const group = await prisma.group.create({
       data: { name, description, meetingSchedule, leader, imageUrl },
     });
 

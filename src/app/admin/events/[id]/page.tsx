@@ -1,42 +1,106 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { ArrowLeft, Check } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { ArrowLeft, Check, Spinner } from "@phosphor-icons/react";
 import Link from "next/link";
 
-const mockEvent = {
-  id: "1",
-  title: "Youth Night — June 2026",
-  description: "Monthly youth gathering with worship and games.",
-  date: "2026-06-20",
-  time: "18:00",
-  location: "Baliwag City",
-  featured: true,
-};
-
-export default function EventEditPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function EventEditPage() {
   const router = useRouter();
-  const isNew = params as unknown as { id: string } === null;
+  const params = useParams();
+  const id = params.id as string;
+  const isNew = id === "new";
 
+  const [loading, setLoading] = useState(!isNew);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
-    title: mockEvent.title,
-    description: mockEvent.description,
-    date: mockEvent.date,
-    time: mockEvent.time,
-    location: mockEvent.location,
-    featured: mockEvent.featured,
+    title: "",
+    description: "",
+    date: "",
+    time: "",
+    location: "",
+    featured: false,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (isNew) return;
+    fetch(`/api/events/${id}`)
+      .then((r) => r.json())
+      .then((res) => {
+        if (res.success && res.data) {
+          const d = res.data;
+          const dt = new Date(d.date);
+          setForm({
+            title: d.title || "",
+            description: d.description || "",
+            date: dt.toISOString().split("T")[0],
+            time: dt.toTimeString().slice(0, 5),
+            location: d.location || "",
+            featured: d.featured || false,
+          });
+        } else {
+          setError("Event not found");
+        }
+      })
+      .catch(() => setError("Failed to load event"))
+      .finally(() => setLoading(false));
+  }, [id, isNew]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Saved! (Mock — real save coming later)");
-    router.push("/admin/events");
+    setSaving(true);
+    setError("");
+
+    const dateTime = form.date && form.time
+      ? new Date(`${form.date}T${form.time}`).toISOString()
+      : form.date
+        ? new Date(form.date).toISOString()
+        : undefined;
+
+    const body = {
+      title: form.title,
+      description: form.description || undefined,
+      date: dateTime,
+      location: form.location || undefined,
+      featured: form.featured,
+    };
+
+    try {
+      const url = isNew ? "/api/events" : `/api/events/${id}`;
+      const method = isNew ? "POST" : "PUT";
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || "Failed to save");
+      router.push("/admin/events");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to save");
+    } finally {
+      setSaving(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-2xl space-y-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 w-48 rounded bg-slu-gray-100" />
+          <div className="rounded-2xl border border-slu-gray-200 bg-white p-6 space-y-4">
+            <div className="h-10 rounded-xl bg-slu-gray-100" />
+            <div className="h-24 rounded-xl bg-slu-gray-100" />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="h-10 rounded-xl bg-slu-gray-100" />
+              <div className="h-10 rounded-xl bg-slu-gray-100" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
@@ -47,58 +111,55 @@ export default function EventEditPage({
         >
           <ArrowLeft size={20} />
         </Link>
-        <h1 className="text-2xl font-bold text-slu-black">Edit Event</h1>
+        <h1 className="text-2xl font-bold text-slu-black">
+          {isNew ? "New Event" : "Edit Event"}
+        </h1>
       </div>
+
+      {error && (
+        <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+          {error}
+        </div>
+      )}
 
       <form
         onSubmit={handleSubmit}
         className="space-y-5 rounded-2xl border border-slu-gray-200 bg-white p-6 shadow-sm"
       >
-        {/* Title */}
         <div>
-          <label className="mb-1 block text-sm font-medium text-slu-gray-700">
-            Title
-          </label>
+          <label className="mb-1 block text-sm font-medium text-slu-gray-700">Title</label>
           <input
             type="text"
+            required
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
             className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
           />
         </div>
 
-        {/* Description */}
         <div>
-          <label className="mb-1 block text-sm font-medium text-slu-gray-700">
-            Description
-          </label>
+          <label className="mb-1 block text-sm font-medium text-slu-gray-700">Description</label>
           <textarea
             rows={4}
             value={form.description}
-            onChange={(e) =>
-              setForm({ ...form, description: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
             className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
           />
         </div>
 
-        {/* Date & Time */}
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1 block text-sm font-medium text-slu-gray-700">
-              Date
-            </label>
+            <label className="mb-1 block text-sm font-medium text-slu-gray-700">Date</label>
             <input
               type="date"
+              required
               value={form.date}
               onChange={(e) => setForm({ ...form, date: e.target.value })}
               className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-slu-gray-700">
-              Time
-            </label>
+            <label className="mb-1 block text-sm font-medium text-slu-gray-700">Time</label>
             <input
               type="time"
               value={form.time}
@@ -108,11 +169,8 @@ export default function EventEditPage({
           </div>
         </div>
 
-        {/* Location */}
         <div>
-          <label className="mb-1 block text-sm font-medium text-slu-gray-700">
-            Location
-          </label>
+          <label className="mb-1 block text-sm font-medium text-slu-gray-700">Location</label>
           <input
             type="text"
             value={form.location}
@@ -121,7 +179,6 @@ export default function EventEditPage({
           />
         </div>
 
-        {/* Featured toggle */}
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -136,19 +193,17 @@ export default function EventEditPage({
               } mt-0.5`}
             />
           </button>
-          <span className="text-sm font-medium text-slu-gray-700">
-            Featured event
-          </span>
+          <span className="text-sm font-medium text-slu-gray-700">Featured event</span>
         </div>
 
-        {/* Actions */}
         <div className="flex items-center gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
+            disabled={saving}
+            className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark disabled:opacity-50"
           >
-            <Check size={18} />
-            Save Event
+            {saving ? <Spinner size={18} className="animate-spin" /> : <Check size={18} />}
+            {saving ? "Saving..." : "Save Event"}
           </button>
           <Link
             href="/admin/events"
