@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash } from "@phosphor-icons/react";
-import { csrfFetch } from "@/lib/csrf-client";
+
 import type { Group } from "@/types";
 
 export default function GroupsPage() {
@@ -20,7 +20,7 @@ export default function GroupsPage() {
 
   async function handleDelete(id: string) {
     if (!confirm("Are you sure you want to delete this group?")) return;
-    await csrfFetch(`/api/groups/${id}`, { method: "DELETE" });
+    await fetch(`/api/groups/${id}`, { method: "DELETE" });
     setGroups((prev) => prev.filter((g) => g.id !== id));
   }
 

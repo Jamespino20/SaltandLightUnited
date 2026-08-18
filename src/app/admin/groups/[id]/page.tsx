@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Check, Spinner } from "@phosphor-icons/react";
 import Link from "next/link";
-import { csrfFetch } from "@/lib/csrf-client";
+
 
 export default function GroupEditPage() {
   const router = useRouter();
@@ -58,7 +58,7 @@ export default function GroupEditPage() {
     try {
       const url = isNew ? "/api/groups" : `/api/groups/${id}`;
       const method = isNew ? "POST" : "PUT";
-      const res = await csrfFetch(url, {
+      const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

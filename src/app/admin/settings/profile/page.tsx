@@ -15,7 +15,7 @@ import {
 } from "@phosphor-icons/react";
 import Link from "next/link";
 import FileUpload from "@/components/ui/FileUpload";
-import { csrfFetch } from "@/lib/csrf-client";
+
 
 export default function ProfilePage() {
   const { data: session, update } = useSession();
@@ -57,7 +57,7 @@ export default function ProfilePage() {
         body.currentPassword = currentPassword;
       }
 
-      const res = await csrfFetch("/api/profile", {
+      const res = await fetch("/api/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -81,7 +81,7 @@ export default function ProfilePage() {
     setEmailMsg("");
 
     try {
-      const res = await csrfFetch("/api/profile/email-change", {
+      const res = await fetch("/api/profile/email-change", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ newEmail, password: emailPassword }),

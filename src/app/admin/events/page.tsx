@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash } from "@phosphor-icons/react";
-import { csrfFetch } from "@/lib/csrf-client";
+
 import type { Event } from "@/types";
 
 export default function EventsPage() {
@@ -19,7 +19,7 @@ export default function EventsPage() {
 
   async function handleDelete(id: string) {
     if (!confirm("Are you sure you want to delete this event?")) return;
-    await csrfFetch(`/api/events/${id}`, { method: "DELETE" });
+    await fetch(`/api/events/${id}`, { method: "DELETE" });
     setEvents((prev) => prev.filter((e) => e.id !== id));
   }
 

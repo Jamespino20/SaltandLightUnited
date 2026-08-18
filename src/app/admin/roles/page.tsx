@@ -12,7 +12,7 @@ import {
   Check,
   FloppyDisk,
 } from "@phosphor-icons/react";
-import { csrfFetch } from "@/lib/csrf-client";
+
 
 interface RoleConfig {
   id: string;
@@ -143,7 +143,7 @@ export default function RolesPage() {
 
     try {
       if (editingRole) {
-        const res = await csrfFetch(`/api/roles/${editingRole.id}`, {
+        const res = await fetch(`/api/roles/${editingRole.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -154,7 +154,7 @@ export default function RolesPage() {
         const data = await res.json();
         if (!data.success) throw new Error(data.error);
       } else {
-        const res = await csrfFetch("/api/roles", {
+        const res = await fetch("/api/roles", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -182,7 +182,7 @@ export default function RolesPage() {
     }
     if (!confirm(`Delete role "${role.displayName}"?`)) return;
     try {
-      const res = await csrfFetch(`/api/roles/${role.id}`, { method: "DELETE" });
+      const res = await fetch(`/api/roles/${role.id}`, { method: "DELETE" });
       const data = await res.json();
       if (!data.success) throw new Error(data.error);
       fetchRoles();

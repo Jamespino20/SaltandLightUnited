@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash, CheckCircle, XCircle } from "@phosphor-icons/react";
-import { csrfFetch } from "@/lib/csrf-client";
+
 import type { Testimony } from "@/types";
 
 export default function TestimoniesPage() {
@@ -31,7 +31,7 @@ export default function TestimoniesPage() {
   }, []);
 
   const handleApprove = async (id: string) => {
-    await csrfFetch(`/api/testimonies/${id}`, {
+    await fetch(`/api/testimonies/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ approved: true }),
@@ -40,7 +40,7 @@ export default function TestimoniesPage() {
   };
 
   const handleReject = async (id: string) => {
-    await csrfFetch(`/api/testimonies/${id}`, {
+    await fetch(`/api/testimonies/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ approved: false }),
@@ -50,7 +50,7 @@ export default function TestimoniesPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this testimony?")) return;
-    await csrfFetch(`/api/testimonies/${id}`, { method: "DELETE" });
+    await fetch(`/api/testimonies/${id}`, { method: "DELETE" });
     fetchTestimonies();
   };
 

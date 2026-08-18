@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash } from "@phosphor-icons/react";
-import { csrfFetch } from "@/lib/csrf-client";
+
 import type { Pubmat } from "@/types";
 
 export default function PubmatsPage() {
@@ -22,7 +22,7 @@ export default function PubmatsPage() {
     if (!confirm("Are you sure you want to delete this pubmat?")) return;
 
     try {
-      const res = await csrfFetch(`/api/pubmats/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/pubmats/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Delete failed");
       setPubmats((prev) => prev.filter((p) => p.id !== id));
     } catch (err) {

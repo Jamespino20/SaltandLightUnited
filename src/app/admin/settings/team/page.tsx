@@ -11,7 +11,7 @@ import {
   Spinner,
   ShieldCheck,
 } from "@phosphor-icons/react";
-import { csrfFetch } from "@/lib/csrf-client";
+
 
 interface User {
   id: string;
@@ -71,7 +71,7 @@ export default function TeamManagementPage() {
     try {
       const url = editingUser ? `/api/users/${editingUser.id}` : "/api/users";
       const method = editingUser ? "PUT" : "POST";
-      const res = await csrfFetch(url, {
+      const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -90,7 +90,7 @@ export default function TeamManagementPage() {
   const handleDelete = async (user: User) => {
     if (!confirm(`Remove ${user.email}?`)) return;
     try {
-      const res = await csrfFetch(`/api/users/${user.id}`, { method: "DELETE" });
+      const res = await fetch(`/api/users/${user.id}`, { method: "DELETE" });
       const data = await res.json();
       if (!data.success) throw new Error(data.error);
       fetchUsers();
