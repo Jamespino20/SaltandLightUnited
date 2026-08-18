@@ -12,7 +12,7 @@ export default function GroupsPage() {
   useEffect(() => {
     fetch("/api/groups")
       .then((res) => res.json())
-      .then((data) => setGroups(data))
+      .then((data) => setGroups(data.data || []))
       .catch(() => setGroups([]))
       .finally(() => setLoading(false));
   }, []);

@@ -17,7 +17,7 @@ export default function TestimoniesPage() {
       const res = await fetch("/api/testimonies?all=true");
       if (!res.ok) throw new Error("Failed to fetch testimonies");
       const data = await res.json();
-      setTestimonies(data.testimonies ?? []);
+      setTestimonies(data.data ?? []);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unknown error");
     } finally {

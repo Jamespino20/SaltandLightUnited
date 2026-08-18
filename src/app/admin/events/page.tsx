@@ -12,7 +12,7 @@ export default function EventsPage() {
   useEffect(() => {
     fetch("/api/events")
       .then((res) => res.json())
-      .then((data) => setEvents(data))
+      .then((data) => setEvents(data.data || []))
       .finally(() => setLoading(false));
   }, []);
 

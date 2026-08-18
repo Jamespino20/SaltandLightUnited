@@ -12,7 +12,7 @@ export default function PubmatsPage() {
   useEffect(() => {
     fetch("/api/pubmats")
       .then((res) => res.json())
-      .then((data) => setPubmats(data))
+      .then((data) => setPubmats(data.data || []))
       .catch((err) => console.error("Failed to fetch pubmats:", err))
       .finally(() => setLoading(false));
   }, []);

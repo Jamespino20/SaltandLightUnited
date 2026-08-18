@@ -66,7 +66,7 @@ export default function DevotionalsPage() {
       const res = await fetch("/api/devotionals");
       if (!res.ok) throw new Error("Failed to load devotionals");
       const data = await res.json();
-      setDevotionals(data);
+      setDevotionals(data.data || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
