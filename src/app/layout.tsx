@@ -2,16 +2,10 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { brand } from "@/lib/brand";
-import { SmoothScroll } from "@/components/animation/SmoothScroll";
-import { LightOrb } from "@/components/animation/LightOrb";
-import { ScrollProgress } from "@/components/animation/ScrollProgress";
+import { MainSiteChrome } from "@/components/layout/MainSiteChrome";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { PageTransition } from "@/components/transition/PageTransition";
-import { LampyWidget } from "@/components/layout/LampyWidget";
 import "./globals.css";
 
 const aileron = localFont({
@@ -59,16 +53,7 @@ export default async function RootLayout({
     <html lang="en" className={aileron.variable}>
       <body className="min-h-screen bg-slu-offwhite text-slu-black antialiased">
         <NextIntlClientProvider messages={messages}>
-          <ScrollProgress />
-          <LightOrb />
-          <SmoothScroll>
-            <PageTransition>
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </PageTransition>
-          </SmoothScroll>
-          <LampyWidget />
+          <MainSiteChrome>{children}</MainSiteChrome>
         </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />

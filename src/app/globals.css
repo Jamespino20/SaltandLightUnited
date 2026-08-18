@@ -15,17 +15,35 @@ html {
   overflow-x: hidden;
 }
 
-/* Disable all scrollbars site-wide */
+/* Disable scrollbars on main site — admin re-enables via .admin-scrollable */
 html::-webkit-scrollbar,
-body::-webkit-scrollbar,
-*::-webkit-scrollbar {
+body::-webkit-scrollbar {
   display: none;
 }
 html,
-body,
-* {
+body {
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+/* Admin scrollable areas — show thin scrollbar */
+.admin-scrollable::-webkit-scrollbar {
+  display: block;
+  width: 6px;
+}
+.admin-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+.admin-scrollable::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+.admin-scrollable::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+.admin-scrollable {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
 }
 
 section[id] {

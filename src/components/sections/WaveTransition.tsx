@@ -38,13 +38,14 @@ export function WaveTransition({
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 24 150 28"
         preserveAspectRatio="none"
+        shape-rendering="auto"
       >
         <defs>
           <path id={waveId} d={WAVE_PATH} />
         </defs>
 
         {/* Background: fromColor — matches the section above */}
-        <rect x="-160" y="30" width="1200" height="120" fill={fromColor} />
+        <rect x="-160" y="24" width="1200" height="80" fill={fromColor} />
 
         <g className="parallax">
           <use href={`#${waveId}`} x="48" y="0" fill={toColor} opacity="0.7" />
