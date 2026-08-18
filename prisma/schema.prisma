@@ -90,17 +90,32 @@ model Resource {
 }
 
 model User {
-  id                String    @id @default(cuid())
-  email             String    @unique
-  name              String?
-  passwordHash      String?
-  role              Role      @default(editor)
-  authyId           String?
-  failedLoginAttempts Int     @default(0)
-  lockedUntil       DateTime?
-  createdAt         DateTime  @default(now())
-  sessions          Session[]
-  auditLogs         AuditLog[]
+  id                  String    @id @default(cuid())
+  email               String    @unique
+  name                String?
+  passwordHash        String?
+  role                Role      @default(editor)
+  authyId             String?
+  avatarUrl           String?
+  phone               String?
+  bio                 String?
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+  createdAt           DateTime  @default(now())
+  sessions            Session[]
+  auditLogs           AuditLog[]
+  emailChangeRequests EmailChangeRequest[]
+}
+
+model EmailChangeRequest {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  newEmail     String
+  token        String   @unique
+  expiresAt    DateTime
+  verified     Boolean  @default(false)
+  createdAt    DateTime @default(now())
 }
 
 model Session {

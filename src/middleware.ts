@@ -67,14 +67,21 @@ export async function middleware(request: NextRequest) {
   const isStateChanging = request.method === "POST" || request.method === "PUT" || request.method === "DELETE" || request.method === "PATCH";
 
   if (isApiRoute && !isNextData && !isAuthRoute && isStateChanging) {
-    const token = request.headers.get(CSRF_HEADER);
-    const cookie = request.cookies.get(CSRF_COOKIE)?.value;
+    const hasSession =
+      request.cookies.get("slu.session-token")?.value ||
+      request.cookies.get("__Secure-next-auth.session-token")?.value ||
+      request.cookies.get("next-auth.session-token")?.value;
 
-    if (!token || !cookie || token !== cookie) {
-      return NextResponse.json(
-        { success: false, error: "Invalid CSRF token" },
-        { status: 403 }
-      );
+    if (!hasSession) {
+      const token = request.headers.get(CSRF_HEADER);
+      const cookie = request.cookies.get(CSRF_COOKIE)?.value;
+
+      if (!token || !cookie || token !== cookie) {
+        return NextResponse.json(
+          { success: false, error: "Invalid CSRF token" },
+          { status: 403 }
+        );
+      }
     }
   }
 
