@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Check, Spinner } from "@phosphor-icons/react";
 import Link from "next/link";
 import FileUpload from "@/components/ui/FileUpload";
+import { csrfFetch } from "@/lib/csrf-client";
 
 export default function DevotionalEditPage() {
   const router = useRouter();
@@ -61,7 +62,7 @@ export default function DevotionalEditPage() {
     try {
       const url = isNew ? "/api/devotionals" : `/api/devotionals/${id}`;
       const method = isNew ? "POST" : "PUT";
-      const res = await fetch(url, {
+      const res = await csrfFetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

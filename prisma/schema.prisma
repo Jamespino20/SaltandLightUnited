@@ -13,6 +13,17 @@ enum Role {
   viewer
 }
 
+model RoleConfig {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  displayName String
+  permissions Json     @default("[]")
+  isDefault   Boolean  @default(false)
+  isSystem    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model Event {
   id          String   @id @default(cuid())
   title       String
@@ -79,15 +90,17 @@ model Resource {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  name         String?
-  passwordHash String?
-  role         Role     @default(editor)
-  authyId      String?
-  createdAt    DateTime @default(now())
-  sessions  Session[]
-  auditLogs AuditLog[]
+  id                String    @id @default(cuid())
+  email             String    @unique
+  name              String?
+  passwordHash      String?
+  role              Role      @default(editor)
+  authyId           String?
+  failedLoginAttempts Int     @default(0)
+  lockedUntil       DateTime?
+  createdAt         DateTime  @default(now())
+  sessions          Session[]
+  auditLogs         AuditLog[]
 }
 
 model Session {

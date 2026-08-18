@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireSession } from "@/lib/api-auth";
+import { requireSession, requirePermission } from "@/lib/api-auth";
+import { logAudit, AUDIT_ACTIONS } from "@/lib/audit";
 
 export async function GET() {
   try {
@@ -8,7 +9,7 @@ export async function GET() {
       orderBy: { name: "asc" },
     });
     return NextResponse.json({ success: true, data: groups });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: "Failed to fetch groups" },
       { status: 500 }
@@ -19,6 +20,9 @@ export async function GET() {
 export async function POST(request: Request) {
   const authResult = await requireSession();
   if (authResult instanceof NextResponse) return authResult;
+
+  const permError = await requirePermission(authResult.session, "groups:create");
+  if (permError) return permError;
 
   try {
     const body = await request.json();
@@ -34,6 +38,12 @@ export async function POST(request: Request) {
     const group = await prisma.group.create({
       data: { name, description, meetingSchedule, leader, imageUrl },
     });
+
+    await logAudit(authResult.session, {
+      action: AUDIT_ACTIONS.CREATE,
+      targetTable: "group",
+      targetId: group.id,
+    }, request);
 
     return NextResponse.json({ success: true, data: group }, { status: 201 });
   } catch (error) {

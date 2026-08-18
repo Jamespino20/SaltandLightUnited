@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireSession, requirePermission } from "@/lib/api-auth";
+import { logAudit, AUDIT_ACTIONS } from "@/lib/audit";
 import { Role } from "@prisma/client";
 
 export async function GET() {
   const authResult = await requireSession();
   if (authResult instanceof NextResponse) return authResult;
 
-  const permError = requirePermission(authResult.session, "users:read");
+  const permError = await requirePermission(authResult.session, "users:read");
   if (permError) return permError;
 
   try {
@@ -34,7 +35,7 @@ export async function POST(request: Request) {
   const authResult = await requireSession();
   if (authResult instanceof NextResponse) return authResult;
 
-  const permError = requirePermission(authResult.session, "users:create");
+  const permError = await requirePermission(authResult.session, "users:create");
   if (permError) return permError;
 
   try {
@@ -66,6 +67,12 @@ export async function POST(request: Request) {
         createdAt: true,
       },
     });
+
+    await logAudit(authResult.session, {
+      action: AUDIT_ACTIONS.CREATE,
+      targetTable: "user",
+      targetId: user.id,
+    }, request);
 
     return NextResponse.json({ success: true, data: user }, { status: 201 });
   } catch {

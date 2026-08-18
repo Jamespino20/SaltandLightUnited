@@ -457,7 +457,7 @@ export default function ResourcesPage() {
               </div>
               <form onSubmit={submitDevotional} className="space-y-4">
                 <label className="block text-sm font-semibold text-white/80">
-                  {t("title")}
+                  {t("titleLabel")}
                   <input
                     required
                     value={devotionalForm.title}

@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
-import { Lock } from "@phosphor-icons/react";
+import { Lock, Warning } from "@phosphor-icons/react";
 
 function LoginForm() {
   const searchParams = useSearchParams();
@@ -13,6 +13,16 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [rateLimited, setRateLimited] = useState(false);
+
+  async function checkRateLimit() {
+    const res = await fetch("/api/auth/rate-limit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    return res.json();
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -20,6 +30,15 @@ function LoginForm() {
     setLoading(true);
 
     try {
+      const rlRes = await checkRateLimit();
+
+      if (rlRes.rateLimited) {
+        setError(`Too many login attempts. Please wait ${Math.ceil((rlRes.reset - Date.now()) / 1000)} seconds.`);
+        setRateLimited(true);
+        setLoading(false);
+        return;
+      }
+
       const res = await signIn("credentials", {
         email,
         password,
@@ -37,9 +56,10 @@ function LoginForm() {
     } catch (err) {
       setLoading(false);
       setError("An error occurred during login. Please try again.");
-      console.error("Login error:", err);
     }
   }
+
+  const disabled = loading || rateLimited;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slu-blue px-4">
@@ -72,6 +92,7 @@ function LoginForm() {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-xl border border-slu-gray-200 px-3 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue"
               placeholder="you@saltandlightunited.org"
+              disabled={disabled}
             />
           </div>
 
@@ -91,18 +112,20 @@ function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-xl border border-slu-gray-200 px-3 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue"
               placeholder="••••••••"
+              disabled={disabled}
             />
           </div>
 
           {error && (
-            <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">
-              {error}
-            </p>
+            <div className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600 flex items-start gap-2">
+              <Warning size={16} className="mt-0.5 shrink-0" />
+              <span>{error}</span>
+            </div>
           )}
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={disabled}
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slu-blue px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark disabled:opacity-60"
           >
             <Lock size={18} />

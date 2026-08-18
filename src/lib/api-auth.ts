@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { Session } from "next-auth";
 import { Role } from "@prisma/client";
-import { hasPermission, Permission } from "@/lib/permissions";
+import { hasPermissionDB, Permission } from "@/lib/permissions";
 
 export interface AuthResult {
   session: Session;
@@ -37,11 +37,11 @@ export function requireRole(
   return null;
 }
 
-export function requirePermission(
+export async function requirePermission(
   session: Session,
   permission: Permission
-): NextResponse | null {
-  if (!hasPermission(session.user.role, permission)) {
+): Promise<NextResponse | null> {
+  if (!(await hasPermissionDB(session.user.role, permission))) {
     return NextResponse.json(
       { success: false, error: "Forbidden" },
       { status: 403 }

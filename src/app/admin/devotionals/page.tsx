@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash } from "@phosphor-icons/react";
+import { csrfFetch } from "@/lib/csrf-client";
 import type { Devotional } from "@/types";
 
 function TableSkeleton() {
@@ -81,7 +82,7 @@ export default function DevotionalsPage() {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this devotional?")) return;
     try {
-      const res = await fetch(`/api/devotionals/${id}`, { method: "DELETE" });
+      const res = await csrfFetch(`/api/devotionals/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete devotional");
       setDevotionals((prev) => prev.filter((d) => d.id !== id));
     } catch (err) {

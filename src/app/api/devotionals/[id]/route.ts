@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireSession } from "@/lib/api-auth";
+import { requireSession, requirePermission } from "@/lib/api-auth";
+import { logAudit, AUDIT_ACTIONS } from "@/lib/audit";
 
 export async function GET(
   _request: Request,
@@ -31,6 +32,9 @@ export async function PUT(
   const authResult = await requireSession();
   if (authResult instanceof NextResponse) return authResult;
 
+  const permError = await requirePermission(authResult.session, "devotionals:update");
+  if (permError) return permError;
+
   const { id } = await params;
   try {
     const body = await request.json();
@@ -50,6 +54,12 @@ export async function PUT(
       },
     });
 
+    await logAudit(authResult.session, {
+      action: AUDIT_ACTIONS.UPDATE,
+      targetTable: "devotional",
+      targetId: id,
+    }, request);
+
     return NextResponse.json({ success: true, data: devotional });
   } catch {
     return NextResponse.json(
@@ -60,15 +70,23 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requireSession();
   if (authResult instanceof NextResponse) return authResult;
 
+  const permError = await requirePermission(authResult.session, "devotionals:delete");
+  if (permError) return permError;
+
   const { id } = await params;
   try {
     await prisma.devotional.delete({ where: { id } });
+    await logAudit(authResult.session, {
+      action: AUDIT_ACTIONS.DELETE,
+      targetTable: "devotional",
+      targetId: id,
+    }, request);
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json(

@@ -19,6 +19,7 @@ import {
   CaretLeft,
   Database,
   UserCircle,
+  ShieldStar,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +32,7 @@ const sidebarLinks = [
   { href: "/admin/groups", label: "Groups", icon: Users },
   { href: "/admin/database", label: "Database", icon: Database },
   { href: "/admin/audit", label: "Audit Log", icon: ShieldCheck },
+  { href: "/admin/roles", label: "Roles", icon: ShieldStar },
   { href: "/admin/settings", label: "Settings", icon: GearSix },
 ];
 

@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Check, Spinner } from "@phosphor-icons/react";
 import Link from "next/link";
 import FileUpload from "@/components/ui/FileUpload";
+import { csrfFetch } from "@/lib/csrf-client";
 
 export default function EventEditPage() {
   const router = useRouter();
@@ -73,7 +74,7 @@ export default function EventEditPage() {
     try {
       const url = isNew ? "/api/events" : `/api/events/${id}`;
       const method = isNew ? "POST" : "PUT";
-      const res = await fetch(url, {
+      const res = await csrfFetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

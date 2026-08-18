@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireSession } from "@/lib/api-auth";
+import { requireSession, requirePermission } from "@/lib/api-auth";
+import { logAudit, AUDIT_ACTIONS } from "@/lib/audit";
 
 export async function GET() {
   try {
@@ -8,7 +9,7 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
     });
     return NextResponse.json({ success: true, data: pubmats });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: "Failed to fetch pubmats" },
       { status: 500 }
@@ -19,6 +20,9 @@ export async function GET() {
 export async function POST(request: Request) {
   const authResult = await requireSession();
   if (authResult instanceof NextResponse) return authResult;
+
+  const permError = await requirePermission(authResult.session, "pubmats:create");
+  if (permError) return permError;
 
   try {
     const body = await request.json();
@@ -34,6 +38,12 @@ export async function POST(request: Request) {
     const pubmat = await prisma.pubmat.create({
       data: { title, description, imageUrl, category, eventId },
     });
+
+    await logAudit(authResult.session, {
+      action: AUDIT_ACTIONS.CREATE,
+      targetTable: "pubmat",
+      targetId: pubmat.id,
+    }, request);
 
     return NextResponse.json({ success: true, data: pubmat }, { status: 201 });
   } catch (error) {

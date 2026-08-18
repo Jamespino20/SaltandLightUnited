@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireSession, requirePermission } from "@/lib/api-auth";
+import { logAudit, AUDIT_ACTIONS } from "@/lib/audit";
 import { Role } from "@prisma/client";
 
 export async function GET(
@@ -10,7 +11,7 @@ export async function GET(
   const authResult = await requireSession();
   if (authResult instanceof NextResponse) return authResult;
 
-  const permError = requirePermission(authResult.session, "users:read");
+  const permError = await requirePermission(authResult.session, "users:read");
   if (permError) return permError;
 
   const { id } = await params;
@@ -47,7 +48,7 @@ export async function PUT(
   const authResult = await requireSession();
   if (authResult instanceof NextResponse) return authResult;
 
-  const permError = requirePermission(authResult.session, "users:update");
+  const permError = await requirePermission(authResult.session, "users:update");
   if (permError) return permError;
 
   const { id } = await params;
@@ -71,6 +72,12 @@ export async function PUT(
       },
     });
 
+    await logAudit(authResult.session, {
+      action: AUDIT_ACTIONS.UPDATE,
+      targetTable: "user",
+      targetId: id,
+    }, request);
+
     return NextResponse.json({ success: true, data: user });
   } catch {
     return NextResponse.json(
@@ -81,13 +88,13 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requireSession();
   if (authResult instanceof NextResponse) return authResult;
 
-  const permError = requirePermission(authResult.session, "users:delete");
+  const permError = await requirePermission(authResult.session, "users:delete");
   if (permError) return permError;
 
   const { id } = await params;
@@ -101,6 +108,11 @@ export async function DELETE(
 
   try {
     await prisma.user.delete({ where: { id } });
+    await logAudit(authResult.session, {
+      action: AUDIT_ACTIONS.DELETE,
+      targetTable: "user",
+      targetId: id,
+    }, request);
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json(

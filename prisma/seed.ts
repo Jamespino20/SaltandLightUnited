@@ -11,6 +11,56 @@ async function hash(plain: string): Promise<string> {
   return `${salt}:${buf.toString("hex")}`;
 }
 
+const DEFAULT_ROLES = [
+  {
+    name: "admin",
+    displayName: "Administrator",
+    permissions: [
+      "events:create", "events:read", "events:update", "events:delete",
+      "devotionals:create", "devotionals:read", "devotionals:update", "devotionals:delete",
+      "testimonies:create", "testimonies:read", "testimonies:update", "testimonies:delete", "testimonies:approve",
+      "groups:create", "groups:read", "groups:update", "groups:delete",
+      "pubmats:create", "pubmats:read", "pubmats:update", "pubmats:delete",
+      "users:read", "users:create", "users:update", "users:delete",
+      "roles:read", "roles:create", "roles:update", "roles:delete",
+      "audit:read",
+      "settings:read", "settings:update",
+    ],
+    isDefault: false,
+    isSystem: true,
+  },
+  {
+    name: "editor",
+    displayName: "Editor",
+    permissions: [
+      "events:create", "events:read", "events:update", "events:delete",
+      "devotionals:create", "devotionals:read", "devotionals:update", "devotionals:delete",
+      "testimonies:read", "testimonies:update", "testimonies:approve",
+      "groups:create", "groups:read", "groups:update", "groups:delete",
+      "pubmats:create", "pubmats:read", "pubmats:update", "pubmats:delete",
+      "users:read",
+      "audit:read",
+    ],
+    isDefault: true,
+    isSystem: true,
+  },
+  {
+    name: "viewer",
+    displayName: "Viewer",
+    permissions: [
+      "events:read",
+      "devotionals:read",
+      "testimonies:read",
+      "groups:read",
+      "pubmats:read",
+      "users:read",
+      "audit:read",
+    ],
+    isDefault: false,
+    isSystem: true,
+  },
+];
+
 async function main() {
   const email = (process.env.ADMIN_EMAIL ?? "espino.jamesbryant20@gmail.com")
     .toLowerCase()
@@ -28,6 +78,20 @@ async function main() {
   });
 
   console.log(`Seeded admin user: ${user.email} (role: ${user.role})`);
+
+  for (const roleConfig of DEFAULT_ROLES) {
+    await prisma.roleConfig.upsert({
+      where: { name: roleConfig.name },
+      update: {
+        displayName: roleConfig.displayName,
+        permissions: roleConfig.permissions,
+        isDefault: roleConfig.isDefault,
+        isSystem: roleConfig.isSystem,
+      },
+      create: roleConfig,
+    });
+    console.log(`Seeded role: ${roleConfig.displayName} (${roleConfig.name})`);
+  }
 }
 
 main()
