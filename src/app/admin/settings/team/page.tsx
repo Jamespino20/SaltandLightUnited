@@ -33,7 +33,7 @@ export default function TeamManagementPage() {
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [form, setForm] = useState({ email: "", name: "", role: "editor" });
+  const [form, setForm] = useState({ email: "", name: "", role: "editor", password: "" });
   const [saving, setSaving] = useState(false);
 
   const fetchUsers = () => {
@@ -53,13 +53,13 @@ export default function TeamManagementPage() {
 
   const openCreate = () => {
     setEditingUser(null);
-    setForm({ email: "", name: "", role: "editor" });
+    setForm({ email: "", name: "", role: "editor", password: "" });
     setShowModal(true);
   };
 
   const openEdit = (user: User) => {
     setEditingUser(user);
-    setForm({ email: user.email, name: user.name || "", role: user.role });
+    setForm({ email: user.email, name: user.name || "", role: user.role, password: "" });
     setShowModal(true);
   };
 
@@ -253,6 +253,20 @@ export default function TeamManagementPage() {
                   ))}
                 </select>
               </div>
+              {!editingUser && (
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-slu-gray-700">Password</label>
+                  <input
+                    type="password"
+                    required
+                    minLength={8}
+                    value={form.password}
+                    onChange={(e) => setForm({ ...form, password: e.target.value })}
+                    className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
+                    placeholder="Min 8 chars, upper, lower, number, special"
+                  />
+                </div>
+              )}
 
               <div className="flex items-center gap-3 pt-2">
                 <button

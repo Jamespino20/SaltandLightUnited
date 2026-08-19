@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireSession, requirePermission } from "@/lib/api-auth";
 import { logAudit, AUDIT_ACTIONS } from "@/lib/audit";
+import { hashPassword, validatePasswordStrength } from "@/lib/password";
 import { Role } from "@prisma/client";
 
 export async function GET() {
@@ -40,11 +41,26 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { email, name, role } = body;
+    const { email, name, role, password } = body;
 
     if (!email) {
       return NextResponse.json(
         { success: false, error: "Email is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!password) {
+      return NextResponse.json(
+        { success: false, error: "Password is required" },
+        { status: 400 }
+      );
+    }
+
+    const pwCheck = validatePasswordStrength(password);
+    if (!pwCheck.valid) {
+      return NextResponse.json(
+        { success: false, error: pwCheck.errors.join(". ") },
         { status: 400 }
       );
     }
@@ -57,8 +73,10 @@ export async function POST(request: Request) {
       );
     }
 
+    const passwordHash = await hashPassword(password);
+
     const user = await prisma.user.create({
-      data: { email, name, role: (role as Role) || Role.editor },
+      data: { email, name, role: (role as Role) || Role.editor, passwordHash },
       select: {
         id: true,
         email: true,
