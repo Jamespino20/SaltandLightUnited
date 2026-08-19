@@ -1,22 +1,11 @@
 import { getRequestConfig } from "next-intl/server";
 import { cookies } from "next/headers";
-import path from "path";
-import fs from "fs";
-import { prisma } from "@/lib/prisma";
-
-const MESSAGES_DIR = path.join(process.cwd(), "messages");
 
 const translationCache = new Map<
   string,
   { data: Record<string, string>; timestamp: number }
 >();
-const CACHE_TTL = 60_000; // 60 seconds
-
-function readJsonFile(locale: string): Record<string, unknown> {
-  const filePath = path.join(MESSAGES_DIR, `${locale}.json`);
-  if (!fs.existsSync(filePath)) return {};
-  return JSON.parse(fs.readFileSync(filePath, "utf-8"));
-}
+const CACHE_TTL = 60_000;
 
 function flatten(obj: Record<string, unknown>, prefix = ""): Record<string, string> {
   const result: Record<string, string> = {};
@@ -45,6 +34,20 @@ function buildNested(flat: Record<string, string>): Record<string, unknown> {
   return result;
 }
 
+async function loadJsonMessages(locale: string): Promise<Record<string, string>> {
+  try {
+    switch (locale) {
+      case "fil":
+        return flatten((await import("../../messages/fil.json")).default);
+      case "en":
+      default:
+        return flatten((await import("../../messages/en.json")).default);
+    }
+  } catch {
+    return {};
+  }
+}
+
 async function getMergedTranslations(locale: string): Promise<Record<string, unknown>> {
   const now = Date.now();
   const cached = translationCache.get(locale);
@@ -53,11 +56,11 @@ async function getMergedTranslations(locale: string): Promise<Record<string, unk
     return buildNested(cached.data);
   }
 
-  const jsonBase = readJsonFile(locale);
-  const jsonFlat = flatten(jsonBase);
+  const jsonFlat = await loadJsonMessages(locale);
 
   let dbFlat: Record<string, string> = {};
   try {
+    const { prisma } = await import("@/lib/prisma");
     const dbTranslations = await prisma.translation.findMany({
       where: { locale },
     });

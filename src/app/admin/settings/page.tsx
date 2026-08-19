@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { GearSix, Users, Globe, Bell, Warning, ArrowRight } from "@phosphor-icons/react";
+import { GearSix, Users, Globe, Bell, Warning, ArrowRight, Translate } from "@phosphor-icons/react";
 
 const settingSections = [
   {
@@ -15,6 +15,12 @@ const settingSections = [
     title: "Site Configuration",
     description: "Site name, description, and public settings.",
     href: "/admin/settings/site-config",
+  },
+  {
+    icon: Translate,
+    title: "Translations",
+    description: "Edit site text and language content.",
+    href: "/admin/translations",
   },
   {
     icon: Bell,

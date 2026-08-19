@@ -8,7 +8,7 @@ export function MaintenanceCheck({ children }: { children: React.ReactNode }) {
     mode: boolean;
     message: string;
   } | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [bypass, setBypass] = useState(true);
 
   useEffect(() => {
     fetch("/api/settings")
@@ -23,18 +23,19 @@ export function MaintenanceCheck({ children }: { children: React.ReactNode }) {
       })
       .catch(() => {});
 
-    // Check admin status via session
     fetch("/api/auth/session")
       .then((r) => r.json())
       .then((session) => {
-        if (session?.user?.role === "admin") {
-          setIsAdmin(true);
+        if (session?.user?.role && session.user.role !== "viewer") {
+          setBypass(true);
+        } else {
+          setBypass(false);
         }
       })
       .catch(() => {});
   }, []);
 
-  if (maintenance?.mode && !isAdmin) {
+  if (maintenance?.mode && !bypass) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-[#0A0A0A] px-4 text-center">
         <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-slu-blue/20">
