@@ -8,13 +8,13 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Image from "@tiptap/extension-image";
 
 function ToolbarButton({
-  onClick,
+  onCommand,
   active,
   disabled,
   children,
   title,
 }: {
-  onClick: () => void;
+  onCommand: () => void;
   active?: boolean;
   disabled?: boolean;
   children: React.ReactNode;
@@ -25,7 +25,7 @@ function ToolbarButton({
       type="button"
       onMouseDown={(e) => {
         e.preventDefault();
-        requestAnimationFrame(() => onClick());
+        onCommand();
       }}
       disabled={disabled}
       title={title}
@@ -87,7 +87,6 @@ function H1Icon() {
       <path d="M4 12h8" />
       <path d="M4 18V6" />
       <path d="M12 18V6" />
-      <path d="M17 12l3-2v10" />
     </svg>
   );
 }
@@ -201,7 +200,6 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [activeStates, setActiveStates] = useState<Record<string, boolean>>({});
 
   const editor = useEditor({
     extensions: [
@@ -218,27 +216,10 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
     onUpdate: ({ editor }) => {
       onChangeRef.current(editor.getHTML());
     },
-    onSelectionUpdate: ({ editor }) => {
-      setActiveStates({
-        bold: editor.isActive("bold"),
-        italic: editor.isActive("italic"),
-        underline: editor.isActive("underline"),
-        code: editor.isActive("code"),
-        heading1: editor.isActive("heading", { level: 1 }),
-        heading2: editor.isActive("heading", { level: 2 }),
-        heading3: editor.isActive("heading", { level: 3 }),
-        bulletList: editor.isActive("bulletList"),
-        orderedList: editor.isActive("orderedList"),
-        blockquote: editor.isActive("blockquote"),
-        textAlignLeft: editor.isActive({ textAlign: "left" }),
-        textAlignCenter: editor.isActive({ textAlign: "center" }),
-        textAlignRight: editor.isActive({ textAlign: "right" }),
-      });
-    },
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose max-w-none min-h-[300px] px-4 py-3 focus:outline-none",
+          "prose prose-sm sm:prose max-w-none min-h-[300px] px-8 py-6 focus:outline-none",
       },
     },
   });
@@ -273,33 +254,33 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
   if (!editor) return null;
 
   return (
-    <div className="overflow-hidden rounded-xl border border-slu-gray-200 bg-white">
-      {/* Toolbar */}
-      <div className="sticky top-0 z-10 flex flex-wrap items-center gap-0.5 border-b border-slu-gray-200 bg-slu-gray-50 px-3 py-2">
+    <div className="overflow-hidden rounded-xl border border-slu-gray-200 bg-white flex flex-col" style={{ height: "500px" }}>
+      {/* Fixed toolbar ribbon */}
+      <div className="flex-none flex flex-wrap items-center gap-0.5 border-b border-slu-gray-200 bg-slu-gray-50 px-3 py-2">
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          active={activeStates.bold}
+          onCommand={() => editor.chain().focus().toggleBold().run()}
+          active={editor.isActive("bold")}
           title="Bold"
         >
           <BoldIcon />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          active={activeStates.italic}
+          onCommand={() => editor.chain().focus().toggleItalic().run()}
+          active={editor.isActive("italic")}
           title="Italic"
         >
           <ItalicIcon />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-          active={activeStates.underline}
+          onCommand={() => editor.chain().focus().toggleUnderline().run()}
+          active={editor.isActive("underline")}
           title="Underline"
         >
           <UnderlineIcon />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleCode().run()}
-          active={activeStates.code}
+          onCommand={() => editor.chain().focus().toggleCode().run()}
+          active={editor.isActive("code")}
           title="Inline code"
         >
           <CodeIcon />
@@ -308,22 +289,22 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
         <ToolbarDivider />
 
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          active={activeStates.heading1}
+          onCommand={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          active={editor.isActive("heading", { level: 1 })}
           title="Heading 1"
         >
           <H1Icon />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          active={activeStates.heading2}
+          onCommand={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          active={editor.isActive("heading", { level: 2 })}
           title="Heading 2"
         >
           <H2Icon />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          active={activeStates.heading3}
+          onCommand={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          active={editor.isActive("heading", { level: 3 })}
           title="Heading 3"
         >
           <H3Icon />
@@ -332,22 +313,22 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
         <ToolbarDivider />
 
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          active={activeStates.bulletList}
+          onCommand={() => editor.chain().focus().toggleBulletList().run()}
+          active={editor.isActive("bulletList")}
           title="Bullet list"
         >
           <ListUnorderedIcon />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          active={activeStates.orderedList}
+          onCommand={() => editor.chain().focus().toggleOrderedList().run()}
+          active={editor.isActive("orderedList")}
           title="Numbered list"
         >
           <ListOrderedIcon />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          active={activeStates.blockquote}
+          onCommand={() => editor.chain().focus().toggleBlockquote().run()}
+          active={editor.isActive("blockquote")}
           title="Blockquote"
         >
           <QuoteIcon />
@@ -356,22 +337,22 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
         <ToolbarDivider />
 
         <ToolbarButton
-          onClick={() => editor.chain().focus().setTextAlign("left").run()}
-          active={activeStates.textAlignLeft}
+          onCommand={() => editor.chain().focus().setTextAlign("left").run()}
+          active={editor.isActive({ textAlign: "left" })}
           title="Align left"
         >
           <AlignLeftIcon />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().setTextAlign("center").run()}
-          active={activeStates.textAlignCenter}
+          onCommand={() => editor.chain().focus().setTextAlign("center").run()}
+          active={editor.isActive({ textAlign: "center" })}
           title="Align center"
         >
           <AlignCenterIcon />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().setTextAlign("right").run()}
-          active={activeStates.textAlignRight}
+          onCommand={() => editor.chain().focus().setTextAlign("right").run()}
+          active={editor.isActive({ textAlign: "right" })}
           title="Align right"
         >
           <AlignRightIcon />
@@ -379,13 +360,15 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
 
         <ToolbarDivider />
 
-        <ToolbarButton onClick={handleImageUpload} title="Insert image">
+        <ToolbarButton onCommand={handleImageUpload} title="Insert image">
           <ImageIcon />
         </ToolbarButton>
       </div>
 
-      {/* Editor */}
-      <EditorContent editor={editor} />
+      {/* Scrollable content area */}
+      <div className="flex-1 overflow-y-auto bg-white">
+        <EditorContent editor={editor} className="h-full [&_.ProseMirror]:h-full [&_.ProseMirror]:outline-none" />
+      </div>
 
       {/* Hidden file input for image upload */}
       <input
