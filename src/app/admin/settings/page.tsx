@@ -14,19 +14,19 @@ const settingSections = [
     icon: Globe,
     title: "Site Configuration",
     description: "Site name, description, and public settings.",
-    href: null,
+    href: "/admin/settings/site-config",
   },
   {
     icon: Bell,
     title: "Notifications",
     description: "Email and push notification preferences.",
-    href: null,
+    href: "/admin/settings/site-config#notifications",
   },
   {
     icon: GearSix,
     title: "Advanced",
     description: "Cache, maintenance mode, and system settings.",
-    href: null,
+    href: "/admin/settings/site-config#advanced",
   },
 ];
 

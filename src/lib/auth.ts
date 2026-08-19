@@ -4,6 +4,7 @@ import { Role } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { verifyPassword } from "@/lib/password";
 import { AUDIT_ACTIONS } from "@/lib/audit";
+import { getPermissionsDB } from "@/lib/permissions";
 
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes
@@ -139,6 +140,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.permissions = await getPermissionsDB(user.role as Role);
       }
       return token;
     },
@@ -146,6 +148,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = (token.role as Role) ?? Role.editor;
+        session.user.permissions = (token.permissions as string[]) ?? [];
 
         try {
           const dbUser = await prisma.user.findUnique({

@@ -57,7 +57,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const pwCheck = validatePasswordStrength(password);
+    const pwCheck = validatePasswordStrength(password, { name, email });
     if (!pwCheck.valid) {
       return NextResponse.json(
         { success: false, error: pwCheck.errors.join(". ") },

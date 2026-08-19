@@ -79,7 +79,10 @@ const PERMISSION_GROUPS: Record<string, { permission: string; label: string }[]>
 
 export default function RolesPage() {
   const { data: session } = useSession();
-  const isAdmin = session?.user?.role === "admin";
+  const permissions = session?.user?.permissions as string[] | undefined;
+  const canUpdateRoles = session?.user?.role === "admin" || permissions?.includes("roles:update");
+  const canCreateRoles = session?.user?.role === "admin" || permissions?.includes("roles:create");
+  const canDeleteRoles = session?.user?.role === "admin" || permissions?.includes("roles:delete");
 
   const [roles, setRoles] = useState<RoleConfig[]>([]);
   const [loading, setLoading] = useState(true);
@@ -213,7 +216,7 @@ export default function RolesPage() {
             Create and configure roles with granular permissions.
           </p>
         </div>
-        {isAdmin && (
+        {canCreateRoles && (
           <button
             onClick={openCreate}
             className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
@@ -266,7 +269,7 @@ export default function RolesPage() {
                 </div>
               </div>
               <div className="flex items-center gap-1">
-                {isAdmin && (
+                {canUpdateRoles && (
                   <>
                     <button
                       onClick={() => openEdit(role)}
@@ -274,7 +277,7 @@ export default function RolesPage() {
                     >
                       <Pencil size={14} />
                     </button>
-                    {!role.isSystem && (
+                    {canDeleteRoles && !role.isSystem && (
                       <button
                         onClick={() => handleDelete(role)}
                         className="rounded-lg p-1.5 text-slu-gray-400 hover:bg-rose-50 hover:text-rose-600"

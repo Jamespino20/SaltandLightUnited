@@ -48,10 +48,14 @@ export async function PUT(
     }
 
     if (existing.isSystem) {
-      return NextResponse.json(
-        { success: false, error: "Cannot modify system roles" },
-        { status: 403 }
-      );
+      const body = await request.clone().json();
+      const { name: requestedName } = body;
+      if (requestedName && requestedName !== existing.name) {
+        return NextResponse.json(
+          { success: false, error: "Cannot change the identifier of a system role" },
+          { status: 403 }
+        );
+      }
     }
 
     const body = await request.json();

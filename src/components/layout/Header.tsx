@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { List, X } from "@phosphor-icons/react";
-import { brand } from "@/lib/brand";
+import { useSiteConfig } from "@/lib/useSiteConfig";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { useTranslations } from "next-intl";
 
@@ -46,6 +46,7 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const t = useTranslations("nav");
+  const config = useSiteConfig();
 
   useEffect(() => {
     let raf = 0;

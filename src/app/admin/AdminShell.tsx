@@ -66,7 +66,7 @@ function AdminUserChip() {
       <button
         type="button"
         onClick={() => signOut({ callbackUrl: "/login" })}
-        className="hidden items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium text-slu-gray-500 transition-colors hover:bg-slu-gray-100 hover:text-slu-gray-700 sm:inline-flex"
+        className="hidden items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium text-slu-gray-500 transition-colors hover:bg-slu-gray-100 hover:text-slu-gray-700 cursor-pointer sm:inline-flex"
       >
         <SignOut size={16} />
         Sign out

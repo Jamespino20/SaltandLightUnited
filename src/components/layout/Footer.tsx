@@ -2,25 +2,24 @@
 
 import Link from "next/link";
 import { FacebookLogo } from "@phosphor-icons/react";
-import { brand } from "@/lib/brand";
-import { useTranslations } from "next-intl";
+import { useSiteConfig } from "@/lib/useSiteConfig";
 
 export function Footer() {
-  const t = useTranslations("footer");
+  const config = useSiteConfig();
   const footerLinks = [
     {
-      title: t("quickLinks"),
+      title: "Quick Links",
       links: [
-        { href: "/about", label: t("aboutUs") },
-        { href: "/events", label: t("events") },
-        { href: "/groups", label: t("community") },
-        { href: "/resources", label: t("resources") },
+        { href: "/about", label: "About Us" },
+        { href: "/events", label: "Events" },
+        { href: "/groups", label: "Community" },
+        { href: "/resources", label: "Resources" },
       ],
     },
     {
-      title: t("connect"),
+      title: "Connect",
       links: [
-        { href: "/contact", label: t("contactUs") },
+        { href: "/contact", label: "Contact Us" },
       ],
     },
   ];
@@ -40,22 +39,22 @@ export function Footer() {
             <div className="flex justify-start">
               <img
                 src="/images/BlueWhitePill.svg"
-                alt="Salt and Light United"
+                alt={config.siteName}
                 className="h-12 w-auto opacity-90 drop-shadow-[0_0_24px_rgba(255,221,150,0.45)]"
               />
             </div>
             <p className="mt-2 text-sm text-slu-gray-400">
-              {brand.description}
+              {config.description}
             </p>
             <div className="mt-4">
               <Link
-                href={brand.facebookUrl}
+                href={config.facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-sm text-slu-gray-400 transition-colors hover:text-slu-blue"
               >
                 <FacebookLogo size={20} />
-                {t("followFacebook")}
+                Follow us on Facebook
               </Link>
             </div>
           </div>
@@ -85,9 +84,9 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-4 border-t border-slu-gray-800 pt-6 text-center text-xs text-slu-gray-500">
           <p>
-            &copy; {new Date().getFullYear()} {brand.name}. {t("allRights")}
+            &copy; {new Date().getFullYear()} {config.siteName}. All rights reserved.
           </p>
-          <p className="mt-1">{t("independence")}</p>
+          <p className="mt-1">{config.independenceNote}</p>
         </div>
       </div>
     </footer>

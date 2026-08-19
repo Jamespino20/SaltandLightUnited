@@ -8,6 +8,7 @@ import { LightOrb } from "@/components/animation/LightOrb";
 import { ScrollProgress } from "@/components/animation/ScrollProgress";
 import { PageTransition } from "@/components/transition/PageTransition";
 import { LampyWidget } from "./LampyWidget";
+import { MaintenanceCheck } from "@/components/MaintenanceCheck";
 
 export function MainSiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -18,7 +19,7 @@ export function MainSiteChrome({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <>
+    <MaintenanceCheck>
       <ScrollProgress />
       <LightOrb />
       <SmoothScroll>
@@ -29,6 +30,6 @@ export function MainSiteChrome({ children }: { children: React.ReactNode }) {
         </PageTransition>
       </SmoothScroll>
       <LampyWidget />
-    </>
+    </MaintenanceCheck>
   );
 }
