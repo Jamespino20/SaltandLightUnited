@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Check, Spinner } from "@phosphor-icons/react";
 import Link from "next/link";
 import FileUpload from "@/components/ui/FileUpload";
+import { RichTextEditor } from "@/components/editor/RichTextEditor";
 
 
 export default function DevotionalEditPage() {
@@ -132,12 +133,10 @@ export default function DevotionalEditPage() {
 
         <div>
           <label className="mb-1 block text-sm font-medium text-slu-gray-700">Content</label>
-          <textarea
-            rows={10}
-            required
+          <RichTextEditor
             value={form.content}
-            onChange={(e) => setForm({ ...form, content: e.target.value })}
-            className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
+            onChange={(content) => setForm({ ...form, content })}
+            placeholder="Write your devotional content..."
           />
         </div>
 

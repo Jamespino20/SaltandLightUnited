@@ -97,6 +97,20 @@
     "emptyDescription": "SLU is currently a hangout fellowship rather than a church or a formal small-group network. We will share updates here if that changes.",
     "emptyNote": "For now, follow the events page or come to a gathering when one is announced."
   },
+  "devotionals": {
+    "title": "Devotionals",
+    "subtitle": "Read and share reflections from the community.",
+    "readMore": "Read more",
+    "backToList": "Back to Devotionals",
+    "empty": "No devotionals published yet."
+  },
+  "testimonies": {
+    "title": "Testimonies",
+    "subtitle": "Stories of faith from our community.",
+    "readMore": "Read more",
+    "backToList": "Back to Testimonies",
+    "empty": "No testimonies published yet."
+  },
   "resources": {
     "title": "Resources",
     "subtitle": "A growing space for SLU devotionals and stories of what God is doing in our lives.",
