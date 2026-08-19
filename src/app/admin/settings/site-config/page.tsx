@@ -1,16 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Globe,
-  FloppyDisk,
-  Spinner,
-  Bell,
-  Warning,
-  Trash,
-  ArrowLeft,
-} from "@phosphor-icons/react";
+import { Globe, FloppyDisk, Spinner, ArrowLeft } from "@phosphor-icons/react";
 import Link from "next/link";
+import { Section, Field, SettingsNotice, SettingsSkeleton } from "../shared";
 
 interface SiteConfig {
   siteName: string;
@@ -28,12 +21,6 @@ interface SiteConfig {
   aboutTitle: string;
   aboutDescription: string;
   independenceNote: string;
-  maintenanceMode: boolean;
-  maintenanceMessage: string;
-  notifyNewDevotional: boolean;
-  notifyNewTestimony: boolean;
-  notifyNewPubmat: boolean;
-  notifyNewUser: boolean;
 }
 
 const defaultConfig: SiteConfig = {
@@ -52,82 +39,7 @@ const defaultConfig: SiteConfig = {
   aboutTitle: "Who We Are",
   aboutDescription: "",
   independenceNote: "",
-  maintenanceMode: false,
-  maintenanceMessage: "We're currently performing maintenance. Please check back soon.",
-  notifyNewDevotional: true,
-  notifyNewTestimony: true,
-  notifyNewPubmat: true,
-  notifyNewUser: true,
 };
-
-function Section({ title, icon: Icon, children }: { title: string; icon: React.ElementType; children: React.ReactNode }) {
-  return (
-    <div className="rounded-2xl border border-slu-gray-200 bg-white p-6">
-      <div className="mb-4 flex items-center gap-3">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slu-blue/10 text-slu-blue">
-          <Icon size={18} />
-        </div>
-        <h2 className="text-lg font-semibold text-slu-black">{title}</h2>
-      </div>
-      <div className="space-y-4">{children}</div>
-    </div>
-  );
-}
-
-function Field({
-  label,
-  children,
-  hint,
-}: {
-  label: string;
-  children: React.ReactNode;
-  hint?: string;
-}) {
-  return (
-    <div>
-      <label className="mb-1 block text-sm font-medium text-slu-gray-700">
-        {label}
-      </label>
-      {children}
-      {hint && (
-        <p className="mt-1 text-xs text-slu-gray-400">{hint}</p>
-      )}
-    </div>
-  );
-}
-
-function Toggle({
-  checked,
-  onChange,
-  label,
-  description,
-}: {
-  checked: boolean;
-  onChange: (v: boolean) => void;
-  label: string;
-  description?: string;
-}) {
-  return (
-    <label className="flex cursor-pointer items-center justify-between rounded-xl border border-slu-gray-200 p-4 transition-colors hover:bg-slu-gray-50">
-      <div>
-        <p className="text-sm font-medium text-slu-black">{label}</p>
-        {description && (
-          <p className="mt-0.5 text-xs text-slu-gray-500">{description}</p>
-        )}
-      </div>
-      <div className="relative ml-4 shrink-0">
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={(e) => onChange(e.target.checked)}
-          className="peer sr-only"
-        />
-        <div className="h-6 w-11 rounded-full bg-slu-gray-200 transition-colors peer-checked:bg-slu-blue" />
-        <div className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform peer-checked:translate-x-5" />
-      </div>
-    </label>
-  );
-}
 
 export default function SiteConfigPage() {
   const [config, setConfig] = useState<SiteConfig>(defaultConfig);
@@ -143,9 +55,21 @@ export default function SiteConfigPage() {
         if (res.success && res.data) {
           const d = res.data;
           setConfig({
-            ...defaultConfig,
-            ...d,
+            siteName: d.siteName ?? defaultConfig.siteName,
+            siteShortName: d.siteShortName ?? defaultConfig.siteShortName,
+            tagline: d.tagline ?? defaultConfig.tagline,
+            description: d.description ?? defaultConfig.description,
+            city: d.city ?? defaultConfig.city,
+            facebookUrl: d.facebookUrl ?? defaultConfig.facebookUrl,
             phones: Array.isArray(d.phones) ? d.phones : [],
+            logoUrl: d.logoUrl ?? null,
+            faviconUrl: d.faviconUrl ?? null,
+            heroTitle1: d.heroTitle1 ?? defaultConfig.heroTitle1,
+            heroTitle2: d.heroTitle2 ?? defaultConfig.heroTitle2,
+            heroSubtitle: d.heroSubtitle ?? defaultConfig.heroSubtitle,
+            aboutTitle: d.aboutTitle ?? defaultConfig.aboutTitle,
+            aboutDescription: d.aboutDescription ?? defaultConfig.aboutDescription,
+            independenceNote: d.independenceNote ?? defaultConfig.independenceNote,
           });
           setPhonesInput(
             (Array.isArray(d.phones) ? d.phones : []).join(", ")
@@ -182,24 +106,7 @@ export default function SiteConfigPage() {
     }
   };
 
-  const handleClearCache = async () => {
-    try {
-      await fetch("/api/settings/cache", { method: "POST" });
-      setNotice("Cache cleared");
-    } catch {
-      setNotice("Failed to clear cache");
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="space-y-4">
-        {[...Array(3)].map((_, i) => (
-          <div key={i} className="h-48 animate-pulse rounded-2xl bg-slu-gray-100" />
-        ))}
-      </div>
-    );
-  }
+  if (loading) return <SettingsSkeleton />;
 
   return (
     <div className="space-y-6">
@@ -218,30 +125,17 @@ export default function SiteConfigPage() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleClearCache}
-            className="inline-flex items-center gap-2 rounded-xl border border-slu-gray-200 px-4 py-2 text-sm font-medium text-slu-gray-600 transition-colors hover:bg-slu-gray-100"
-          >
-            <Trash size={14} />
-            Clear Cache
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark disabled:opacity-50"
-          >
-            {saving ? <Spinner size={16} className="animate-spin" /> : <FloppyDisk size={16} />}
-            {saving ? "Saving..." : "Save Changes"}
-          </button>
-        </div>
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark disabled:opacity-50"
+        >
+          {saving ? <Spinner size={16} className="animate-spin" /> : <FloppyDisk size={16} />}
+          {saving ? "Saving..." : "Save Changes"}
+        </button>
       </div>
 
-      {notice && (
-        <div className="rounded-xl border border-slu-blue/20 bg-slu-blue/5 px-4 py-3 text-sm text-slu-blue">
-          {notice}
-        </div>
-      )}
+      <SettingsNotice notice={notice} />
 
       {/* General */}
       <Section title="General" icon={Globe}>
@@ -355,61 +249,6 @@ export default function SiteConfigPage() {
             className="w-full resize-y rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm outline-none focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
           />
         </Field>
-      </Section>
-
-      {/* Notifications */}
-      <Section title="Notifications" icon={Bell}>
-        <p className="text-sm text-slu-gray-500">
-          Choose which new submissions trigger admin notifications.
-        </p>
-        <Toggle
-          checked={config.notifyNewDevotional}
-          onChange={(v) => update("notifyNewDevotional", v)}
-          label="New Devotional"
-          description="Notify when someone submits a new devotional"
-        />
-        <Toggle
-          checked={config.notifyNewTestimony}
-          onChange={(v) => update("notifyNewTestimony", v)}
-          label="New Testimony"
-          description="Notify when someone shares a new testimony"
-        />
-        <Toggle
-          checked={config.notifyNewPubmat}
-          onChange={(v) => update("notifyNewPubmat", v)}
-          label="New Pubmat"
-          description="Notify when a new publication material is uploaded"
-        />
-        <Toggle
-          checked={config.notifyNewUser}
-          onChange={(v) => update("notifyNewUser", v)}
-          label="New User Signup"
-          description="Notify when a new user creates an account"
-        />
-      </Section>
-
-      {/* Advanced */}
-      <Section title="Advanced" icon={Warning}>
-        <Toggle
-          checked={config.maintenanceMode}
-          onChange={(v) => update("maintenanceMode", v)}
-          label="Maintenance Mode"
-          description="When enabled, only admins can access the site"
-        />
-        {config.maintenanceMode && (
-          <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
-            <p className="mb-2 text-sm font-medium text-amber-700">
-              Maintenance mode is active
-            </p>
-            <Field label="Maintenance Message" hint="Shown to non-admin visitors">
-              <input
-                value={config.maintenanceMessage}
-                onChange={(e) => update("maintenanceMessage", e.target.value)}
-                className="w-full rounded-xl border border-amber-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
-              />
-            </Field>
-          </div>
-        )}
       </Section>
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { GearSix, Users, Globe, Bell, ArrowRight } from "@phosphor-icons/react";
+import { GearSix, Users, Globe, Bell, Warning, ArrowRight } from "@phosphor-icons/react";
 
 const settingSections = [
   {
@@ -20,13 +20,13 @@ const settingSections = [
     icon: Bell,
     title: "Notifications",
     description: "Email and push notification preferences.",
-    href: "/admin/settings/site-config#notifications",
+    href: "/admin/settings/notifications",
   },
   {
-    icon: GearSix,
+    icon: Warning,
     title: "Advanced",
     description: "Cache, maintenance mode, and system settings.",
-    href: "/admin/settings/site-config#advanced",
+    href: "/admin/settings/advanced",
   },
 ];
 

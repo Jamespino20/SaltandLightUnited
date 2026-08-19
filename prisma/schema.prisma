@@ -201,3 +201,16 @@ model SiteSetting {
   value     String
   updatedAt DateTime @updatedAt
 }
+
+model Translation {
+  id        String   @id @default(cuid())
+  locale    String
+  namespace String
+  key       String
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+
+  @@unique([locale, namespace, key])
+  @@index([locale])
+  @@index([locale, namespace])
+}

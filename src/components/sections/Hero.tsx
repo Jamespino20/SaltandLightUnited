@@ -2,9 +2,11 @@
 
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
+import { useTranslations } from "next-intl";
 import { useSiteConfig } from "@/lib/useSiteConfig";
 
 export function Hero() {
+  const t = useTranslations("home.hero");
   const config = useSiteConfig();
   const root = useRef<HTMLElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -56,8 +58,8 @@ export function Hero() {
         ref={heading}
         className="relative z-10 text-4xl font-bold leading-tight tracking-tight opacity-0 sm:text-5xl lg:text-6xl"
       >
-        <span className="text-white">{config.heroTitle1} </span>
-        <span className="text-slu-blue-light">{config.heroTitle2}</span>
+        <span className="text-white">{config.heroTitle1 || t("title1")} </span>
+        <span className="text-slu-blue-light">{config.heroTitle2 || t("title2")}</span>
       </h1>
 
       {/* Supporting copy */}
@@ -65,7 +67,7 @@ export function Hero() {
         ref={sub}
         className="relative z-10 mx-auto mt-6 max-w-xl px-4 text-base leading-relaxed text-white/70 sm:text-lg"
       >
-        {config.heroSubtitle}
+        {config.heroSubtitle || t("subtitle")}
       </p>
 
       {/* Scroll cue */}

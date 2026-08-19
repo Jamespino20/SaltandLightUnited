@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash } from "@phosphor-icons/react";
+import { usePermissions } from "@/lib/usePermissions";
 
 import type { Pubmat } from "@/types";
 
 export default function PubmatsPage() {
+  const { canCreate, canUpdate, canDelete } = usePermissions();
   const [pubmats, setPubmats] = useState<Pubmat[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -41,13 +43,15 @@ export default function PubmatsPage() {
             Manage posters, banners, and social media assets.
           </p>
         </div>
-        <Link
-          href="/admin/pubmats/new"
-          className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
-        >
-          <Plus size={18} />
-          Upload Pubmat
-        </Link>
+        {canCreate("pubmats") && (
+          <Link
+            href="/admin/pubmats/new"
+            className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
+          >
+            <Plus size={18} />
+            Upload Pubmat
+          </Link>
+        )}
       </div>
 
       <div className="overflow-hidden rounded-2xl border border-slu-gray-200 bg-white shadow-sm">
@@ -111,19 +115,23 @@ export default function PubmatsPage() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center justify-end gap-2">
-                          <Link
-                            href={`/admin/pubmats/${pub.id}`}
-                            className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-slu-blue/10 hover:text-slu-blue"
-                          >
-                            <Pencil size={16} />
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(pub.id!)}
-                            className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-rose-50 hover:text-rose-600"
-                          >
-                            <Trash size={16} />
-                          </button>
+                          {canUpdate("pubmats") && (
+                            <Link
+                              href={`/admin/pubmats/${pub.id}`}
+                              className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-slu-blue/10 hover:text-slu-blue"
+                            >
+                              <Pencil size={16} />
+                            </Link>
+                          )}
+                          {canDelete("pubmats") && (
+                            <button
+                              type="button"
+                              onClick={() => handleDelete(pub.id!)}
+                              className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-rose-50 hover:text-rose-600"
+                            >
+                              <Trash size={16} />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>

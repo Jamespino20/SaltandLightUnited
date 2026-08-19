@@ -71,9 +71,16 @@ const PERMISSION_GROUPS: Record<string, { permission: string; label: string }[]>
   Audit: [
     { permission: "audit:read", label: "View Logs" },
   ],
+  Database: [
+    { permission: "database:read", label: "View" },
+  ],
   Settings: [
     { permission: "settings:read", label: "View" },
     { permission: "settings:update", label: "Edit" },
+  ],
+  Translations: [
+    { permission: "translations:read", label: "View" },
+    { permission: "translations:update", label: "Edit" },
   ],
 };
 

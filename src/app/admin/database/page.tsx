@@ -14,6 +14,7 @@ import {
   ArrowsClockwise,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { usePermissions } from "@/lib/usePermissions";
 
 interface ModelInfo {
   key: string;
@@ -54,6 +55,7 @@ function formatValue(val: unknown, col: string): string {
 }
 
 export default function DatabaseViewerPage() {
+  const { canRead } = usePermissions();
   const [models, setModels] = useState<ModelInfo[]>([]);
   const [selectedModel, setSelectedModel] = useState<string>("");
   const [rows, setRows] = useState<Record<string, unknown>[]>([]);
@@ -302,7 +304,19 @@ export default function DatabaseViewerPage() {
                     const start = Math.max(1, Math.min(page - 2, meta.totalPages - 4));
                     const p = start + i;
                     if (p > meta.totalPages) return null;
-                    return (
+  if (!canRead("database")) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center">
+        <Database size={48} className="mb-4 text-slu-gray-300" />
+        <h2 className="text-lg font-semibold text-slu-black">Access Denied</h2>
+        <p className="mt-1 text-sm text-slu-gray-500">
+          You don&apos;t have permission to view the database.
+        </p>
+      </div>
+    );
+  }
+
+  return (
                       <button
                         key={p}
                         onClick={() => setPage(p)}

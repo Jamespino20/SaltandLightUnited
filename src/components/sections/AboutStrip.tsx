@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { Reveal } from "@/components/animation/Reveal";
+import { useTranslations } from "next-intl";
 import { useSiteConfig } from "@/lib/useSiteConfig";
 
 export function AboutStrip() {
+  const t = useTranslations("home.about");
   const config = useSiteConfig();
   return (
     <section
@@ -22,11 +24,11 @@ export function AboutStrip() {
 
       <Reveal className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
         <h2 className="text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
-          {config.aboutTitle}
+          {config.aboutTitle || t("title")}
         </h2>
 
         <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/80 sm:text-lg">
-          {config.aboutDescription}
+          {config.aboutDescription || t("description")}
         </p>
 
         <Link

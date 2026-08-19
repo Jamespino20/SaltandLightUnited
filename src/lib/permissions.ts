@@ -32,8 +32,11 @@ export type Permission =
   | "roles:update"
   | "roles:delete"
   | "audit:read"
+  | "database:read"
   | "settings:read"
-  | "settings:update";
+  | "settings:update"
+  | "translations:read"
+  | "translations:update";
 
 export const ALL_PERMISSIONS: Permission[] = [
   "events:create", "events:read", "events:update", "events:delete",
@@ -44,7 +47,9 @@ export const ALL_PERMISSIONS: Permission[] = [
   "users:read", "users:create", "users:update", "users:delete",
   "roles:read", "roles:create", "roles:update", "roles:delete",
   "audit:read",
+  "database:read",
   "settings:read", "settings:update",
+  "translations:read", "translations:update",
 ];
 
 export const PERMISSION_GROUPS: Record<string, Permission[]> = {
@@ -56,7 +61,9 @@ export const PERMISSION_GROUPS: Record<string, Permission[]> = {
   Users: ["users:read", "users:create", "users:update", "users:delete"],
   Roles: ["roles:read", "roles:create", "roles:update", "roles:delete"],
   Audit: ["audit:read"],
+  Database: ["database:read"],
   Settings: ["settings:read", "settings:update"],
+  Translations: ["translations:read", "translations:update"],
 };
 
 const DEFAULT_ROLE_PERMISSIONS: Record<Role, Permission[]> = {
@@ -69,7 +76,9 @@ const DEFAULT_ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     "users:read", "users:create", "users:update", "users:delete",
     "roles:read", "roles:create", "roles:update", "roles:delete",
     "audit:read",
+    "database:read",
     "settings:read", "settings:update",
+    "translations:read", "translations:update",
   ],
   editor: [
     "events:create", "events:read", "events:update", "events:delete",
@@ -88,6 +97,7 @@ const DEFAULT_ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     "pubmats:read",
     "users:read",
     "audit:read",
+    "database:read",
   ],
 };
 

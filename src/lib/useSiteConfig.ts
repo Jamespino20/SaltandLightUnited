@@ -31,9 +31,10 @@ const defaultConfig: SiteConfig = {
   phones: [...fallbackBrand.phones],
   logoUrl: null,
   faviconUrl: null,
-  heroTitle1: "Salt",
-  heroTitle2: "& Light",
-  heroSubtitle: "A Christ-centered community of students and young people growing in faith together.",
+  heroTitle1: "Be the Salt.",
+  heroTitle2: "Be the Light.",
+  heroSubtitle:
+    "Salt and Light United is a Christ-centered community of students and young people in Baliwag City, Bulacan, Philippines. We encounter Christ, grow together, and shine His light in our schools and streets.",
   aboutTitle: "Who We Are",
   aboutDescription: fallbackBrand.description,
   independenceNote: fallbackBrand.independenceNote,
@@ -55,15 +56,20 @@ export function useSiteConfig() {
             description: d.description || fallbackBrand.description,
             city: d.city || fallbackBrand.city,
             facebookUrl: d.facebookUrl || fallbackBrand.facebookUrl,
-            phones: Array.isArray(d.phones) ? d.phones : [...fallbackBrand.phones],
+            phones: Array.isArray(d.phones)
+              ? d.phones
+              : [...fallbackBrand.phones],
             logoUrl: d.logoUrl || null,
             faviconUrl: d.faviconUrl || null,
             heroTitle1: d.heroTitle1 || "Salt",
             heroTitle2: d.heroTitle2 || "& Light",
-            heroSubtitle: d.heroSubtitle || "A Christ-centered community of students and young people growing in faith together.",
+            heroSubtitle:
+              d.heroSubtitle ||
+              "A Christ-centered community of students and young people growing in faith together.",
             aboutTitle: d.aboutTitle || "Who We Are",
             aboutDescription: d.aboutDescription || fallbackBrand.description,
-            independenceNote: d.independenceNote || fallbackBrand.independenceNote,
+            independenceNote:
+              d.independenceNote || fallbackBrand.independenceNote,
           });
         }
       })

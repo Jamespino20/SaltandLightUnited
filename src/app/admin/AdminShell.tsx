@@ -20,20 +20,22 @@ import {
   Database,
   UserCircle,
   ShieldStar,
+  Translate,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
 const sidebarLinks = [
-  { href: "/admin", label: "Dashboard", icon: House },
-  { href: "/admin/events", label: "Events", icon: CalendarBlank },
-  { href: "/admin/devotionals", label: "Devotionals", icon: BookOpen },
-  { href: "/admin/testimonies", label: "Testimonies", icon: Heart },
-  { href: "/admin/pubmats", label: "Pubmats", icon: Images },
-  { href: "/admin/groups", label: "Groups", icon: Users },
-  { href: "/admin/database", label: "Database", icon: Database },
-  { href: "/admin/audit", label: "Audit Log", icon: ShieldCheck },
-  { href: "/admin/roles", label: "Roles", icon: ShieldStar },
-  { href: "/admin/settings", label: "Settings", icon: GearSix },
+  { href: "/admin", label: "Dashboard", icon: House, perm: null },
+  { href: "/admin/events", label: "Events", icon: CalendarBlank, perm: "events:read" },
+  { href: "/admin/devotionals", label: "Devotionals", icon: BookOpen, perm: "devotionals:read" },
+  { href: "/admin/testimonies", label: "Testimonies", icon: Heart, perm: "testimonies:read" },
+  { href: "/admin/pubmats", label: "Pubmats", icon: Images, perm: "pubmats:read" },
+  { href: "/admin/groups", label: "Groups", icon: Users, perm: "groups:read" },
+  { href: "/admin/database", label: "Database", icon: Database, perm: "database:read" },
+  { href: "/admin/audit", label: "Audit Log", icon: ShieldCheck, perm: "audit:read" },
+  { href: "/admin/roles", label: "Roles", icon: ShieldStar, perm: "roles:read" },
+  { href: "/admin/translations", label: "Translations", icon: Translate, perm: "translations:read" },
+  { href: "/admin/settings", label: "Settings", icon: GearSix, perm: null },
 ];
 
 function AdminUserChip() {
@@ -95,11 +97,26 @@ export default function AdminShell({
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
   return (
     <SessionProvider>
+      <AdminShellInner>{children}</AdminShellInner>
+    </SessionProvider>
+  );
+}
+
+function AdminShellInner({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const { data: session } = useSession();
+  const permissions = (session?.user?.permissions as string[]) ?? [];
+  const role = session?.user?.role;
+  const hasPerm = (perm: string) => role === "admin" || permissions.includes(perm);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const visibleLinks = sidebarLinks.filter(
+    (link) => !link.perm || hasPerm(link.perm)
+  );
+
+  return (
       <div className="flex h-screen overflow-hidden bg-slu-gray-50">
         {sidebarOpen && (
           <div
@@ -139,7 +156,7 @@ export default function AdminShell({
 
           <nav className="admin-scrollable flex-1 overflow-y-auto px-3 py-3">
             <ul className="space-y-0.5">
-              {sidebarLinks.map((link) => {
+              {visibleLinks.map((link) => {
                 const isActive =
                   link.href === "/admin"
                     ? pathname === "/admin"
@@ -206,6 +223,5 @@ export default function AdminShell({
           </main>
         </div>
       </div>
-    </SessionProvider>
   );
 }

@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash, CheckCircle, XCircle } from "@phosphor-icons/react";
+import { usePermissions } from "@/lib/usePermissions";
 
 import type { Testimony } from "@/types";
 
 export default function TestimoniesPage() {
+  const { canCreate, canUpdate, canDelete, can } = usePermissions();
   const [testimonies, setTestimonies] = useState<Testimony[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,13 +65,15 @@ export default function TestimoniesPage() {
             Review and manage member testimonies.
           </p>
         </div>
-        <Link
-          href="/admin/testimonies/new"
-          className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
-        >
-          <Plus size={18} />
-          New Testimony
-        </Link>
+        {canCreate("testimonies") && (
+          <Link
+            href="/admin/testimonies/new"
+            className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
+          >
+            <Plus size={18} />
+            New Testimony
+          </Link>
+        )}
       </div>
 
       {error && (
@@ -141,7 +145,7 @@ export default function TestimoniesPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-2">
-                        {!t.approved && (
+                        {can("testimonies:approve") && !t.approved && (
                           <button
                             type="button"
                             onClick={() => handleApprove(t.id)}
@@ -150,7 +154,7 @@ export default function TestimoniesPage() {
                             Approve
                           </button>
                         )}
-                        {t.approved && (
+                        {can("testimonies:approve") && t.approved && (
                           <button
                             type="button"
                             onClick={() => handleReject(t.id)}
@@ -159,19 +163,23 @@ export default function TestimoniesPage() {
                             Reject
                           </button>
                         )}
-                        <Link
-                          href={`/admin/testimonies/${t.id}`}
-                          className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-slu-blue/10 hover:text-slu-blue"
-                        >
-                          <Pencil size={16} />
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(t.id)}
-                          className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-rose-50 hover:text-rose-600"
-                        >
-                          <Trash size={16} />
-                        </button>
+                        {canUpdate("testimonies") && (
+                          <Link
+                            href={`/admin/testimonies/${t.id}`}
+                            className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-slu-blue/10 hover:text-slu-blue"
+                          >
+                            <Pencil size={16} />
+                          </Link>
+                        )}
+                        {canDelete("testimonies") && (
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(t.id)}
+                            className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-rose-50 hover:text-rose-600"
+                          >
+                            <Trash size={16} />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

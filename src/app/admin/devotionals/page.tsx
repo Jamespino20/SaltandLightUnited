@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash } from "@phosphor-icons/react";
 import type { Devotional } from "@/types";
+import { usePermissions } from "@/lib/usePermissions";
 
 function TableSkeleton() {
   return (
@@ -55,6 +56,7 @@ function TableSkeleton() {
 }
 
 export default function DevotionalsPage() {
+  const { canCreate, canUpdate, canDelete } = usePermissions();
   const [devotionals, setDevotionals] = useState<Devotional[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -98,13 +100,15 @@ export default function DevotionalsPage() {
             Manage published devotionals.
           </p>
         </div>
-        <Link
-          href="/admin/devotionals/new"
-          className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
-        >
-          <Plus size={18} />
-          New Devotional
-        </Link>
+        {canCreate("devotionals") && (
+          <Link
+            href="/admin/devotionals/new"
+            className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
+          >
+            <Plus size={18} />
+            New Devotional
+          </Link>
+        )}
       </div>
 
       {loading ? (
@@ -180,19 +184,23 @@ export default function DevotionalsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-2">
-                        <Link
-                          href={`/admin/devotionals/${dev.id}`}
-                          className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-slu-blue/10 hover:text-slu-blue"
-                        >
-                          <Pencil size={16} />
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(dev.id)}
-                          className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-rose-50 hover:text-rose-600"
-                        >
-                          <Trash size={16} />
-                        </button>
+                        {canUpdate("devotionals") && (
+                          <Link
+                            href={`/admin/devotionals/${dev.id}`}
+                            className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-slu-blue/10 hover:text-slu-blue"
+                          >
+                            <Pencil size={16} />
+                          </Link>
+                        )}
+                        {canDelete("devotionals") && (
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(dev.id)}
+                            className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-rose-50 hover:text-rose-600"
+                          >
+                            <Trash size={16} />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

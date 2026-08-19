@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireSession, requirePermission } from "@/lib/api-auth";
 import { invalidatePermissionsCache } from "@/lib/permissions";
+import { clearTranslationCache } from "@/i18n/request";
 
 export async function POST() {
   const authResult = await requireSession();
@@ -10,6 +11,7 @@ export async function POST() {
   if (permError) return permError;
 
   invalidatePermissionsCache();
+  clearTranslationCache();
 
   return NextResponse.json({ success: true, message: "Cache cleared" });
 }

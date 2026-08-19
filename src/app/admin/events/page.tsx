@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash } from "@phosphor-icons/react";
+import { usePermissions } from "@/lib/usePermissions";
 
 import type { Event } from "@/types";
 
 export default function EventsPage() {
+  const { canCreate, canUpdate, canDelete } = usePermissions();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,13 +34,15 @@ export default function EventsPage() {
             Manage upcoming and past events.
           </p>
         </div>
-        <Link
-          href="/admin/events/new"
-          className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
-        >
-          <Plus size={18} />
-          New Event
-        </Link>
+        {canCreate("events") && (
+          <Link
+            href="/admin/events/new"
+            className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
+          >
+            <Plus size={18} />
+            New Event
+          </Link>
+        )}
       </div>
 
       <div className="overflow-hidden rounded-2xl border border-slu-gray-200 bg-white shadow-sm">
@@ -113,19 +117,23 @@ export default function EventsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-2">
-                        <Link
-                          href={`/admin/events/${event.id}`}
-                          className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-slu-blue/10 hover:text-slu-blue"
-                        >
-                          <Pencil size={16} />
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(event.id)}
-                          className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-rose-50 hover:text-rose-600"
-                        >
-                          <Trash size={16} />
-                        </button>
+                        {canUpdate("events") && (
+                          <Link
+                            href={`/admin/events/${event.id}`}
+                            className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-slu-blue/10 hover:text-slu-blue"
+                          >
+                            <Pencil size={16} />
+                          </Link>
+                        )}
+                        {canDelete("events") && (
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(event.id)}
+                            className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-rose-50 hover:text-rose-600"
+                          >
+                            <Trash size={16} />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
