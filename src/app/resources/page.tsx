@@ -13,6 +13,7 @@ type Devotional = {
   content: string;
   author?: string | null;
   scriptureRef?: string | null;
+  imageUrl?: string | null;
   publishedAt?: string | null;
 };
 
@@ -472,105 +473,217 @@ export default function ResourcesPage() {
               )}
             </div>
           ) : (
-            /* ══ BLOG: filtered by tab ══ */
-            <>
-              {activeTab === "devotionals" && (
-                devotionals.length === 0 ? <EmptyState /> : (
-                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {devotionals.map((item) => (
-                      <Link
-                        key={item.id}
-                        href={`/resources/devotionals/${item.id}`}
-                        className="group rounded-2xl border border-slu-gray-200 bg-white p-6 transition-all hover:shadow-md"
-                      >
-                        <p className="text-xs font-semibold text-slu-blue">{item.scriptureRef || "Community reflection"}</p>
-                        <h3 className="mt-2 text-lg font-bold text-slu-black group-hover:text-slu-blue">{item.title}</h3>
-                        <p className="mt-2 text-sm leading-relaxed text-slu-gray-600 line-clamp-3">{item.description || stripHtml(item.content)}</p>
-                        <div className="mt-4 flex items-center justify-between text-xs text-slu-gray-500">
-                          {item.author && <span>By {item.author}</span>}
-                          <span className="font-medium text-slu-blue opacity-0 transition-opacity group-hover:opacity-100">Read more</span>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                )
-              )}
+            /* ══ BLOG: featured hero + list cards ══ */
+            <div className="space-y-0">
+              {(() => {
+                const items = activeTab === "devotionals" ? devotionals
+                  : activeTab === "testimonies" ? testimonies
+                  : activeTab === "pubmats" ? pubmats
+                  : guides;
 
-              {activeTab === "testimonies" && (
-                testimonies.length === 0 ? <EmptyState /> : (
-                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {testimonies.map((item) => (
-                      <Link
-                        key={item.id}
-                        href={`/resources/testimonies/${item.id}`}
-                        className="group rounded-2xl border border-slu-gray-200 bg-slu-gray-50 p-6 transition-all hover:shadow-md"
-                      >
-                        <div className="mb-3 flex items-center gap-3">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slu-blue/10 text-slu-blue">
-                            <Heart size={16} />
-                          </div>
-                          <div>
-                            <p className="text-sm font-semibold text-slu-black">{item.authorName}</p>
-                          </div>
-                        </div>
-                        <p className="text-sm leading-relaxed text-slu-gray-600 line-clamp-4">{item.description || stripHtml(item.content)}</p>
-                        <span className="mt-3 inline-block text-sm font-medium text-slu-blue opacity-0 transition-opacity group-hover:opacity-100">Read more</span>
-                      </Link>
-                    ))}
-                  </div>
-                )
-              )}
+                if (items.length === 0) return <EmptyState />;
 
-              {activeTab === "pubmats" && (
-                pubmats.length === 0 ? <EmptyState /> : (
-                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {pubmats.map((item) => (
-                      <Link
-                        key={item.id}
-                        href={`/resources/pubmats/${item.id}`}
-                        className="group overflow-hidden rounded-2xl border border-slu-gray-200 bg-white transition-all hover:shadow-md"
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={item.imageUrl} alt={item.title} className="aspect-[4/3] w-full object-cover" />
-                        <div className="p-5">
-                          <h3 className="text-lg font-bold text-slu-black group-hover:text-slu-blue">{item.title}</h3>
-                          {item.description && <p className="mt-2 text-sm text-slu-gray-600 line-clamp-2">{item.description}</p>}
-                          {item.category && <p className="mt-2 text-xs font-semibold text-slu-blue">{item.category}</p>}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                )
-              )}
+                const featured = items[0];
+                const rest = items.slice(1);
 
-              {activeTab === "guides" && (
-                guides.length === 0 ? <EmptyState /> : (
-                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {guides.map((item) => (
-                      <Link
-                        key={item.id}
-                        href={`/resources/guides/${item.id}`}
-                        className="group overflow-hidden rounded-2xl border border-slu-gray-200 bg-white transition-all hover:shadow-md"
-                      >
-                        {item.thumbnailUrl ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={item.thumbnailUrl} alt={item.title} className="aspect-[16/9] w-full object-cover" />
-                        ) : (
-                          <div className="flex aspect-[16/9] items-center justify-center bg-rose-50">
-                            <FilePdf size={48} className="text-rose-300" />
+                return (
+                  <>
+                    {/* Featured Hero */}
+                    {activeTab === "devotionals" && (() => {
+                      const dev = featured as Devotional;
+                      return (
+                        <Link
+                          href={`/resources/devotionals/${dev.id}`}
+                          className="group relative block overflow-hidden rounded-2xl"
+                        >
+                          {dev.imageUrl ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={dev.imageUrl} alt={dev.title} className="aspect-[21/9] w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                          ) : (
+                            <div className="aspect-[21/9] w-full bg-gradient-to-br from-slu-navy to-slu-blue" />
+                          )}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                          <div className="absolute bottom-0 left-0 p-6 sm:p-8 lg:p-10">
+                            <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slu-gold">Devotional</p>
+                            <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl lg:text-4xl">{dev.title}</h2>
+                            {dev.author && <p className="text-sm text-white/70">By {dev.author}</p>}
                           </div>
-                        )}
-                        <div className="p-5">
-                          <h3 className="text-lg font-bold text-slu-black group-hover:text-slu-blue">{item.title}</h3>
-                          {item.description && <p className="mt-2 text-sm text-slu-gray-600 line-clamp-2">{item.description}</p>}
-                          {item.category && <p className="mt-2 text-xs font-semibold text-slu-blue">{item.category}</p>}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                )
-              )}
-            </>
+                        </Link>
+                      );
+                    })()}
+
+                    {activeTab === "testimonies" && (() => {
+                      const ts = featured as Testimony;
+                      return (
+                        <Link
+                          href={`/resources/testimonies/${ts.id}`}
+                          className="group relative block overflow-hidden rounded-2xl bg-gradient-to-br from-slu-navy to-slu-blue"
+                        >
+                          <div className="aspect-[21/9] w-full" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                          <div className="absolute bottom-0 left-0 p-6 sm:p-8 lg:p-10">
+                            <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slu-gold">Testimony</p>
+                            <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl lg:text-4xl">{ts.authorName}&apos;s Story</h2>
+                            <p className="line-clamp-2 text-sm text-white/70">{ts.description || stripHtml(ts.content)}</p>
+                          </div>
+                        </Link>
+                      );
+                    })()}
+
+                    {activeTab === "pubmats" && (() => {
+                      const pub = featured as Pubmat;
+                      return (
+                        <Link
+                          href={`/resources/pubmats/${pub.id}`}
+                          className="group relative block overflow-hidden rounded-2xl"
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={pub.imageUrl} alt={pub.title} className="aspect-[21/9] w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                          <div className="absolute bottom-0 left-0 p-6 sm:p-8 lg:p-10">
+                            <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slu-gold">Pubmat</p>
+                            <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl lg:text-4xl">{pub.title}</h2>
+                            {pub.category && <p className="text-sm text-white/70">{pub.category}</p>}
+                          </div>
+                        </Link>
+                      );
+                    })()}
+
+                    {activeTab === "guides" && (() => {
+                      const guide = featured as FellowshipGuide;
+                      return (
+                        <Link
+                          href={`/resources/guides/${guide.id}`}
+                          className="group relative block overflow-hidden rounded-2xl"
+                        >
+                          {guide.thumbnailUrl ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={guide.thumbnailUrl} alt={guide.title} className="aspect-[21/9] w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                          ) : (
+                            <div className="aspect-[21/9] w-full bg-gradient-to-br from-rose-500 to-rose-700" />
+                          )}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                          <div className="absolute bottom-0 left-0 p-6 sm:p-8 lg:p-10">
+                            <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slu-gold">Fellowship Guide</p>
+                            <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl lg:text-4xl">{guide.title}</h2>
+                            {guide.category && <p className="text-sm text-white/70">{guide.category}</p>}
+                          </div>
+                        </Link>
+                      );
+                    })()}
+
+                    {/* List Cards */}
+                    {rest.length > 0 && (
+                      <div className="mt-6 divide-y divide-slu-gray-200 rounded-2xl border border-slu-gray-200 bg-white">
+                        {rest.map((item) => {
+                          if (activeTab === "devotionals") {
+                            const dev = item as Devotional;
+                            const devDate = dev.publishedAt ? new Date(dev.publishedAt) : null;
+                            return (
+                              <Link
+                                key={dev.id}
+                                href={`/resources/devotionals/${dev.id}`}
+                                className="group flex gap-4 p-4 transition-colors hover:bg-slu-gray-50 sm:p-5"
+                              >
+                                {dev.imageUrl ? (
+                                  // eslint-disable-next-line @next/next/no-img-element
+                                  <img src={dev.imageUrl} alt={dev.title} className="h-24 w-24 shrink-0 rounded-xl object-cover sm:h-28 sm:w-28" />
+                                ) : (
+                                  <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-slu-blue/10 sm:h-28 sm:w-28">
+                                    <BookOpen size={24} className="text-slu-blue/40" />
+                                  </div>
+                                )}
+                                <div className="flex min-w-0 flex-1 flex-col justify-center">
+                                  <div className="mb-1 flex items-center gap-2 text-xs text-slu-gray-500">
+                                    <span className="font-semibold uppercase tracking-wider text-slu-blue">Devotional</span>
+                                    {devDate && <span>{devDate.toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" })}</span>}
+                                  </div>
+                                  <h3 className="truncate text-base font-bold text-slu-black group-hover:text-slu-blue sm:text-lg">{dev.title}</h3>
+                                  <p className="mt-1 line-clamp-2 text-sm text-slu-gray-600">{dev.description || stripHtml(dev.content)}</p>
+                                  {dev.author && <p className="mt-1 text-xs text-slu-gray-500">{dev.author}</p>}
+                                </div>
+                              </Link>
+                            );
+                          }
+
+                          if (activeTab === "testimonies") {
+                            const ts = item as Testimony;
+                            const tsDate = new Date(ts.createdAt);
+                            return (
+                              <Link
+                                key={ts.id}
+                                href={`/resources/testimonies/${ts.id}`}
+                                className="group flex gap-4 p-4 transition-colors hover:bg-slu-gray-50 sm:p-5"
+                              >
+                                <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-slu-blue/10 sm:h-28 sm:w-28">
+                                  <Heart size={24} className="text-slu-blue/40" />
+                                </div>
+                                <div className="flex min-w-0 flex-1 flex-col justify-center">
+                                  <div className="mb-1 flex items-center gap-2 text-xs text-slu-gray-500">
+                                    <span className="font-semibold uppercase tracking-wider text-slu-blue">Testimony</span>
+                                    <span>{tsDate.toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" })}</span>
+                                  </div>
+                                  <h3 className="truncate text-base font-bold text-slu-black group-hover:text-slu-blue sm:text-lg">{ts.authorName}</h3>
+                                  <p className="mt-1 line-clamp-2 text-sm text-slu-gray-600">{ts.description || stripHtml(ts.content)}</p>
+                                </div>
+                              </Link>
+                            );
+                          }
+
+                          if (activeTab === "pubmats") {
+                            const pub = item as Pubmat;
+                            return (
+                              <Link
+                                key={pub.id}
+                                href={`/resources/pubmats/${pub.id}`}
+                                className="group flex gap-4 p-4 transition-colors hover:bg-slu-gray-50 sm:p-5"
+                              >
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={pub.imageUrl} alt={pub.title} className="h-24 w-24 shrink-0 rounded-xl object-cover sm:h-28 sm:w-28" />
+                                <div className="flex min-w-0 flex-1 flex-col justify-center">
+                                  <div className="mb-1 flex items-center gap-2 text-xs text-slu-gray-500">
+                                    <span className="font-semibold uppercase tracking-wider text-slu-blue">Pubmat</span>
+                                    {pub.category && <span>{pub.category}</span>}
+                                  </div>
+                                  <h3 className="truncate text-base font-bold text-slu-black group-hover:text-slu-blue sm:text-lg">{pub.title}</h3>
+                                  {pub.description && <p className="mt-1 line-clamp-2 text-sm text-slu-gray-600">{pub.description}</p>}
+                                </div>
+                              </Link>
+                            );
+                          }
+
+                          const guide = item as FellowshipGuide;
+                          return (
+                            <Link
+                              key={guide.id}
+                              href={`/resources/guides/${guide.id}`}
+                              className="group flex gap-4 p-4 transition-colors hover:bg-slu-gray-50 sm:p-5"
+                            >
+                              {guide.thumbnailUrl ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img src={guide.thumbnailUrl} alt={guide.title} className="h-24 w-24 shrink-0 rounded-xl object-cover sm:h-28 sm:w-28" />
+                              ) : (
+                                <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-rose-50 sm:h-28 sm:w-28">
+                                  <FilePdf size={24} className="text-rose-300" />
+                                </div>
+                              )}
+                              <div className="flex min-w-0 flex-1 flex-col justify-center">
+                                <div className="mb-1 flex items-center gap-2 text-xs text-slu-gray-500">
+                                  <span className="font-semibold uppercase tracking-wider text-slu-blue">Guide</span>
+                                  {guide.category && <span>{guide.category}</span>}
+                                </div>
+                                <h3 className="truncate text-base font-bold text-slu-black group-hover:text-slu-blue sm:text-lg">{guide.title}</h3>
+                                {guide.description && <p className="mt-1 line-clamp-2 text-sm text-slu-gray-600">{guide.description}</p>}
+                              </div>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
+            </div>
           )}
         </div>
       </section>

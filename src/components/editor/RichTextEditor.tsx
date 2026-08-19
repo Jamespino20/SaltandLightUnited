@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
@@ -25,7 +25,7 @@ function ToolbarButton({
       type="button"
       onMouseDown={(e) => {
         e.preventDefault();
-        onClick();
+        requestAnimationFrame(() => onClick());
       }}
       disabled={disabled}
       title={title}
