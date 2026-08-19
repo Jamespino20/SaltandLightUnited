@@ -60,13 +60,15 @@ export default function EventsPage() {
         ) : events.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <p className="text-slu-gray-500">No events yet.</p>
-            <Link
-              href="/admin/events/new"
-              className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-slu-blue hover:underline"
-            >
-              <Plus size={14} />
-              Create your first event
-            </Link>
+            {canCreate("events") && (
+              <Link
+                href="/admin/events/new"
+                className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-slu-blue hover:underline"
+              >
+                <Plus size={14} />
+                Create your first event
+              </Link>
+            )}
           </div>
         ) : (
           <div className="overflow-x-auto">

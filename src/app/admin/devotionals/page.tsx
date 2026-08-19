@@ -127,13 +127,15 @@ export default function DevotionalsPage() {
       ) : devotionals.length === 0 ? (
         <div className="rounded-2xl border border-slu-gray-200 bg-white p-12 text-center shadow-sm">
           <p className="text-slu-gray-500">No devotionals yet.</p>
-          <Link
-            href="/admin/devotionals/new"
-            className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slu-blue hover:underline"
-          >
-            <Plus size={14} />
-            Write your first devotional
-          </Link>
+          {canCreate("devotionals") && (
+            <Link
+              href="/admin/devotionals/new"
+              className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slu-blue hover:underline"
+            >
+              <Plus size={14} />
+              Write your first devotional
+            </Link>
+          )}
         </div>
       ) : (
         <div className="overflow-hidden rounded-2xl border border-slu-gray-200 bg-white shadow-sm">

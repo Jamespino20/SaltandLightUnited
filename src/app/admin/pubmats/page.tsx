@@ -98,7 +98,9 @@ export default function PubmatsPage() {
                   ? (
                     <tr>
                       <td colSpan={4} className="px-4 py-12 text-center text-slu-gray-400">
-                        No pubmats found. Upload one to get started.
+                        {canCreate("pubmats")
+                          ? "No pubmats found. Upload one to get started."
+                          : "No pubmats found."}
                       </td>
                     </tr>
                   )

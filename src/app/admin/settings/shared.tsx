@@ -72,7 +72,7 @@ export function Toggle({
           onChange={(e) => onChange(e.target.checked)}
           className="peer sr-only"
         />
-        <div className="h-6 w-11 rounded-full bg-slu-gray-200 transition-colors peer-checked:bg-slu-blue" />
+        <div className="h-6 w-11 rounded-full bg-slu-gray-200 ring-1 ring-slu-gray-300 transition-colors peer-checked:bg-slu-blue peer-checked:ring-slu-blue" />
         <div className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform peer-checked:translate-x-5" />
       </div>
     </label>

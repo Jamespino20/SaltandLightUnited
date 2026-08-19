@@ -14,6 +14,7 @@ import {
   Images,
   ShieldCheck,
 } from "@phosphor-icons/react";
+import { usePermissions } from "@/lib/usePermissions";
 
 interface Stats {
   events: number;
@@ -32,10 +33,17 @@ interface Activity {
   createdAt: string;
 }
 
-const quickActions = [
-  { label: "Add Event", href: "/admin/events/new", icon: CalendarBlank },
-  { label: "Add Devotional", href: "/admin/devotionals/new", icon: BookOpen },
-  { label: "Upload Pubmat", href: "/admin/pubmats/new", icon: Images },
+interface QuickAction {
+  label: string;
+  href: string;
+  icon: React.ElementType;
+  perm: string;
+}
+
+const quickActions: QuickAction[] = [
+  { label: "Add Event", href: "/admin/events/new", icon: CalendarBlank, perm: "events:create" },
+  { label: "Add Devotional", href: "/admin/devotionals/new", icon: BookOpen, perm: "devotionals:create" },
+  { label: "Upload Pubmat", href: "/admin/pubmats/new", icon: Images, perm: "pubmats:create" },
 ];
 
 const statCards = [
@@ -57,6 +65,7 @@ function timeAgo(dateStr: string): string {
 }
 
 export default function AdminDashboard() {
+  const { has } = usePermissions();
   const [stats, setStats] = useState<Stats>({
     events: 0, devotionals: 0, testimonies: 0, groups: 0, pubmats: 0, pendingTestimonies: 0,
   });
@@ -149,7 +158,9 @@ export default function AdminDashboard() {
             Quick Actions
           </h2>
           <div className="space-y-1">
-            {quickActions.map((action) => (
+            {quickActions
+              .filter((action) => has(action.perm))
+              .map((action) => (
               <Link
                 key={action.label}
                 href={action.href}

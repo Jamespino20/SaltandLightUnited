@@ -129,7 +129,9 @@ export default function GroupsPage() {
 
         {!loading && groups.length === 0 && (
           <div className="px-4 py-12 text-center text-sm text-slu-gray-500">
-            No groups found. Create your first group to get started.
+            {canCreate("groups")
+              ? "No groups found. Create your first group to get started."
+              : "No groups found."}
           </div>
         )}
       </div>

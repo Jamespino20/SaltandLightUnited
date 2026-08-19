@@ -15,11 +15,6 @@ interface SiteConfig {
   phones: string[];
   logoUrl: string | null;
   faviconUrl: string | null;
-  heroTitle1: string;
-  heroTitle2: string;
-  heroSubtitle: string;
-  aboutTitle: string;
-  aboutDescription: string;
   independenceNote: string;
 }
 
@@ -33,11 +28,6 @@ const defaultConfig: SiteConfig = {
   phones: [],
   logoUrl: null,
   faviconUrl: null,
-  heroTitle1: "Salt",
-  heroTitle2: "& Light",
-  heroSubtitle: "",
-  aboutTitle: "Who We Are",
-  aboutDescription: "",
   independenceNote: "",
 };
 
@@ -64,11 +54,6 @@ export default function SiteConfigPage() {
             phones: Array.isArray(d.phones) ? d.phones : [],
             logoUrl: d.logoUrl ?? null,
             faviconUrl: d.faviconUrl ?? null,
-            heroTitle1: d.heroTitle1 ?? defaultConfig.heroTitle1,
-            heroTitle2: d.heroTitle2 ?? defaultConfig.heroTitle2,
-            heroSubtitle: d.heroSubtitle ?? defaultConfig.heroSubtitle,
-            aboutTitle: d.aboutTitle ?? defaultConfig.aboutTitle,
-            aboutDescription: d.aboutDescription ?? defaultConfig.aboutDescription,
             independenceNote: d.independenceNote ?? defaultConfig.independenceNote,
           });
           setPhonesInput(
@@ -199,53 +184,6 @@ export default function SiteConfigPage() {
             rows={2}
             value={config.independenceNote}
             onChange={(e) => update("independenceNote", e.target.value)}
-            className="w-full resize-y rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm outline-none focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
-          />
-        </Field>
-      </Section>
-
-      {/* Hero Section */}
-      <Section title="Hero Section" icon={Globe}>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Title Part 1" hint="First word of the hero heading">
-            <input
-              value={config.heroTitle1}
-              onChange={(e) => update("heroTitle1", e.target.value)}
-              className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm outline-none focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
-            />
-          </Field>
-          <Field label="Title Part 2" hint="Second word of the hero heading">
-            <input
-              value={config.heroTitle2}
-              onChange={(e) => update("heroTitle2", e.target.value)}
-              className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm outline-none focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
-            />
-          </Field>
-        </div>
-        <Field label="Subtitle" hint="Supporting text below the heading">
-          <textarea
-            rows={2}
-            value={config.heroSubtitle}
-            onChange={(e) => update("heroSubtitle", e.target.value)}
-            className="w-full resize-y rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm outline-none focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
-          />
-        </Field>
-      </Section>
-
-      {/* About Section */}
-      <Section title="About Section" icon={Globe}>
-        <Field label="About Title">
-          <input
-            value={config.aboutTitle}
-            onChange={(e) => update("aboutTitle", e.target.value)}
-            className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm outline-none focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
-          />
-        </Field>
-        <Field label="About Description" hint="Shown on the landing page About strip">
-          <textarea
-            rows={3}
-            value={config.aboutDescription}
-            onChange={(e) => update("aboutDescription", e.target.value)}
             className="w-full resize-y rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm outline-none focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
           />
         </Field>

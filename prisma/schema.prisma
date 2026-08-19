@@ -37,13 +37,6 @@ model SiteConfig {
   logoUrl        String?
   faviconUrl     String?
 
-  heroTitle1     String  @default("Salt")
-  heroTitle2     String  @default("& Light")
-  heroSubtitle   String  @default("A Christ-centered community of students and young people growing in faith together.")
-
-  aboutTitle     String  @default("Who We Are")
-  aboutDescription String @default("We are a community of young people in Baliwag City who love Jesus and want to live out our faith together. Through worship, fellowship, and service, we seek to be the salt and light in our city.")
-
   independenceNote String @default("Salt and Light United (SLU) is not related nor affiliated to any school, college, university, organizations, churches, or denominations; as it is an independent Christian community as of 2026.")
 
   maintenanceMode Boolean @default(false)
