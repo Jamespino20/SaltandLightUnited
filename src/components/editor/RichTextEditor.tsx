@@ -3,7 +3,6 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
-import Underline from "@tiptap/extension-underline";
 import Placeholder from "@tiptap/extension-placeholder";
 import Image from "@tiptap/extension-image";
 
@@ -200,7 +199,6 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
         heading: { levels: [1, 2, 3] },
       }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
-      Underline,
       Placeholder.configure({
         placeholder: placeholder || "Start writing...",
       }),
@@ -230,7 +228,7 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
   return (
     <div className="overflow-hidden rounded-xl border border-slu-gray-200 bg-white">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-0.5 border-b border-slu-gray-200 bg-slu-gray-50 px-3 py-2">
+      <div className="sticky top-0 z-10 flex flex-wrap items-center gap-0.5 border-b border-slu-gray-200 bg-slu-gray-50 px-3 py-2">
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
           active={editor.isActive("bold")}

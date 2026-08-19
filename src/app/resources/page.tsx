@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode, FormEvent, useEffect, useState, useRef, useCallback } from "react";
-import { BookOpen, Heart, PaperPlaneRight, CaretLeft, CaretRight, X } from "@phosphor-icons/react";
+import { BookOpen, Heart, PaperPlaneRight, CaretLeft, CaretRight, X, List, ArrowRight } from "@phosphor-icons/react";
 import { WaveTransition } from "@/components/sections/WaveTransition";
 import { useTranslations } from "next-intl";
 
@@ -29,7 +29,11 @@ type Pubmat = {
   category?: string | null;
 };
 
-/* ── Modal (social-media post style) ── */
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+}
+
+/* ── Modal ── */
 function PostModal({
   open,
   onClose,
@@ -80,7 +84,6 @@ function PostModal({
           visible ? "opacity-100" : "opacity-0"
         }`}
       />
-
       <div
         className={`relative z-10 max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white shadow-2xl transition-all duration-300 ease-out ${
           visible
@@ -166,7 +169,6 @@ function InfiniteCarousel<T>({
       >
         <CaretLeft size={20} />
       </button>
-
       <div
         ref={scrollRef}
         className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4"
@@ -178,7 +180,6 @@ function InfiniteCarousel<T>({
           </div>
         ))}
       </div>
-
       <button
         type="button"
         onClick={() => scroll("right")}
@@ -191,7 +192,93 @@ function InfiniteCarousel<T>({
   );
 }
 
+/* ── Blog Card ── */
+function BlogCard({
+  item,
+  type,
+  onClick,
+}: {
+  item: Devotional | Testimony | Pubmat;
+  type: "devotional" | "testimony" | "pubmat";
+  onClick: () => void;
+}) {
+  if (type === "pubmat") {
+    const pub = item as Pubmat;
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="group overflow-hidden rounded-2xl border border-slu-gray-200 bg-white text-left transition-all hover:shadow-md"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={pub.imageUrl} alt={pub.title} className="aspect-[4/3] w-full object-cover" />
+        <div className="p-5">
+          <h3 className="text-lg font-bold text-slu-black group-hover:text-slu-blue">{pub.title}</h3>
+          {pub.description && (
+            <p className="mt-2 text-sm text-slu-gray-600 line-clamp-2">{stripHtml(pub.description)}</p>
+          )}
+          {pub.category && <p className="mt-2 text-xs font-semibold text-slu-blue">{pub.category}</p>}
+        </div>
+      </button>
+    );
+  }
+
+  if (type === "devotional") {
+    const dev = item as Devotional;
+    const date = dev.publishedAt ? new Date(dev.publishedAt) : null;
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="group rounded-2xl border border-slu-gray-200 bg-white p-6 text-left transition-all hover:shadow-md"
+      >
+        <p className="text-xs font-semibold text-slu-blue">{dev.scriptureRef || "Community reflection"}</p>
+        <h3 className="mt-2 text-lg font-bold text-slu-black group-hover:text-slu-blue">{dev.title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-slu-gray-600 line-clamp-3">{stripHtml(dev.content)}</p>
+        <div className="mt-4 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs text-slu-gray-500">
+            {dev.author && <span>By {dev.author}</span>}
+            {date && <span>{date.toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" })}</span>}
+          </div>
+          <span className="inline-flex items-center gap-1 text-sm font-medium text-slu-blue opacity-0 transition-opacity group-hover:opacity-100">
+            Read <ArrowRight size={14} />
+          </span>
+        </div>
+      </button>
+    );
+  }
+
+  const ts = item as Testimony;
+  const date = new Date(ts.createdAt);
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="group rounded-2xl border border-slu-gray-200 bg-slu-gray-50 p-6 text-left transition-all hover:shadow-md"
+    >
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slu-blue/10 text-slu-blue">
+          <Heart size={16} />
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-slu-black">{ts.authorName}</p>
+          <p className="text-xs text-slu-gray-500">
+            {date.toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" })}
+          </p>
+        </div>
+      </div>
+      <p className="text-sm leading-relaxed text-slu-gray-600 line-clamp-4">{stripHtml(ts.content)}</p>
+      <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-slu-blue opacity-0 transition-opacity group-hover:opacity-100">
+        Read <ArrowRight size={14} />
+      </span>
+    </button>
+  );
+}
+
 /* ── Main Page ── */
+const TABS = ["devotionals", "testimonies", "pubmats"] as const;
+type Tab = (typeof TABS)[number];
+
 export default function ResourcesPage() {
   const t = useTranslations("resources");
   const [devotionals, setDevotionals] = useState<Devotional[]>([]);
@@ -200,8 +287,10 @@ export default function ResourcesPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [notice, setNotice] = useState("");
-  const [modalItem, setModalItem] = useState<Devotional | Testimony | null>(null);
-  const [modalType, setModalType] = useState<"devotional" | "testimony">("devotional");
+  const [activeTab, setActiveTab] = useState<Tab>("devotionals");
+  const [viewMode, setViewMode] = useState<"carousel" | "blog">("carousel");
+  const [modalItem, setModalItem] = useState<Devotional | Testimony | Pubmat | null>(null);
+  const [modalType, setModalType] = useState<"devotional" | "testimony" | "pubmat">("devotional");
   const [devotionalForm, setDevotionalForm] = useState({
     title: "",
     author: "",
@@ -276,15 +365,11 @@ export default function ResourcesPage() {
     }
   }
 
-  function openDevotionalModal(item: Devotional) {
-    setModalItem(item);
-    setModalType("devotional");
-  }
-
-  function openTestimonyModal(item: Testimony) {
-    setModalItem(item);
-    setModalType("testimony");
-  }
+  const tabCounts: Record<Tab, number> = {
+    devotionals: devotionals.length,
+    testimonies: testimonies.length,
+    pubmats: pubmats.length,
+  };
 
   return (
     <>
@@ -298,140 +383,173 @@ export default function ResourcesPage() {
 
       <WaveTransition from="dark" to="light" />
 
-      {/* Devotionals Carousel */}
-      <section className="bg-[#F0F0F0] py-16 sm:py-20">
+      {/* Tabs + View Toggle */}
+      <section className="bg-[#F0F0F0] pt-12 sm:pt-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-8 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slu-blue/10 text-slu-blue">
-              <BookOpen size={20} />
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            {/* Tabs */}
+            <div className="flex gap-1 rounded-xl bg-white p-1 ring-1 ring-slu-gray-200">
+              {TABS.map((tab) => (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => setActiveTab(tab)}
+                  className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                    activeTab === tab
+                      ? "bg-slu-navy text-white shadow-sm"
+                      : "text-slu-gray-600 hover:text-slu-black"
+                  }`}
+                >
+                  {tab === "devotionals" && <BookOpen size={16} />}
+                  {tab === "testimonies" && <Heart size={16} />}
+                  {tab === "pubmats" && <BookOpen size={16} />}
+                  {t(tab)}
+                  <span className={`ml-1 rounded-full px-1.5 py-0.5 text-xs ${
+                    activeTab === tab ? "bg-white/20" : "bg-slu-gray-100"
+                  }`}>
+                    {tabCounts[tab]}
+                  </span>
+                </button>
+              ))}
             </div>
-            <div>
-              <h2 className="text-2xl font-bold text-slu-black">{t("devotionals")}</h2>
-              <p className="text-sm text-slu-gray-500">{t("devotionalsDescription")}</p>
+
+            {/* View Toggle */}
+            <div className="flex gap-1 rounded-xl bg-white p-1 ring-1 ring-slu-gray-200">
+              <button
+                type="button"
+                onClick={() => setViewMode("carousel")}
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                  viewMode === "carousel"
+                    ? "bg-slu-navy text-white shadow-sm"
+                    : "text-slu-gray-600 hover:text-slu-black"
+                }`}
+              >
+                <CaretLeft size={14} className="rotate-90" /> Carousel
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode("blog")}
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                  viewMode === "blog"
+                    ? "bg-slu-navy text-white shadow-sm"
+                    : "text-slu-gray-600 hover:text-slu-black"
+                }`}
+              >
+                <List size={14} /> Blog
+              </button>
             </div>
           </div>
-
-          {loading ? (
-            <p className="text-sm text-slu-gray-500">{t("loadingSubmissions")}</p>
-          ) : devotionals.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-slu-gray-300 bg-white p-8">
-              <p className="font-semibold text-slu-black">{t("nothingPublished")}</p>
-              <p className="mt-2 text-sm text-slu-gray-500">{t("beFirst")}</p>
-            </div>
-          ) : (
-            <InfiniteCarousel
-              items={devotionals}
-              fadeIn
-              renderItem={(item) => (
-                <button
-                  type="button"
-                  onClick={() => openDevotionalModal(item)}
-                  className="w-full rounded-2xl border border-slu-gray-200 bg-white p-6 text-left transition-all hover:shadow-md"
-                >
-                  <p className="text-xs font-semibold text-slu-blue">
-                    {item.scriptureRef || "Community reflection"}
-                  </p>
-                  <h3 className="mt-2 text-lg font-bold text-slu-black">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-slu-gray-600 line-clamp-3">
-                    {item.content}
-                  </p>
-                  {item.author && (
-                    <p className="mt-3 text-xs font-semibold text-slu-gray-500">By {item.author}</p>
-                  )}
-                </button>
-              )}
-            />
-          )}
         </div>
       </section>
 
-      {/* Testimonies Carousel */}
-      <section className="bg-white py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-8 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slu-blue/10 text-slu-blue">
-              <Heart size={20} />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-slu-black">{t("testimonies")}</h2>
-              <p className="text-sm text-slu-gray-500">{t("storiesDescription")}</p>
-            </div>
-          </div>
-
+      {/* Content */}
+      <section className="bg-[#F0F0F0] pb-16 sm:pb-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8">
           {loading ? (
-            <p className="text-sm text-slu-gray-500">{t("loadingSubmissions")}</p>
-          ) : testimonies.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-slu-gray-300 bg-[#F0F0F0] p-8">
-              <p className="font-semibold text-slu-black">{t("nothingPublished")}</p>
-              <p className="mt-2 text-sm text-slu-gray-500">{t("beFirst")}</p>
-            </div>
-          ) : (
-            <InfiniteCarousel
-              items={testimonies}
-              fadeIn
-              renderItem={(item) => (
-                <button
-                  type="button"
-                  onClick={() => openTestimonyModal(item)}
-                  className="w-full rounded-2xl border border-slu-gray-200 bg-[#F0F0F0] p-6 text-left transition-all hover:shadow-md"
-                >
-                  <p className="text-sm leading-relaxed text-slu-gray-600 line-clamp-3">
-                    {item.content}
-                  </p>
-                  <p className="mt-3 text-xs font-semibold text-slu-gray-500">
-                    Shared by {item.authorName}
-                  </p>
-                </button>
-              )}
-            />
-          )}
-        </div>
-      </section>
-
-      {/* Pubmats Carousel */}
-      <section className="bg-[#F0F0F0] py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-8 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slu-blue/10 text-slu-blue">
-              <BookOpen size={20} />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-slu-black">{t("pubmats")}</h2>
-              <p className="text-sm text-slu-gray-500">{t("pubmatsDescription")}</p>
-            </div>
-          </div>
-
-          {loading ? (
-            <p className="text-sm text-slu-gray-500">{t("loadingSubmissions")}</p>
-          ) : pubmats.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-slu-gray-300 bg-white p-8">
-              <p className="font-semibold text-slu-black">{t("nothingPublished")}</p>
-              <p className="mt-2 text-sm text-slu-gray-500">{t("beFirst")}</p>
-            </div>
-          ) : (
-            <InfiniteCarousel
-              items={pubmats}
-              fadeIn
-              renderItem={(item) => (
-                <div className="overflow-hidden rounded-2xl border border-slu-gray-200 bg-white transition-all hover:shadow-md">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={item.imageUrl}
-                    alt={item.title}
-                    className="aspect-[4/5] w-full object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="font-bold text-slu-black">{item.title}</h3>
-                    {item.description && (
-                      <p className="mt-1 text-sm text-slu-gray-500 line-clamp-2">{item.description}</p>
-                    )}
-                    {item.category && (
-                      <p className="mt-2 text-xs font-semibold text-slu-blue">{item.category}</p>
-                    )}
-                  </div>
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="animate-pulse rounded-2xl border border-slu-gray-200 bg-white p-6">
+                  <div className="mb-2 h-4 w-1/3 rounded bg-slu-gray-200" />
+                  <div className="mb-2 h-6 w-1/2 rounded bg-slu-gray-200" />
+                  <div className="h-4 w-3/4 rounded bg-slu-gray-200" />
                 </div>
+              ))}
+            </div>
+          ) : (
+            <>
+              {/* Devotionals */}
+              {activeTab === "devotionals" && (
+                devotionals.length === 0 ? (
+                  <EmptyState />
+                ) : viewMode === "carousel" ? (
+                  <InfiniteCarousel
+                    items={devotionals}
+                    fadeIn
+                    renderItem={(item, i) => (
+                      <BlogCard
+                        key={item.id}
+                        item={item}
+                        type="devotional"
+                        onClick={() => { setModalItem(item); setModalType("devotional"); }}
+                      />
+                    )}
+                  />
+                ) : (
+                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {devotionals.map((item) => (
+                      <BlogCard
+                        key={item.id}
+                        item={item}
+                        type="devotional"
+                        onClick={() => { setModalItem(item); setModalType("devotional"); }}
+                      />
+                    ))}
+                  </div>
+                )
               )}
-            />
+
+              {/* Testimonies */}
+              {activeTab === "testimonies" && (
+                testimonies.length === 0 ? (
+                  <EmptyState />
+                ) : viewMode === "carousel" ? (
+                  <InfiniteCarousel
+                    items={testimonies}
+                    fadeIn
+                    renderItem={(item, i) => (
+                      <BlogCard
+                        key={item.id}
+                        item={item}
+                        type="testimony"
+                        onClick={() => { setModalItem(item); setModalType("testimony"); }}
+                      />
+                    )}
+                  />
+                ) : (
+                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {testimonies.map((item) => (
+                      <BlogCard
+                        key={item.id}
+                        item={item}
+                        type="testimony"
+                        onClick={() => { setModalItem(item); setModalType("testimony"); }}
+                      />
+                    ))}
+                  </div>
+                )
+              )}
+
+              {/* Pubmats */}
+              {activeTab === "pubmats" && (
+                pubmats.length === 0 ? (
+                  <EmptyState />
+                ) : viewMode === "carousel" ? (
+                  <InfiniteCarousel
+                    items={pubmats}
+                    fadeIn
+                    renderItem={(item, i) => (
+                      <BlogCard
+                        key={item.id}
+                        item={item}
+                        type="pubmat"
+                        onClick={() => { setModalItem(item); setModalType("pubmat"); }}
+                      />
+                    )}
+                  />
+                ) : (
+                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {pubmats.map((item) => (
+                      <BlogCard
+                        key={item.id}
+                        item={item}
+                        type="pubmat"
+                        onClick={() => { setModalItem(item); setModalType("pubmat"); }}
+                      />
+                    ))}
+                  </div>
+                )
+              )}
+            </>
           )}
         </div>
       </section>
@@ -561,9 +679,10 @@ export default function ResourcesPage() {
                 By {(modalItem as Devotional).author}
               </p>
             )}
-            <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-slu-gray-700">
-              {(modalItem as Devotional).content}
-            </p>
+            <div
+              className="prose prose-sm mt-4 max-w-none text-slu-gray-700"
+              dangerouslySetInnerHTML={{ __html: (modalItem as Devotional).content }}
+            />
           </div>
         )}
         {modalItem && modalType === "testimony" && (
@@ -576,12 +695,48 @@ export default function ResourcesPage() {
                 {(modalItem as Testimony).authorName}
               </p>
             </div>
-            <p className="whitespace-pre-line text-sm leading-relaxed text-slu-gray-700">
-              {(modalItem as Testimony).content}
-            </p>
+            <div
+              className="prose prose-sm max-w-none text-slu-gray-700"
+              dangerouslySetInnerHTML={{ __html: (modalItem as Testimony).content }}
+            />
+          </div>
+        )}
+        {modalItem && modalType === "pubmat" && (
+          <div className="p-6">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={(modalItem as Pubmat).imageUrl}
+              alt={(modalItem as Pubmat).title}
+              className="mb-4 w-full rounded-xl object-cover"
+            />
+            <h2 className="text-2xl font-bold text-slu-black">
+              {(modalItem as Pubmat).title}
+            </h2>
+            {(modalItem as Pubmat).category && (
+              <p className="mt-2 text-xs font-semibold text-slu-blue">
+                {(modalItem as Pubmat).category}
+              </p>
+            )}
+            {(modalItem as Pubmat).description && (
+              <div
+                className="prose prose-sm mt-3 max-w-none text-slu-gray-700"
+                dangerouslySetInnerHTML={{ __html: (modalItem as Pubmat).description! }}
+              />
+            )}
           </div>
         )}
       </PostModal>
     </>
+  );
+}
+
+function EmptyState() {
+  const t = useTranslations("resources");
+  return (
+    <div className="rounded-2xl border border-dashed border-slu-gray-300 bg-white p-12 text-center">
+      <BookOpen className="mx-auto mb-4 text-slu-gray-400" size={48} />
+      <p className="font-semibold text-slu-black">{t("nothingPublished")}</p>
+      <p className="mt-2 text-sm text-slu-gray-500">{t("beFirst")}</p>
+    </div>
   );
 }

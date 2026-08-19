@@ -354,6 +354,7 @@ export default function ProfilePage() {
             className="w-full rounded-xl border border-amber-200 bg-white px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
             placeholder="Enter your password to confirm changes"
             required
+            autoComplete="current-password"
           />
           <p className="mt-1 text-xs text-amber-600">
             Required to protect your account from unauthorized changes
@@ -432,6 +433,7 @@ export default function ProfilePage() {
                   onChange={(e) => setEmailPassword(e.target.value)}
                   className="w-full rounded-xl border border-slu-gray-200 bg-white px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
                   placeholder="Enter your password to verify"
+                  autoComplete="current-password"
                 />
               </div>
               <div className="flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 text-xs text-blue-700">
