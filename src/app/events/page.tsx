@@ -1,74 +1,72 @@
 "use client";
 
-import { useState } from "react";
-import { CalendarBlank, CaretDown, CaretUp } from "@phosphor-icons/react";
+import { useState, useEffect } from "react";
+import { CalendarBlank, CaretDown, CaretUp, Spinner } from "@phosphor-icons/react";
 import { Reveal } from "@/components/animation/Reveal";
 import { WaveTransition } from "@/components/sections/WaveTransition";
 import { useTranslations } from "next-intl";
 
-const upcomingEvents = [
-  {
-    id: "1",
-    title: "Friday Hangout",
-    date: "Every Friday, 6:00 PM",
-    description: "A relaxed evening to catch up, talk about life, and spend time together.",
-  },
-  {
-    id: "2",
-    title: "Creative Night",
-    date: "Monthly · Date announced soon",
-    description: "Music, art, games, and whatever the community wants to make together.",
-  },
-  {
-    id: "3",
-    title: "School Break Meetup",
-    date: "Next school break · Details soon",
-    description:
-      "A casual day out for food, conversation, and meeting new friends from SLU.",
-  },
-  {
-    id: "4",
-    title: "Open Mic & Hangout",
-    date: "September 25, 2026",
-    description:
-      "Bring a song, poem, game, or story and make the evening your own.",
-  },
-  {
-    id: "5",
-    title: "Back-to-School Meetup",
-    date: "August 15, 2026",
-    description:
-      "Start the semester with familiar faces, new friends, and a little encouragement.",
-  },
-];
+interface Event {
+  id: string;
+  title: string;
+  description: string | null;
+  date: string;
+  location: string | null;
+  imageUrl: string | null;
+  featured: boolean;
+}
 
-const pastEvents = [
-  {
-    id: "6",
-    title: "Summer Community Day",
-    date: "April 5, 2026",
-    description:
-      "A simple day of food, games, and time together.",
-  },
-  {
-    id: "7",
-    title: "Game Night",
-    date: "February 14, 2026",
-    description:
-      "Board games, group games, snacks, and a lot of friendly competition.",
-  },
-  {
-    id: "8",
-    title: "Year-End Hangout",
-    date: "December 28, 2025",
-    description:
-      "A low-key year-end gathering to look back, laugh, and look ahead together.",
-  },
-];
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+function formatRelativeDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diff = date.getTime() - now.getTime();
+  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+
+  if (days === 0) return "Today";
+  if (days === 1) return "Tomorrow";
+  if (days < 7) return `In ${days} days`;
+  if (days < 30) return `In ${Math.ceil(days / 7)} weeks`;
+  return formatDate(dateStr);
+}
 
 export default function EventsPage() {
   const t = useTranslations("events");
   const [showPast, setShowPast] = useState(false);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/events")
+      .then((r) => r.json())
+      .then((res) => {
+        if (res.success && res.data) {
+          setEvents(res.data);
+        }
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const now = new Date();
+  const upcomingEvents = events
+    .filter((e) => new Date(e.date) >= now)
+    .sort((a, b) => {
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    });
+  const pastEvents = events
+    .filter((e) => new Date(e.date) < now)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (
     <>
@@ -98,28 +96,59 @@ export default function EventsPage() {
               {t("upcoming")}
             </h2>
           </Reveal>
-          <Reveal
-            className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-            stagger
-          >
-            {upcomingEvents.map((event) => (
-              <div
-                key={event.id}
-                className="rounded-2xl border border-slu-gray-200 bg-white p-6 transition-all hover:shadow-md"
-              >
-                <div className="mb-3 flex items-center gap-2 text-sm font-medium text-slu-blue">
-                  <CalendarBlank size={16} />
-                  {event.date}
+
+          {loading ? (
+            <div className="mt-8 flex items-center justify-center py-12">
+              <Spinner size={32} className="animate-spin text-slu-blue" />
+            </div>
+          ) : upcomingEvents.length === 0 ? (
+            <div className="mt-8 rounded-2xl border border-slu-gray-200 bg-white p-12 text-center">
+              <CalendarBlank size={48} className="mx-auto text-slu-gray-300" />
+              <p className="mt-4 text-slu-gray-500">No upcoming events yet.</p>
+              <p className="mt-1 text-sm text-slu-gray-400">
+                Check back soon for new events!
+              </p>
+            </div>
+          ) : (
+            <Reveal
+              className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              stagger
+            >
+              {upcomingEvents.map((event) => (
+                <div
+                  key={event.id}
+                  className={`rounded-2xl border bg-white p-6 transition-all hover:shadow-md ${
+                    event.featured
+                      ? "border-slu-blue/30 ring-1 ring-slu-blue/10"
+                      : "border-slu-gray-200"
+                  }`}
+                >
+                  <div className="mb-3 flex items-center gap-2 text-sm font-medium text-slu-blue">
+                    <CalendarBlank size={16} />
+                    {formatRelativeDate(event.date)}
+                  </div>
+                  <h3 className="text-lg font-bold text-slu-black">
+                    {event.title}
+                  </h3>
+                  {event.description && (
+                    <p className="mt-2 text-sm text-slu-gray-500">
+                      {event.description}
+                    </p>
+                  )}
+                  {event.location && (
+                    <p className="mt-2 text-xs text-slu-gray-400">
+                      📍 {event.location}
+                    </p>
+                  )}
+                  {event.featured && (
+                    <span className="mt-3 inline-block rounded-full bg-slu-blue/10 px-2.5 py-0.5 text-xs font-medium text-slu-blue">
+                      Featured
+                    </span>
+                  )}
                 </div>
-                <h3 className="text-lg font-bold text-slu-black">
-                  {event.title}
-                </h3>
-                <p className="mt-2 text-sm text-slu-gray-500">
-                  {event.description}
-                </p>
-              </div>
-            ))}
-          </Reveal>
+              ))}
+            </Reveal>
+          )}
         </div>
       </section>
 
@@ -137,7 +166,7 @@ export default function EventsPage() {
                 {t("past")}
               </h2>
               <p className="mt-1 text-sm text-white/50">
-                {pastEvents.length} previous events
+                {pastEvents.length} previous event{pastEvents.length !== 1 && "s"}
               </p>
             </div>
             {showPast ? (
@@ -159,14 +188,16 @@ export default function EventsPage() {
                 >
                   <div className="mb-3 flex items-center gap-2 text-sm text-white/50">
                     <CalendarBlank size={16} />
-                    {event.date}
+                    {formatDate(event.date)}
                   </div>
                   <h3 className="text-lg font-bold text-white">
                     {event.title}
                   </h3>
-                  <p className="mt-2 text-sm text-white/60">
-                    {event.description}
-                  </p>
+                  {event.description && (
+                    <p className="mt-2 text-sm text-white/60">
+                      {event.description}
+                    </p>
+                  )}
                 </div>
               ))}
             </Reveal>
