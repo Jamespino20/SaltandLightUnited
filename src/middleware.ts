@@ -31,7 +31,6 @@ export async function middleware(request: NextRequest) {
   headers.set("X-DNS-Prefetch-Control", "on");
   headers.set("Cross-Origin-Opener-Policy", "same-origin");
   headers.set("Cross-Origin-Resource-Policy", "same-origin");
-  headers.set("Cross-Origin-Embedder-Policy", "require-corp");
   headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
 
   headers.delete("X-Powered-By");
