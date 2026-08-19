@@ -1,30 +1,19 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { useState, useMemo, useEffect } from "react";
+import { CaretLeft, CaretRight, Spinner } from "@phosphor-icons/react";
 import { Reveal } from "@/components/animation/Reveal";
 import { useTranslations } from "next-intl";
 
-const sampleEvents = [
-  {
-    id: "1",
-    title: "Friday Hangout",
-    date: "Every Friday, 6:00 PM",
-    description: "A relaxed evening to catch up, talk about life, and spend time together.",
-  },
-  {
-    id: "2",
-    title: "Creative Night",
-    date: "Monthly · Date announced soon",
-    description: "Music, art, games, and whatever the community wants to make together.",
-  },
-  {
-    id: "3",
-    title: "School Break Meetup",
-    date: "Next school break · Details soon",
-    description: "A casual day out for food, conversation, and meeting new friends from SLU.",
-  },
-];
+interface Event {
+  id: string;
+  title: string;
+  description: string | null;
+  date: string;
+  location: string | null;
+  imageUrl: string | null;
+  featured: boolean;
+}
 
 const MONTHS = [
   "January","February","March","April","May","June",
@@ -41,7 +30,24 @@ function getFirstDayOfWeek(year: number, month: number) {
   return new Date(year, month, 1).getDay();
 }
 
-function Calendar({ selectedDate, onSelect }: { selectedDate: Date; onSelect: (d: Date) => void }) {
+function formatDateShort(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function Calendar({
+  selectedDate,
+  onSelect,
+  eventDays,
+}: {
+  selectedDate: Date;
+  onSelect: (d: Date) => void;
+  eventDays: Set<string>;
+}) {
   const [viewMonth, setViewMonth] = useState(selectedDate.getMonth());
   const [viewYear, setViewYear] = useState(selectedDate.getFullYear());
 
@@ -81,6 +87,8 @@ function Calendar({ selectedDate, onSelect }: { selectedDate: Date; onSelect: (d
         ))}
         {cells.map((day, i) => {
           if (day === null) return <div key={`e${i}`} />;
+          const dateKey = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+          const hasEvent = eventDays.has(dateKey);
           const isSelected =
             day === selectedDate.getDate() &&
             viewMonth === selectedDate.getMonth() &&
@@ -92,7 +100,7 @@ function Calendar({ selectedDate, onSelect }: { selectedDate: Date; onSelect: (d
               key={day}
               type="button"
               onClick={() => onSelect(new Date(viewYear, viewMonth, day))}
-              className={`flex h-8 w-full items-center justify-center rounded-lg text-sm font-medium transition-colors ${
+              className={`relative flex h-8 w-full items-center justify-center rounded-lg text-sm font-medium transition-colors ${
                 isSelected
                   ? "bg-slu-blue text-white"
                   : isWeekend
@@ -101,6 +109,9 @@ function Calendar({ selectedDate, onSelect }: { selectedDate: Date; onSelect: (d
               }`}
             >
               {day}
+              {hasEvent && !isSelected && (
+                <span className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-slu-blue" />
+              )}
             </button>
           );
         })}
@@ -112,6 +123,38 @@ function Calendar({ selectedDate, onSelect }: { selectedDate: Date; onSelect: (d
 export function UpcomingEvents() {
   const t = useTranslations("home.events");
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/events")
+      .then((r) => r.json())
+      .then((res) => {
+        if (res.success && res.data) {
+          setEvents(res.data);
+        }
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const now = new Date();
+  const upcomingEvents = events
+    .filter((e) => new Date(e.date) >= now)
+    .sort((a, b) => {
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    });
+
+  const eventDays = useMemo(() => {
+    const days = new Set<string>();
+    for (const event of events) {
+      const d = new Date(event.date);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      days.add(key);
+    }
+    return days;
+  }, [events]);
 
   return (
     <section id="events" className="bg-[#F0F0F0] py-12 sm:py-16 md:py-24">
@@ -125,25 +168,43 @@ export function UpcomingEvents() {
 
         {/* Calendar — centered single column */}
         <Reveal className="mx-auto max-w-md">
-          <Calendar selectedDate={selectedDate} onSelect={setSelectedDate} />
+          <Calendar selectedDate={selectedDate} onSelect={setSelectedDate} eventDays={eventDays} />
         </Reveal>
 
         {/* Events — grid below calendar */}
-        <Reveal stagger className="mt-8 grid gap-4 sm:mt-10 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {sampleEvents.map((event, i) => (
-            <div
-              key={event.id}
-              className="rounded-2xl border border-slu-gray-200 bg-white p-6 transition-all hover:shadow-md"
-            >
-              <div className="mb-1 text-xs font-semibold tracking-wide text-slu-blue">
-                EVENT {i + 1}
+        {loading ? (
+          <div className="mt-8 flex items-center justify-center py-8 sm:mt-10">
+            <Spinner size={28} className="animate-spin text-slu-blue" />
+          </div>
+        ) : upcomingEvents.length === 0 ? (
+          <div className="mt-8 rounded-2xl border border-slu-gray-200 bg-white p-8 text-center sm:mt-10">
+            <p className="text-slu-gray-500">No upcoming events yet.</p>
+          </div>
+        ) : (
+          <Reveal stagger className="mt-8 grid gap-4 sm:mt-10 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {upcomingEvents.slice(0, 3).map((event) => (
+              <div
+                key={event.id}
+                className={`rounded-2xl border bg-white p-6 transition-all hover:shadow-md ${
+                  event.featured
+                    ? "border-slu-blue/30 ring-1 ring-slu-blue/10"
+                    : "border-slu-gray-200"
+                }`}
+              >
+                <div className="mb-1 text-xs font-semibold tracking-wide text-slu-blue">
+                  {formatDateShort(event.date)}
+                </div>
+                <h3 className="text-lg font-bold text-slu-black">{event.title}</h3>
+                {event.description && (
+                  <p className="mt-2 text-sm text-slu-gray-600">{event.description}</p>
+                )}
+                {event.location && (
+                  <p className="mt-2 text-xs text-slu-gray-400">📍 {event.location}</p>
+                )}
               </div>
-              <h3 className="text-lg font-bold text-slu-black">{event.title}</h3>
-              <p className="mt-1 text-sm text-slu-gray-500">{event.date}</p>
-              <p className="mt-2 text-sm text-slu-gray-600">{event.description}</p>
-            </div>
-          ))}
-        </Reveal>
+            ))}
+          </Reveal>
+        )}
       </div>
     </section>
   );
