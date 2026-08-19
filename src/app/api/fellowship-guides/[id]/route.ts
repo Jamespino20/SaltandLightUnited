@@ -9,17 +9,17 @@ export async function GET(
 ) {
   const { id } = await params;
   try {
-    const testimony = await prisma.testimony.findUnique({ where: { id } });
-    if (!testimony) {
+    const guide = await prisma.fellowshipGuide.findUnique({ where: { id } });
+    if (!guide) {
       return NextResponse.json(
-        { success: false, error: "Testimony not found" },
+        { success: false, error: "Fellowship guide not found" },
         { status: 404 }
       );
     }
-    return NextResponse.json({ success: true, data: testimony });
+    return NextResponse.json({ success: true, data: guide });
   } catch {
     return NextResponse.json(
-      { success: false, error: "Failed to fetch testimony" },
+      { success: false, error: "Failed to fetch fellowship guide" },
       { status: 500 }
     );
   }
@@ -32,40 +32,35 @@ export async function PUT(
   const authResult = await requireSession();
   if (authResult instanceof NextResponse) return authResult;
 
-  const permError = await requirePermission(authResult.session, "testimonies:update");
+  const permError = await requirePermission(authResult.session, "pubmats:update");
   if (permError) return permError;
 
   const { id } = await params;
   try {
     const body = await request.json();
-    const { authorName, authorAge, description, content, imageUrl, approved } = body;
+    const { title, description, fileUrl, thumbnailUrl, category } = body;
 
-    const testimony = await prisma.testimony.update({
+    const guide = await prisma.fellowshipGuide.update({
       where: { id },
       data: {
-        ...(authorName !== undefined && { authorName }),
-        ...(authorAge !== undefined && { authorAge }),
-        ...(description !== undefined && { description: description || null }),
-        ...(content !== undefined && { content }),
-        ...(imageUrl !== undefined && { imageUrl }),
-        ...(approved !== undefined && { approved }),
+        ...(title !== undefined && { title }),
+        ...(description !== undefined && { description }),
+        ...(fileUrl !== undefined && { fileUrl }),
+        ...(thumbnailUrl !== undefined && { thumbnailUrl }),
+        ...(category !== undefined && { category }),
       },
     });
 
-    const auditAction = approved !== undefined
-      ? (approved ? AUDIT_ACTIONS.APPROVE : AUDIT_ACTIONS.REJECT)
-      : AUDIT_ACTIONS.UPDATE;
-
     await logAudit(authResult.session, {
-      action: auditAction,
-      targetTable: "testimony",
+      action: AUDIT_ACTIONS.UPDATE,
+      targetTable: "fellowshipGuide",
       targetId: id,
     }, request);
 
-    return NextResponse.json({ success: true, data: testimony });
+    return NextResponse.json({ success: true, data: guide });
   } catch {
     return NextResponse.json(
-      { success: false, error: "Failed to update testimony" },
+      { success: false, error: "Failed to update fellowship guide" },
       { status: 500 }
     );
   }
@@ -78,21 +73,21 @@ export async function DELETE(
   const authResult = await requireSession();
   if (authResult instanceof NextResponse) return authResult;
 
-  const permError = await requirePermission(authResult.session, "testimonies:delete");
+  const permError = await requirePermission(authResult.session, "pubmats:delete");
   if (permError) return permError;
 
   const { id } = await params;
   try {
-    await prisma.testimony.delete({ where: { id } });
+    await prisma.fellowshipGuide.delete({ where: { id } });
     await logAudit(authResult.session, {
       action: AUDIT_ACTIONS.DELETE,
-      targetTable: "testimony",
+      targetTable: "fellowshipGuide",
       targetId: id,
     }, request);
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json(
-      { success: false, error: "Failed to delete testimony" },
+      { success: false, error: "Failed to delete fellowship guide" },
       { status: 500 }
     );
   }

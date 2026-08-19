@@ -21,6 +21,7 @@ import {
   UserCircle,
   ShieldStar,
   Translate,
+  FilePdf,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +32,7 @@ const sidebarLinks = [
   { href: "/admin/testimonies", label: "Testimonies", icon: Heart, perm: "testimonies:read" },
   { href: "/admin/pubmats", label: "Pubmats", icon: Images, perm: "pubmats:read" },
   { href: "/admin/groups", label: "Groups", icon: Users, perm: "groups:read" },
+  { href: "/admin/fellowship-guides", label: "Fellowship Guides", icon: FilePdf, perm: "pubmats:read" },
   { href: "/admin/database", label: "Database", icon: Database, perm: "database:read" },
   { href: "/admin/audit", label: "Audit Log", icon: ShieldCheck, perm: "audit:read" },
   { href: "/admin/roles", label: "Roles", icon: ShieldStar, perm: "roles:read" },

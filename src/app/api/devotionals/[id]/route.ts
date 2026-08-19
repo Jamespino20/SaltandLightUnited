@@ -38,12 +38,13 @@ export async function PUT(
   const { id } = await params;
   try {
     const body = await request.json();
-    const { title, content, author, scriptureRef, imageUrl, publishedAt } = body;
+    const { title, description, content, author, scriptureRef, imageUrl, publishedAt } = body;
 
     const devotional = await prisma.devotional.update({
       where: { id },
       data: {
         ...(title !== undefined && { title }),
+        ...(description !== undefined && { description: description || null }),
         ...(content !== undefined && { content }),
         ...(author !== undefined && { author }),
         ...(scriptureRef !== undefined && { scriptureRef }),

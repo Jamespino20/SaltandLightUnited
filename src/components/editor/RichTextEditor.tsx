@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useCallback, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
@@ -22,7 +23,10 @@ function ToolbarButton({
   return (
     <button
       type="button"
-      onClick={onClick}
+      onMouseDown={(e) => {
+        e.preventDefault();
+        onClick();
+      }}
       disabled={disabled}
       title={title}
       className={`rounded-lg p-1.5 transition-colors ${
@@ -190,9 +194,15 @@ interface RichTextEditorProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  accept?: string;
 }
 
-export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
+export function RichTextEditor({ value, onChange, placeholder, accept = "image/*" }: RichTextEditorProps) {
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [activeStates, setActiveStates] = useState<Record<string, boolean>>({});
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -206,7 +216,24 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
     ],
     content: value,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      onChangeRef.current(editor.getHTML());
+    },
+    onSelectionUpdate: ({ editor }) => {
+      setActiveStates({
+        bold: editor.isActive("bold"),
+        italic: editor.isActive("italic"),
+        underline: editor.isActive("underline"),
+        code: editor.isActive("code"),
+        heading1: editor.isActive("heading", { level: 1 }),
+        heading2: editor.isActive("heading", { level: 2 }),
+        heading3: editor.isActive("heading", { level: 3 }),
+        bulletList: editor.isActive("bulletList"),
+        orderedList: editor.isActive("orderedList"),
+        blockquote: editor.isActive("blockquote"),
+        textAlignLeft: editor.isActive({ textAlign: "left" }),
+        textAlignCenter: editor.isActive({ textAlign: "center" }),
+        textAlignRight: editor.isActive({ textAlign: "right" }),
+      });
     },
     editorProps: {
       attributes: {
@@ -216,14 +243,34 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
     },
   });
 
-  if (!editor) return null;
+  const handleImageUpload = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
 
-  const addImage = () => {
-    const url = window.prompt("Enter image URL:");
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
-  };
+  const handleImageFile = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file || !editor) return;
+      e.target.value = "";
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "editor-images");
+
+      try {
+        const res = await fetch("/api/upload", { method: "POST", body: formData });
+        const data = await res.json();
+        if (data.success && data.data.url) {
+          editor.chain().focus().setImage({ src: data.data.url }).run();
+        }
+      } catch {
+        // Upload failed silently
+      }
+    },
+    [editor]
+  );
+
+  if (!editor) return null;
 
   return (
     <div className="overflow-hidden rounded-xl border border-slu-gray-200 bg-white">
@@ -231,28 +278,28 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
       <div className="sticky top-0 z-10 flex flex-wrap items-center gap-0.5 border-b border-slu-gray-200 bg-slu-gray-50 px-3 py-2">
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
-          active={editor.isActive("bold")}
+          active={activeStates.bold}
           title="Bold"
         >
           <BoldIcon />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          active={editor.isActive("italic")}
+          active={activeStates.italic}
           title="Italic"
         >
           <ItalicIcon />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          active={editor.isActive("underline")}
+          active={activeStates.underline}
           title="Underline"
         >
           <UnderlineIcon />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleCode().run()}
-          active={editor.isActive("code")}
+          active={activeStates.code}
           title="Inline code"
         >
           <CodeIcon />
@@ -262,21 +309,21 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
 
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          active={editor.isActive("heading", { level: 1 })}
+          active={activeStates.heading1}
           title="Heading 1"
         >
           <H1Icon />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          active={editor.isActive("heading", { level: 2 })}
+          active={activeStates.heading2}
           title="Heading 2"
         >
           <H2Icon />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          active={editor.isActive("heading", { level: 3 })}
+          active={activeStates.heading3}
           title="Heading 3"
         >
           <H3Icon />
@@ -286,21 +333,21 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
 
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          active={editor.isActive("bulletList")}
+          active={activeStates.bulletList}
           title="Bullet list"
         >
           <ListUnorderedIcon />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          active={editor.isActive("orderedList")}
+          active={activeStates.orderedList}
           title="Numbered list"
         >
           <ListOrderedIcon />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          active={editor.isActive("blockquote")}
+          active={activeStates.blockquote}
           title="Blockquote"
         >
           <QuoteIcon />
@@ -310,21 +357,21 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
 
         <ToolbarButton
           onClick={() => editor.chain().focus().setTextAlign("left").run()}
-          active={editor.isActive({ textAlign: "left" })}
+          active={activeStates.textAlignLeft}
           title="Align left"
         >
           <AlignLeftIcon />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().setTextAlign("center").run()}
-          active={editor.isActive({ textAlign: "center" })}
+          active={activeStates.textAlignCenter}
           title="Align center"
         >
           <AlignCenterIcon />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().setTextAlign("right").run()}
-          active={editor.isActive({ textAlign: "right" })}
+          active={activeStates.textAlignRight}
           title="Align right"
         >
           <AlignRightIcon />
@@ -332,13 +379,22 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
 
         <ToolbarDivider />
 
-        <ToolbarButton onClick={addImage} title="Insert image">
+        <ToolbarButton onClick={handleImageUpload} title="Insert image">
           <ImageIcon />
         </ToolbarButton>
       </div>
 
       {/* Editor */}
       <EditorContent editor={editor} />
+
+      {/* Hidden file input for image upload */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept={accept}
+        onChange={handleImageFile}
+        className="hidden"
+      />
     </div>
   );
 }

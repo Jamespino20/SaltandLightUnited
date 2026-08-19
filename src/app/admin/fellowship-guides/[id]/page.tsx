@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Check, Spinner } from "@phosphor-icons/react";
 import Link from "next/link";
-import { RichTextEditor } from "@/components/editor/RichTextEditor";
+import FileUpload from "@/components/ui/FileUpload";
 
-
-export default function TestimonyEditPage() {
+export default function FellowshipGuideEditPage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
@@ -17,32 +16,32 @@ export default function TestimonyEditPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [form, setForm] = useState({
-    authorName: "",
-    authorAge: 0,
+    title: "",
     description: "",
-    content: "",
-    approved: false,
+    fileUrl: "",
+    thumbnailUrl: "",
+    category: "",
   });
 
   useEffect(() => {
     if (isNew) return;
-    fetch(`/api/testimonies/${id}`)
+    fetch(`/api/fellowship-guides/${id}`)
       .then((r) => r.json())
       .then((res) => {
         if (res.success && res.data) {
-          const d = res.data;
+          const g = res.data;
           setForm({
-            authorName: d.authorName || "",
-            authorAge: d.authorAge || 0,
-            description: d.description || "",
-            content: d.content || "",
-            approved: d.approved || false,
+            title: g.title || "",
+            description: g.description || "",
+            fileUrl: g.fileUrl || "",
+            thumbnailUrl: g.thumbnailUrl || "",
+            category: g.category || "",
           });
         } else {
-          setError("Testimony not found");
+          setError("Fellowship guide not found");
         }
       })
-      .catch(() => setError("Failed to load testimony"))
+      .catch(() => setError("Failed to load fellowship guide"))
       .finally(() => setLoading(false));
   }, [id, isNew]);
 
@@ -52,15 +51,15 @@ export default function TestimonyEditPage() {
     setError("");
 
     const body = {
-      authorName: form.authorName,
-      authorAge: form.authorAge || undefined,
+      title: form.title,
       description: form.description || undefined,
-      content: form.content,
-      approved: form.approved,
+      fileUrl: form.fileUrl,
+      thumbnailUrl: form.thumbnailUrl || undefined,
+      category: form.category || undefined,
     };
 
     try {
-      const url = isNew ? "/api/testimonies" : `/api/testimonies/${id}`;
+      const url = isNew ? "/api/fellowship-guides" : `/api/fellowship-guides/${id}`;
       const method = isNew ? "POST" : "PUT";
       const res = await fetch(url, {
         method,
@@ -69,7 +68,7 @@ export default function TestimonyEditPage() {
       });
       const data = await res.json();
       if (!data.success) throw new Error(data.error || "Failed to save");
-      router.push("/admin/testimonies");
+      router.push("/admin/fellowship-guides");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save");
     } finally {
@@ -83,10 +82,7 @@ export default function TestimonyEditPage() {
         <div className="animate-pulse space-y-4">
           <div className="h-8 w-48 rounded bg-slu-gray-100" />
           <div className="rounded-2xl border border-slu-gray-200 bg-white p-6 space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="h-10 rounded-xl bg-slu-gray-100" />
-              <div className="h-10 rounded-xl bg-slu-gray-100" />
-            </div>
+            <div className="h-10 rounded-xl bg-slu-gray-100" />
             <div className="h-32 rounded-xl bg-slu-gray-100" />
           </div>
         </div>
@@ -98,13 +94,13 @@ export default function TestimonyEditPage() {
     <div className="mx-auto max-w-2xl space-y-6">
       <div className="flex items-center gap-3">
         <Link
-          href="/admin/testimonies"
+          href="/admin/fellowship-guides"
           className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-slu-gray-100 hover:text-slu-black"
         >
           <ArrowLeft size={20} />
         </Link>
         <h1 className="text-2xl font-bold text-slu-black">
-          {isNew ? "New Testimony" : "Edit Testimony"}
+          {isNew ? "New Fellowship Guide" : "Edit Fellowship Guide"}
         </h1>
       </div>
 
@@ -118,31 +114,20 @@ export default function TestimonyEditPage() {
         onSubmit={handleSubmit}
         className="space-y-5 rounded-2xl border border-slu-gray-200 bg-white p-6 shadow-sm"
       >
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label className="mb-1 block text-sm font-medium text-slu-gray-700">Author Name</label>
-            <input
-              type="text"
-              required
-              value={form.authorName}
-              onChange={(e) => setForm({ ...form, authorName: e.target.value })}
-              className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-slu-gray-700">Age</label>
-            <input
-              type="number"
-              value={form.authorAge || ""}
-              onChange={(e) => setForm({ ...form, authorAge: parseInt(e.target.value) || 0 })}
-              className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
-            />
-          </div>
+        <div>
+          <label className="mb-1 block text-sm font-medium text-slu-gray-700">Title</label>
+          <input
+            type="text"
+            required
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
+          />
         </div>
 
         <div>
           <label className="mb-1 block text-sm font-medium text-slu-gray-700">
-            Short Description <span className="text-slu-gray-400">(shown in resource cards)</span>
+            Short Description
           </label>
           <textarea
             rows={2}
@@ -154,30 +139,31 @@ export default function TestimonyEditPage() {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-slu-gray-700">Content</label>
-          <RichTextEditor
-            value={form.content}
-            onChange={(content) => setForm({ ...form, content })}
-            placeholder="Share your testimony..."
+          <label className="mb-1 block text-sm font-medium text-slu-gray-700">Category</label>
+          <input
+            type="text"
+            value={form.category}
+            onChange={(e) => setForm({ ...form, category: e.target.value })}
+            placeholder="e.g. Discipleship, Prayer, Leadership"
+            className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
           />
         </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setForm({ ...form, approved: !form.approved })}
-            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors ${
-              form.approved ? "bg-emerald-600" : "bg-slu-gray-300"
-            }`}
-          >
-            <span
-              className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-sm transition-transform ${
-                form.approved ? "translate-x-5.5" : "translate-x-0.5"
-              } mt-0.5`}
-            />
-          </button>
-          <span className="text-sm font-medium text-slu-gray-700">Approved</span>
-        </div>
+        <FileUpload
+          value={form.fileUrl}
+          onChange={(url) => setForm({ ...form, fileUrl: url })}
+          folder="fellowship-guides"
+          accept="application/pdf"
+          label="PDF Guide"
+        />
+
+        <FileUpload
+          value={form.thumbnailUrl}
+          onChange={(url) => setForm({ ...form, thumbnailUrl: url })}
+          folder="fellowship-guides"
+          accept="image/*"
+          label="Thumbnail (optional)"
+        />
 
         <div className="flex items-center gap-3 pt-2">
           <button
@@ -186,10 +172,10 @@ export default function TestimonyEditPage() {
             className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark disabled:opacity-50"
           >
             {saving ? <Spinner size={18} className="animate-spin" /> : <Check size={18} />}
-            {saving ? "Saving..." : "Save Testimony"}
+            {saving ? "Saving..." : "Save Guide"}
           </button>
           <Link
-            href="/admin/testimonies"
+            href="/admin/fellowship-guides"
             className="rounded-xl border border-slu-gray-200 px-5 py-2.5 text-sm font-medium text-slu-gray-600 transition-colors hover:bg-slu-gray-100"
           >
             Cancel

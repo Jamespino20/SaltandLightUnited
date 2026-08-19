@@ -66,6 +66,7 @@ model Event {
 model Devotional {
   id            String   @id @default(cuid())
   title         String
+  description   String?
   content       String
   author        String?
   scriptureRef  String?
@@ -78,6 +79,7 @@ model Testimony {
   id          String   @id @default(cuid())
   authorName  String
   authorAge   Int?
+  description String?
   content     String
   imageUrl    String?
   approved    Boolean  @default(false)
@@ -113,6 +115,16 @@ model Resource {
   fileUrl      String?
   thumbnailUrl String?
   createdAt    DateTime @default(now())
+}
+
+model FellowshipGuide {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  fileUrl     String
+  thumbnailUrl String?
+  category    String?
+  createdAt   DateTime @default(now())
 }
 
 model User {

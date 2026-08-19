@@ -19,6 +19,7 @@ export default function DevotionalEditPage() {
   const [error, setError] = useState("");
   const [form, setForm] = useState({
     title: "",
+    description: "",
     content: "",
     author: "",
     scriptureRef: "",
@@ -34,6 +35,7 @@ export default function DevotionalEditPage() {
           const d = res.data;
           setForm({
             title: d.title || "",
+            description: d.description || "",
             content: d.content || "",
             author: d.author || "",
             scriptureRef: d.scriptureRef || "",
@@ -54,6 +56,7 @@ export default function DevotionalEditPage() {
 
     const body = {
       title: form.title,
+      description: form.description || undefined,
       content: form.content,
       author: form.author || undefined,
       scriptureRef: form.scriptureRef || undefined,
@@ -128,6 +131,19 @@ export default function DevotionalEditPage() {
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
             className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium text-slu-gray-700">
+            Short Description <span className="text-slu-gray-400">(shown in resource cards)</span>
+          </label>
+          <textarea
+            rows={2}
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            placeholder="A brief summary for the resource listing..."
+            className="w-full resize-none rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
           />
         </div>
 

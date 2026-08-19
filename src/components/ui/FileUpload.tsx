@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { UploadSimple, X, FileImage } from "@phosphor-icons/react";
+import { UploadSimple, X, FileImage, FilePdf } from "@phosphor-icons/react";
 
 interface FileUploadProps {
   value: string;
@@ -10,6 +10,44 @@ interface FileUploadProps {
   accept?: string;
   label?: string;
   previewClassName?: string;
+}
+
+const MAX_SIZE_MB = 20;
+const ALLOWED_TYPES: Record<string, string[]> = {
+  "image/*": ["image/png", "image/jpeg", "image/gif", "image/svg+xml", "image/webp"],
+  "application/pdf": ["application/pdf"],
+};
+
+function isTypeAllowed(file: File, accept: string): boolean {
+  const patterns = accept.split(",").map((s) => s.trim());
+  for (const pattern of patterns) {
+    if (pattern === "image/*" && file.type.startsWith("image/")) return true;
+    if (pattern === "application/pdf" && file.type === "application/pdf") return true;
+    if (ALLOWED_TYPES[pattern]?.includes(file.type)) return true;
+  }
+  return false;
+}
+
+function validatePdf(file: File): Promise<string | null> {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const arr = new Uint8Array(reader.result as ArrayBuffer);
+      const header = String.fromCharCode(...arr.slice(0, 5));
+      if (header !== "%PDF-") {
+        resolve("File is not a valid PDF (missing PDF header)");
+        return;
+      }
+      const tail = String.fromCharCode(...arr.slice(-6));
+      if (!tail.includes("%%EOF")) {
+        resolve("File may be corrupted (missing PDF EOF marker)");
+        return;
+      }
+      resolve(null);
+    };
+    reader.onerror = () => resolve("Could not read file for validation");
+    reader.readAsArrayBuffer(file.slice(0, 1024 * 50));
+  });
 }
 
 export default function FileUpload({
@@ -28,6 +66,26 @@ export default function FileUpload({
   const handleFile = useCallback(
     async (file: File) => {
       setError("");
+
+      if (!isTypeAllowed(file, accept)) {
+        setError(`File type "${file.type || "unknown"}" is not allowed. Accepted: ${accept}`);
+        return;
+      }
+
+      const maxSize = MAX_SIZE_MB * 1024 * 1024;
+      if (file.size > maxSize) {
+        setError(`File is too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Maximum is ${MAX_SIZE_MB}MB.`);
+        return;
+      }
+
+      if (file.type === "application/pdf") {
+        const pdfError = await validatePdf(file);
+        if (pdfError) {
+          setError(pdfError);
+          return;
+        }
+      }
+
       setUploading(true);
       try {
         const formData = new FormData();
@@ -47,7 +105,7 @@ export default function FileUpload({
         setUploading(false);
       }
     },
-    [folder, onChange]
+    [folder, onChange, accept]
   );
 
   const handleDrop = useCallback(
@@ -67,13 +125,35 @@ export default function FileUpload({
 
   const handleDragLeave = useCallback(() => setDragging(false), []);
 
+  const isPdf = accept.includes("pdf");
+  const isImage = accept.includes("image");
+  const isMulti = accept.includes(",") || (isPdf && isImage);
+  const acceptLabel = isMulti ? "Images or PDF" : isPdf ? "PDF" : "Images";
+
   return (
     <div className="space-y-2">
       <label className="block text-sm font-medium text-slu-gray-700">{label}</label>
 
       {value ? (
         <div className="relative inline-block">
-          <img src={value} alt="Preview" className={previewClassName} />
+          {value.endsWith(".pdf") ? (
+            <div className="flex items-center gap-3 rounded-lg border border-slu-gray-200 bg-slu-gray-50 p-4">
+              <FilePdf size={32} className="text-rose-500" />
+              <div className="flex-1 truncate text-sm text-slu-black">
+                {value.split("/").pop()}
+              </div>
+              <a
+                href={value}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-medium text-slu-blue hover:underline"
+              >
+                Open
+              </a>
+            </div>
+          ) : (
+            <img src={value} alt="Preview" className={previewClassName} />
+          )}
           <button
             type="button"
             onClick={() => onChange("")}
@@ -101,11 +181,17 @@ export default function FileUpload({
             </div>
           ) : (
             <>
-              <FileImage size={28} className="text-slu-gray-300" />
+              {isPdf ? (
+                <FilePdf size={28} className="text-slu-gray-300" />
+              ) : (
+                <FileImage size={28} className="text-slu-gray-300" />
+              )}
               <p className="text-sm text-slu-gray-500">
                 <span className="font-medium text-slu-blue">Click to browse</span> or drag and drop
               </p>
-              <p className="text-xs text-slu-gray-400">PNG, JPG, GIF, SVG up to 10MB</p>
+              <p className="text-xs text-slu-gray-400">
+                {acceptLabel} up to {MAX_SIZE_MB}MB
+              </p>
             </>
           )}
         </div>

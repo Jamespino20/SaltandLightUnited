@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { title, content, author, scriptureRef, imageUrl, publishedAt } = body;
+    const { title, description, content, author, scriptureRef, imageUrl, publishedAt } = body;
 
     if (!title || !content) {
       return NextResponse.json(
@@ -38,6 +38,7 @@ export async function POST(request: Request) {
     const devotional = await prisma.devotional.create({
       data: {
         title,
+        description: description || null,
         content,
         author,
         scriptureRef,
