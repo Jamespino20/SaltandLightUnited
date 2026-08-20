@@ -16,9 +16,10 @@ interface RichTextEditorProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  theme?: "light" | "dark";
 }
 
-export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
+export function RichTextEditor({ value, onChange, placeholder, theme = "light" }: RichTextEditorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const quillRef = useRef<{ root: HTMLElement } | null>(null);
   const onChangeRef = useRef(onChange);
@@ -65,8 +66,13 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
     }
   }, [value]);
 
+  const isDark = theme === "dark";
+
   return (
-    <div className="rounded-xl border border-slu-gray-200 bg-white overflow-hidden flex flex-col" style={{ height: "500px" }}>
+    <div
+      className={`rounded-xl overflow-hidden flex flex-col ${isDark ? "rte-dark" : "rte-light"}`}
+      style={{ height: "500px" }}
+    >
       <div ref={containerRef} className="flex flex-col flex-1 min-h-0" />
     </div>
   );

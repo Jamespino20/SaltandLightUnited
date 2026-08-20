@@ -416,6 +416,106 @@ body {
 .resource-content a:hover {
   color: #055A94;
 }
+/* Alignment — Quill outputs inline styles */
+.resource-content [style*="text-align: center"] { text-align: center; }
+.resource-content [style*="text-align: right"] { text-align: right; }
+.resource-content [style*="text-align: justify"] { text-align: justify; }
+/* Also handle Quill alignment classes */
+.resource-content .ql-align-center { text-align: center; }
+.resource-content .ql-align-right { text-align: right; }
+.resource-content .ql-align-justify { text-align: justify; }
+
+/* ── RichTextEditor themes ── */
+.rte-light {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+}
+.rte-light .ql-toolbar {
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+.rte-light .ql-container {
+  border: none;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  color: #0A0A0A;
+}
+.rte-light .ql-editor {
+  padding: 16px;
+  min-height: 100%;
+}
+.rte-light .ql-editor.ql-blank::before {
+  color: #9ca3af;
+  font-style: normal;
+}
+
+.rte-dark {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+}
+.rte-dark .ql-toolbar {
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+}
+.rte-dark .ql-toolbar .ql-stroke {
+  stroke: #cbd5e1;
+}
+.rte-dark .ql-toolbar .ql-fill {
+  fill: #cbd5e1;
+}
+.rte-dark .ql-toolbar button:hover .ql-stroke,
+.rte-dark .ql-toolbar .ql-active .ql-stroke {
+  stroke: #3b82f6;
+}
+.rte-dark .ql-toolbar button:hover .ql-fill,
+.rte-dark .ql-toolbar .ql-active .ql-fill {
+  fill: #3b82f6;
+}
+.rte-dark .ql-toolbar button:hover,
+.rte-dark .ql-toolbar button.ql-active {
+  color: #3b82f6;
+}
+.rte-dark .ql-toolbar .ql-picker-label {
+  color: #cbd5e1;
+}
+.rte-dark .ql-toolbar .ql-picker-label:hover,
+.rte-dark .ql-toolbar .ql-picker-label.ql-active {
+  color: #3b82f6;
+}
+.rte-dark .ql-toolbar .ql-picker-options {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.rte-dark .ql-toolbar .ql-picker-item {
+  color: #cbd5e1;
+}
+.rte-dark .ql-toolbar .ql-picker-item:hover {
+  color: #3b82f6;
+}
+.rte-dark .ql-container {
+  border: none;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  color: #e2e8f0;
+}
+.rte-dark .ql-container .ql-editor {
+  padding: 16px;
+  min-height: 100%;
+}
+.rte-dark .ql-container .ql-editor.ql-blank::before {
+  color: #64748b;
+  font-style: normal;
+}
+.rte-dark .ql-editor blockquote {
+  border-left-color: #3b82f6;
+  color: #94a3b8;
+}
+.rte-dark .ql-editor pre.ql-syntax {
+  background: #0f172a;
+  color: #e2e8f0;
+}
 
 /* Aileron font fallback */
 @font-face {

@@ -161,14 +161,11 @@ export default function ResourcesPage() {
   const [notice, setNotice] = useState("");
   const [activeTab, setActiveTab] = useState<Tab>("devotionals");
   const [viewMode, setViewMode] = useState<"carousel" | "blog">("carousel");
-  const [devotionalForm, setDevotionalForm] = useState({
+  const [submissionTab, setSubmissionTab] = useState<"devotional" | "testimony">("devotional");
+  const [subForm, setSubForm] = useState({
     title: "",
     author: "",
     scriptureRef: "",
-    content: "",
-  });
-  const [testimonyForm, setTestimonyForm] = useState({
-    authorName: "",
     content: "",
   });
 
@@ -196,40 +193,37 @@ export default function ResourcesPage() {
 
   useEffect(() => { void loadResources(); }, []);
 
-  async function submitDevotional(e: FormEvent<HTMLFormElement>) {
+  async function submitContent(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitting(true);
     setNotice("");
     try {
-      const res = await fetch("/api/devotionals", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(devotionalForm),
-      });
-      if (!res.ok) throw new Error();
-      setDevotionalForm({ title: "", author: "", scriptureRef: "", content: "" });
-      setNotice(t("thanksDevotional"));
-      await loadResources();
-    } catch {
-      setNotice(t("errorSending"));
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  async function submitTestimony(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setSubmitting(true);
-    setNotice("");
-    try {
-      const res = await fetch("/api/testimonies", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(testimonyForm),
-      });
-      if (!res.ok) throw new Error();
-      setTestimonyForm({ authorName: "", content: "" });
-      setNotice(t("thanksTestimony"));
+      if (submissionTab === "devotional") {
+        const res = await fetch("/api/devotionals", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: subForm.title,
+            author: subForm.author,
+            scriptureRef: subForm.scriptureRef,
+            content: subForm.content,
+          }),
+        });
+        if (!res.ok) throw new Error();
+        setNotice(t("thanksDevotional"));
+      } else {
+        const res = await fetch("/api/testimonies", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            authorName: subForm.author,
+            content: subForm.content,
+          }),
+        });
+        if (!res.ok) throw new Error();
+        setNotice(t("thanksTestimony"));
+      }
+      setSubForm({ title: "", author: "", scriptureRef: "", content: "" });
       await loadResources();
     } catch {
       setNotice(t("errorSending"));
@@ -691,9 +685,9 @@ export default function ResourcesPage() {
 
       <WaveTransition from="light" to="dark" />
 
-      {/* Submission Forms */}
+      {/* Submission Form */}
       <section className="bg-[#0A0A0A] py-16 sm:py-20">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
           <h2 className="mb-2 text-center text-3xl font-bold text-white sm:text-4xl">
             {t("shareWithCommunity")}
           </h2>
@@ -701,96 +695,89 @@ export default function ResourcesPage() {
             {t("submissionNote")}
           </p>
 
-          <div className="grid gap-8 lg:grid-cols-2">
-            {/* Devotional Form */}
-            <div className="rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
-              <div className="mb-4 flex items-center gap-2">
-                <BookOpen size={18} className="text-slu-blue" />
-                <h3 className="text-lg font-bold text-white">{t("dropDevotional")}</h3>
-              </div>
-              <form onSubmit={submitDevotional} className="space-y-4">
-                <label className="block text-sm font-semibold text-white/80">
-                  {t("titleLabel")}
-                  <input
-                    required
-                    value={devotionalForm.title}
-                    onChange={(e) => setDevotionalForm({ ...devotionalForm, title: e.target.value })}
-                    className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-white placeholder:text-white/30 focus:border-slu-blue focus:outline-none focus:ring-2 focus:ring-slu-blue/20"
-                  />
-                </label>
-                <label className="block text-sm font-semibold text-white/80">
-                  {t("yourName")}
-                  <input
-                    required
-                    value={devotionalForm.author}
-                    onChange={(e) => setDevotionalForm({ ...devotionalForm, author: e.target.value })}
-                    className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-white placeholder:text-white/30 focus:border-slu-blue focus:outline-none focus:ring-2 focus:ring-slu-blue/20"
-                  />
-                </label>
-                <label className="block text-sm font-semibold text-white/80">
-                  {t("scriptureRef")}
-                  <input
-                    required
-                    value={devotionalForm.scriptureRef}
-                    onChange={(e) => setDevotionalForm({ ...devotionalForm, scriptureRef: e.target.value })}
-                    className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-white placeholder:text-white/30 focus:border-slu-blue focus:outline-none focus:ring-2 focus:ring-slu-blue/20"
-                  />
-                </label>
-                <label className="block text-sm font-semibold text-white/80">
-                  {t("reflection")}
-                  <div className="mt-1.5">
-                    <RichTextEditor
-                      value={devotionalForm.content}
-                      onChange={(val) => setDevotionalForm({ ...devotionalForm, content: val })}
-                      placeholder="Write your reflection..."
-                    />
-                  </div>
-                </label>
-                <button
-                  disabled={submitting}
-                  className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark disabled:opacity-50"
-                >
-                  <PaperPlaneRight size={16} />
-                  {t("sendDevotional")}
-                </button>
-              </form>
+          <div className="rounded-2xl bg-white/5 p-6 ring-1 ring-white/10 sm:p-8">
+            {/* Tab switcher */}
+            <div className="mb-6 flex gap-2 rounded-xl bg-white/5 p-1">
+              <button
+                type="button"
+                onClick={() => setSubmissionTab("devotional")}
+                className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors ${
+                  submissionTab === "devotional"
+                    ? "bg-slu-blue text-white"
+                    : "text-white/60 hover:text-white/80"
+                }`}
+              >
+                <BookOpen size={16} />
+                {t("dropDevotional")}
+              </button>
+              <button
+                type="button"
+                onClick={() => setSubmissionTab("testimony")}
+                className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors ${
+                  submissionTab === "testimony"
+                    ? "bg-slu-blue text-white"
+                    : "text-white/60 hover:text-white/80"
+                }`}
+              >
+                <Heart size={16} />
+                {t("shareTestimony")}
+              </button>
             </div>
 
-            {/* Testimony Form */}
-            <div className="rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
-              <div className="mb-4 flex items-center gap-2">
-                <Heart size={18} className="text-slu-blue" />
-                <h3 className="text-lg font-bold text-white">{t("shareTestimony")}</h3>
-              </div>
-              <form onSubmit={submitTestimony} className="space-y-4">
-                <label className="block text-sm font-semibold text-white/80">
-                  {t("yourName")}
-                  <input
-                    required
-                    value={testimonyForm.authorName}
-                    onChange={(e) => setTestimonyForm({ ...testimonyForm, authorName: e.target.value })}
-                    className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-white placeholder:text-white/30 focus:border-slu-blue focus:outline-none focus:ring-2 focus:ring-slu-blue/20"
-                  />
-                </label>
-                <label className="block text-sm font-semibold text-white/80">
-                  {t("yourStory")}
-                  <div className="mt-1.5">
-                    <RichTextEditor
-                      value={testimonyForm.content}
-                      onChange={(val) => setTestimonyForm({ ...testimonyForm, content: val })}
-                      placeholder="Share your story..."
+            <form onSubmit={submitContent} className="space-y-4">
+              {/* Devotional-only fields */}
+              {submissionTab === "devotional" && (
+                <>
+                  <label className="block text-sm font-semibold text-white/80">
+                    {t("titleLabel")}
+                    <input
+                      required
+                      value={subForm.title}
+                      onChange={(e) => setSubForm({ ...subForm, title: e.target.value })}
+                      className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-white placeholder:text-white/30 focus:border-slu-blue focus:outline-none focus:ring-2 focus:ring-slu-blue/20"
                     />
-                  </div>
-                </label>
-                <button
-                  disabled={submitting}
-                  className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark disabled:opacity-50"
-                >
-                  <PaperPlaneRight size={16} />
-                  {t("sendTestimony")}
-                </button>
-              </form>
-            </div>
+                  </label>
+                  <label className="block text-sm font-semibold text-white/80">
+                    {t("scriptureRef")}
+                    <input
+                      required
+                      value={subForm.scriptureRef}
+                      onChange={(e) => setSubForm({ ...subForm, scriptureRef: e.target.value })}
+                      className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-white placeholder:text-white/30 focus:border-slu-blue focus:outline-none focus:ring-2 focus:ring-slu-blue/20"
+                    />
+                  </label>
+                </>
+              )}
+
+              {/* Shared fields */}
+              <label className="block text-sm font-semibold text-white/80">
+                {t("yourName")}
+                <input
+                  required
+                  value={subForm.author}
+                  onChange={(e) => setSubForm({ ...subForm, author: e.target.value })}
+                  className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-white placeholder:text-white/30 focus:border-slu-blue focus:outline-none focus:ring-2 focus:ring-slu-blue/20"
+                />
+              </label>
+              <label className="block text-sm font-semibold text-white/80">
+                {submissionTab === "devotional" ? t("reflection") : t("yourStory")}
+                <div className="mt-1.5">
+                  <RichTextEditor
+                    value={subForm.content}
+                    onChange={(val) => setSubForm({ ...subForm, content: val })}
+                    placeholder={submissionTab === "devotional" ? "Write your reflection..." : "Share your story..."}
+                    theme="dark"
+                  />
+                </div>
+              </label>
+              <button
+                disabled={submitting}
+                className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark disabled:opacity-50"
+              >
+                <PaperPlaneRight size={16} />
+                {submissionTab === "devotional" ? t("sendDevotional") : t("sendTestimony")}
+              </button>
+            </form>
           </div>
 
           {notice && (
