@@ -3,6 +3,7 @@
 import { type ReactNode, FormEvent, useEffect, useState, useRef, useCallback } from "react";
 import { BookOpen, Heart, PaperPlaneRight, CaretLeft, CaretRight, List, FilePdf } from "@phosphor-icons/react";
 import { WaveTransition } from "@/components/sections/WaveTransition";
+import { RichTextEditor } from "@/components/editor/RichTextEditor";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
@@ -737,13 +738,13 @@ export default function ResourcesPage() {
                 </label>
                 <label className="block text-sm font-semibold text-white/80">
                   {t("reflection")}
-                  <textarea
-                    required
-                    rows={5}
-                    value={devotionalForm.content}
-                    onChange={(e) => setDevotionalForm({ ...devotionalForm, content: e.target.value })}
-                    className="mt-1.5 w-full resize-y rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-white placeholder:text-white/30 focus:border-slu-blue focus:outline-none focus:ring-2 focus:ring-slu-blue/20"
-                  />
+                  <div className="mt-1.5">
+                    <RichTextEditor
+                      value={devotionalForm.content}
+                      onChange={(val) => setDevotionalForm({ ...devotionalForm, content: val })}
+                      placeholder="Write your reflection..."
+                    />
+                  </div>
                 </label>
                 <button
                   disabled={submitting}
@@ -773,13 +774,13 @@ export default function ResourcesPage() {
                 </label>
                 <label className="block text-sm font-semibold text-white/80">
                   {t("yourStory")}
-                  <textarea
-                    required
-                    rows={8}
-                    value={testimonyForm.content}
-                    onChange={(e) => setTestimonyForm({ ...testimonyForm, content: e.target.value })}
-                    className="mt-1.5 w-full resize-y rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-white placeholder:text-white/30 focus:border-slu-blue focus:outline-none focus:ring-2 focus:ring-slu-blue/20"
-                  />
+                  <div className="mt-1.5">
+                    <RichTextEditor
+                      value={testimonyForm.content}
+                      onChange={(val) => setTestimonyForm({ ...testimonyForm, content: val })}
+                      placeholder="Share your story..."
+                    />
+                  </div>
                 </label>
                 <button
                   disabled={submitting}

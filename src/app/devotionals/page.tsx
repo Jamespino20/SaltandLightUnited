@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Calendar, User, BookOpen, ArrowRight, Pen } from "@phosphor-icons/react";
+import { Calendar, User, BookOpen, ArrowRight } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { MainSiteChrome } from "@/components/layout/MainSiteChrome";
@@ -37,12 +37,6 @@ export default function DevotionalsPage() {
           <BookOpen className="mx-auto mb-4 text-slu-gold" size={48} />
           <h1 className="mb-3 text-4xl font-bold sm:text-5xl">{t("title")}</h1>
           <p className="mx-auto max-w-2xl text-lg text-white/80">{t("subtitle")}</p>
-          <Link
-            href="/devotionals/submit"
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-slu-gold px-6 py-3 text-sm font-semibold text-slu-navy transition-colors hover:bg-slu-gold/90"
-          >
-            <Pen size={16} /> Submit a Devotional
-          </Link>
         </div>
       </section>
 

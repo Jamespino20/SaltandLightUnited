@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { brand } from "@/lib/brand";
-import { MainSiteChrome } from "@/components/layout/MainSiteChrome";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -53,7 +52,7 @@ export default async function RootLayout({
     <html lang="en" className={aileron.variable}>
       <body className="min-h-screen bg-slu-offwhite text-slu-black antialiased">
         <NextIntlClientProvider messages={messages}>
-          <MainSiteChrome>{children}</MainSiteChrome>
+          {children}
         </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />
