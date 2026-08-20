@@ -47,6 +47,8 @@ export default function TestimonyEditPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const label = form.approved ? "save and approve" : "save as pending";
+    if (!confirm(`Are you sure you want to ${label} this testimony?`)) return;
     setSaving(true);
     setError("");
 

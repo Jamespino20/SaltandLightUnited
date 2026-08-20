@@ -38,15 +38,10 @@ function validatePdf(file: File): Promise<string | null> {
         resolve("File is not a valid PDF (missing PDF header)");
         return;
       }
-      const tail = String.fromCharCode(...arr.slice(-6));
-      if (!tail.includes("%%EOF")) {
-        resolve("File may be corrupted (missing PDF EOF marker)");
-        return;
-      }
       resolve(null);
     };
     reader.onerror = () => resolve("Could not read file for validation");
-    reader.readAsArrayBuffer(file.slice(0, 1024 * 50));
+    reader.readAsArrayBuffer(file.slice(0, 1024));
   });
 }
 

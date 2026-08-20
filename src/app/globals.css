@@ -218,11 +218,15 @@ body {
   background: #f9fafb;
   padding: 8px 12px !important;
   font-family: var(--font-sans);
+  flex-shrink: 0;
 }
 .ql-container.ql-snow {
   border: none !important;
   font-family: var(--font-sans);
   font-size: 0.875rem;
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
 }
 .ql-editor {
   min-height: 300px;

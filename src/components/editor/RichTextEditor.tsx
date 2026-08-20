@@ -71,8 +71,8 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
   }, [value]);
 
   return (
-    <div className="rounded-xl border border-slu-gray-200 bg-white overflow-hidden" style={{ height: "500px" }}>
-      <div ref={containerRef} style={{ height: "450px" }} />
+    <div className="rounded-xl border border-slu-gray-200 bg-white overflow-hidden flex flex-col" style={{ height: "500px" }}>
+      <div ref={containerRef} className="flex flex-col flex-1 min-h-0" />
     </div>
   );
 }

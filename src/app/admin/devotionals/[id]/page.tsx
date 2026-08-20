@@ -23,6 +23,7 @@ export default function DevotionalEditPage() {
     author: "",
     scriptureRef: "",
     imageUrl: "",
+    published: false,
   });
 
   useEffect(() => {
@@ -39,6 +40,7 @@ export default function DevotionalEditPage() {
             author: d.author || "",
             scriptureRef: d.scriptureRef || "",
             imageUrl: d.imageUrl || "",
+            published: !!d.publishedAt,
           });
         } else {
           setError("Devotional not found");
@@ -50,6 +52,8 @@ export default function DevotionalEditPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const label = form.published ? "publish" : "save as draft";
+    if (!confirm(`Are you sure you want to ${label} this devotional?`)) return;
     setSaving(true);
     setError("");
 
@@ -60,6 +64,7 @@ export default function DevotionalEditPage() {
       author: form.author || undefined,
       scriptureRef: form.scriptureRef || undefined,
       imageUrl: form.imageUrl || undefined,
+      publishedAt: form.published ? new Date().toISOString() : null,
     };
 
     try {
@@ -169,6 +174,26 @@ export default function DevotionalEditPage() {
                 className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
               />
             </div>
+          </div>
+
+          {/* Draft / Published toggle */}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setForm({ ...form, published: !form.published })}
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors ring-1 ring-slu-gray-300 ${
+                form.published ? "bg-slu-blue" : "bg-slu-gray-300"
+              }`}
+            >
+              <span
+                className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-sm transition-transform ${
+                  form.published ? "translate-x-5.5" : "translate-x-0.5"
+                } mt-0.5`}
+              />
+            </button>
+            <span className="text-sm font-medium text-slu-gray-700">
+              {form.published ? "Published" : "Draft"}
+            </span>
           </div>
 
           <FileUpload
