@@ -76,14 +76,16 @@ model Devotional {
 }
 
 model Testimony {
-  id          String   @id @default(cuid())
-  authorName  String
-  authorAge   Int?
-  description String?
-  content     String
-  imageUrl    String?
-  approved    Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  id           String   @id @default(cuid())
+  authorName   String
+  authorAge    Int?
+  description  String?
+  content      String
+  imageUrl     String?
+  contactEmail String?
+  contactPhone String?
+  approved     Boolean  @default(false)
+  createdAt    DateTime @default(now())
 }
 
 model Pubmat {

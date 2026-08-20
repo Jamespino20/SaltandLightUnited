@@ -131,7 +131,7 @@ export default function DevotionalPage() {
 
         {/* Content */}
         <div
-          className="prose prose-lg max-w-none text-slu-gray-700"
+          className="resource-content text-slu-gray-700"
           dangerouslySetInnerHTML={{ __html: devotional.content }}
         />
       </article>

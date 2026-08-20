@@ -22,7 +22,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { authorName, authorAge, description, content, imageUrl } = body;
+    const { authorName, authorAge, description, content, imageUrl, contactEmail, contactPhone } = body;
 
     if (!authorName || !content) {
       return NextResponse.json(
@@ -32,7 +32,15 @@ export async function POST(request: Request) {
     }
 
     const testimony = await prisma.testimony.create({
-      data: { authorName, authorAge, description: description || null, content, imageUrl },
+      data: {
+        authorName,
+        authorAge,
+        description: description || null,
+        content,
+        imageUrl: imageUrl || null,
+        contactEmail: contactEmail || null,
+        contactPhone: contactPhone || null,
+      },
     });
 
     return NextResponse.json({ success: true, data: testimony }, { status: 201 });

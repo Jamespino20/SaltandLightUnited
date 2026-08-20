@@ -112,7 +112,7 @@ export default function TestimonyPage() {
 
         {/* Content */}
         <div
-          className="prose prose-lg max-w-none text-slu-gray-700"
+          className="resource-content text-slu-gray-700"
           dangerouslySetInnerHTML={{ __html: testimony.content }}
         />
       </article>
