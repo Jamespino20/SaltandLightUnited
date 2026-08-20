@@ -108,42 +108,6 @@ function RedoIcon() {
   return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23,4 23,10 17,10" /><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" /></svg>);
 }
 
-/* ── Bulletproof command executor ── */
-function useStableCommand(editor: Editor | null) {
-  const savedSelection = useRef<unknown>(null);
-
-  useEffect(() => {
-    if (!editor) return;
-    const handler = () => {
-      savedSelection.current = editor.state.selection;
-    };
-    editor.on("selectionUpdate", handler);
-    editor.on("transaction", handler);
-    return () => {
-      editor.off("selectionUpdate", handler);
-      editor.off("transaction", handler);
-    };
-  }, [editor]);
-
-  const runCommand = useCallback(
-    (command: () => void) => {
-      if (!editor) return;
-      if (savedSelection.current) {
-        const { state } = editor;
-        const tr = state.tr.setSelection(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          savedSelection.current as any
-        );
-        editor.view.dispatch(tr);
-      }
-      command();
-    },
-    [editor]
-  );
-
-  return runCommand;
-}
-
 interface RichTextEditorProps {
   value: string;
   onChange: (value: string) => void;
@@ -155,7 +119,10 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const editorRef = useRef<Editor | null>(null);
+  const savedSelection = useRef<unknown>(null);
 
+  // Create editor once
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
@@ -176,9 +143,26 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
         class: "prose prose-sm max-w-none min-h-[300px] px-8 py-6 focus:outline-none",
       },
     },
-  });
+  }, [value]); // Include value to reset when content changes
 
-  const runCommand = useStableCommand(editor);
+  // Keep editor reference
+  useEffect(() => {
+    if (editor) editorRef.current = editor;
+  }, [editor]);
+
+  // Save selection on changes
+  useEffect(() => {
+    if (!editor) return;
+    const handler = () => {
+      savedSelection.current = editor.state.selection;
+    };
+    editor.on("selectionUpdate", handler);
+    editor.on("transaction", handler);
+    return () => {
+      editor.off("selectionUpdate", handler);
+      editor.off("transaction", handler);
+    };
+  }, [editor]);
 
   const handleImageUpload = useCallback(() => {
     fileInputRef.current?.click();
@@ -196,14 +180,155 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
         const res = await fetch("/api/upload", { method: "POST", body: formData });
         const data = await res.json();
         if (data.success && data.data.url) {
-          runCommand(() => editor.chain().focus().setImage({ src: data.data.url }).run());
+          editor.chain().focus().setImage({ src: data.data.url }).run();
         }
       } catch { /* silent */ }
     },
-    [editor, runCommand]
+    [editor]
   );
 
   if (!editor) return null;
+
+  // Toolbar commands that will preserve selection
+  const undoCommand = useCallback(() => editor.chain().focus().undo().run(), [editor]);
+  const redoCommand = useCallback(() => editor.chain().focus().redo().run(), [editor]);
+  const toggleBold = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().toggleBold().run();
+  }, [editor]);
+
+  const toggleItalic = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().toggleItalic().run();
+  }, [editor]);
+
+  const toggleUnderline = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().toggleUnderline().run();
+  }, [editor]);
+
+  const toggleStrike = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().toggleStrike().run();
+  }, [editor]);
+
+  const toggleCode = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().toggleCode().run();
+  }, [editor]);
+
+  const toggleHeading1 = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().toggleHeading({ level: 1 }).run();
+  }, [editor]);
+
+  const toggleHeading2 = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().toggleHeading({ level: 2 }).run();
+  }, [editor]);
+
+  const toggleHeading3 = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().toggleHeading({ level: 3 }).run();
+  }, [editor]);
+
+  const toggleBulletList = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().toggleBulletList().run();
+  }, [editor]);
+
+  const toggleOrderedList = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().toggleOrderedList().run();
+  }, [editor]);
+
+  const toggleBlockquote = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().toggleBlockquote().run();
+  }, [editor]);
+
+  const toggleCodeBlock = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().toggleCodeBlock().run();
+  }, [editor]);
+
+  const setTextAlignLeft = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().setTextAlign("left").run();
+  }, [editor]);
+
+  const setTextAlignCenter = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().setTextAlign("center").run();
+  }, [editor]);
+
+  const setTextAlignRight = useCallback(() => {
+    if (savedSelection.current) {
+      const { state } = editor;
+      const tr = state.tr.setSelection(savedSelection.current as any);
+      editor.view.dispatch(tr);
+    }
+    editor.chain().focus().setTextAlign("right").run();
+  }, [editor]);
+
+  const setHorizontalRule = useCallback(() => editor.chain().focus().setHorizontalRule().run(), [editor]);
+  const insertTable = useCallback(() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(), [editor]);
 
   return (
     <div className="flex flex-col overflow-hidden rounded-xl border border-slu-gray-200 bg-white" style={{ height: "500px" }}>
@@ -216,36 +341,36 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
           }
         }}
       >
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().undo().run())} title="Undo"><UndoIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().redo().run())} title="Redo"><RedoIcon /></ToolbarButton>
+        <ToolbarButton onClick={undoCommand} title="Undo"><UndoIcon /></ToolbarButton>
+        <ToolbarButton onClick={redoCommand} title="Redo"><RedoIcon /></ToolbarButton>
         <ToolbarDivider />
 
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().toggleBold().run())} active={editor.isActive("bold")} title="Bold"><BoldIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().toggleItalic().run())} active={editor.isActive("italic")} title="Italic"><ItalicIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().toggleUnderline().run())} active={editor.isActive("underline")} title="Underline"><UnderlineIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().toggleStrike().run())} active={editor.isActive("strike")} title="Strikethrough"><StrikethroughIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().toggleCode().run())} active={editor.isActive("code")} title="Inline code"><CodeIcon /></ToolbarButton>
+        <ToolbarButton onClick={toggleBold} active={editor.isActive("bold")} title="Bold"><BoldIcon /></ToolbarButton>
+        <ToolbarButton onClick={toggleItalic} active={editor.isActive("italic")} title="Italic"><ItalicIcon /></ToolbarButton>
+        <ToolbarButton onClick={toggleUnderline} active={editor.isActive("underline")} title="Underline"><UnderlineIcon /></ToolbarButton>
+        <ToolbarButton onClick={toggleStrike} active={editor.isActive("strike")} title="Strikethrough"><StrikethroughIcon /></ToolbarButton>
+        <ToolbarButton onClick={toggleCode} active={editor.isActive("code")} title="Inline code"><CodeIcon /></ToolbarButton>
         <ToolbarDivider />
 
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().toggleHeading({ level: 1 }).run())} active={editor.isActive("heading", { level: 1 })} title="Heading 1"><H1Icon /></ToolbarButton>
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().toggleHeading({ level: 2 }).run())} active={editor.isActive("heading", { level: 2 })} title="Heading 2"><H2Icon /></ToolbarButton>
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().toggleHeading({ level: 3 }).run())} active={editor.isActive("heading", { level: 3 })} title="Heading 3"><H3Icon /></ToolbarButton>
+        <ToolbarButton onClick={toggleHeading1} active={editor.isActive("heading", { level: 1 })} title="Heading 1"><H1Icon /></ToolbarButton>
+        <ToolbarButton onClick={toggleHeading2} active={editor.isActive("heading", { level: 2 })} title="Heading 2"><H2Icon /></ToolbarButton>
+        <ToolbarButton onClick={toggleHeading3} active={editor.isActive("heading", { level: 3 })} title="Heading 3"><H3Icon /></ToolbarButton>
         <ToolbarDivider />
 
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().toggleBulletList().run())} active={editor.isActive("bulletList")} title="Bullet list"><ListUnorderedIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().toggleOrderedList().run())} active={editor.isActive("orderedList")} title="Numbered list"><ListOrderedIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().toggleBlockquote().run())} active={editor.isActive("blockquote")} title="Blockquote"><QuoteIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().toggleCodeBlock().run())} active={editor.isActive("codeBlock")} title="Code block"><CodeBlockIcon /></ToolbarButton>
+        <ToolbarButton onClick={toggleBulletList} active={editor.isActive("bulletList")} title="Bullet list"><ListUnorderedIcon /></ToolbarButton>
+        <ToolbarButton onClick={toggleOrderedList} active={editor.isActive("orderedList")} title="Numbered list"><ListOrderedIcon /></ToolbarButton>
+        <ToolbarButton onClick={toggleBlockquote} active={editor.isActive("blockquote")} title="Blockquote"><QuoteIcon /></ToolbarButton>
+        <ToolbarButton onClick={toggleCodeBlock} active={editor.isActive("codeBlock")} title="Code block"><CodeBlockIcon /></ToolbarButton>
         <ToolbarDivider />
 
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().setTextAlign("left").run())} active={editor.isActive({ textAlign: "left" })} title="Align left"><AlignLeftIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().setTextAlign("center").run())} active={editor.isActive({ textAlign: "center" })} title="Align center"><AlignCenterIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().setTextAlign("right").run())} active={editor.isActive({ textAlign: "right" })} title="Align right"><AlignRightIcon /></ToolbarButton>
+        <ToolbarButton onClick={setTextAlignLeft} active={editor.isActive({ textAlign: "left" })} title="Align left"><AlignLeftIcon /></ToolbarButton>
+        <ToolbarButton onClick={setTextAlignCenter} active={editor.isActive({ textAlign: "center" })} title="Align center"><AlignCenterIcon /></ToolbarButton>
+        <ToolbarButton onClick={setTextAlignRight} active={editor.isActive({ textAlign: "right" })} title="Align right"><AlignRightIcon /></ToolbarButton>
         <ToolbarDivider />
 
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().setHorizontalRule().run())} title="Horizontal rule"><HorizontalRuleIcon /></ToolbarButton>
+        <ToolbarButton onClick={setHorizontalRule} title="Horizontal rule"><HorizontalRuleIcon /></ToolbarButton>
         <ToolbarButton onClick={handleImageUpload} title="Insert image"><ImageIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => runCommand(() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run())} title="Insert table"><TableIcon /></ToolbarButton>
+        <ToolbarButton onClick={insertTable} title="Insert table"><TableIcon /></ToolbarButton>
       </div>
 
       {/* Table contextual bar */}
@@ -258,9 +383,23 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
             { label: "- Column", fn: () => editor.chain().focus().deleteColumn().run() },
             { label: "- Row", fn: () => editor.chain().focus().deleteRow().run() },
           ].map((item) => (
-            <button key={item.label} type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => runCommand(item.fn)} className="rounded px-2 py-1 hover:bg-slu-gray-100">{item.label}</button>
+            <button key={item.label} type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => {
+              if (savedSelection.current) {
+                const { state } = editor;
+                const tr = state.tr.setSelection(savedSelection.current as any);
+                editor.view.dispatch(tr);
+              }
+              item.fn();
+            }} className="rounded px-2 py-1 hover:bg-slu-gray-100">{item.label}</button>
           ))}
-          <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => runCommand(() => editor.chain().focus().deleteTable().run())} className="rounded px-2 py-1 text-red-600 hover:bg-red-50">Delete Table</button>
+          <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => {
+            if (savedSelection.current) {
+              const { state } = editor;
+              const tr = state.tr.setSelection(savedSelection.current as any);
+              editor.view.dispatch(tr);
+            }
+            editor.chain().focus().deleteTable().run();
+          }} className="rounded px-2 py-1 text-red-600 hover:bg-red-50">Delete Table</button>
         </div>
       )}
 
