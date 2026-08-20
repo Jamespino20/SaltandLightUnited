@@ -132,7 +132,7 @@ export default function FileUpload({
       {value ? (
         <div className="relative inline-block">
           {value.endsWith(".pdf") ? (
-            <div className="flex items-center gap-3 rounded-lg border border-slu-gray-200 bg-slu-gray-50 p-4">
+            <div className="flex min-w-0 items-center gap-3 rounded-lg border border-slu-gray-200 bg-slu-gray-50 p-4">
               <FilePdf size={32} className="text-rose-500" />
               <div className="flex-1 truncate text-sm text-slu-black">
                 {value.split("/").pop()}
