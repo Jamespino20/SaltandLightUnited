@@ -9,6 +9,7 @@ const TOOLBAR_OPTIONS = [
   ["blockquote", "code-block"],
   [{ align: [] }],
   ["link", "image"],
+  [{ table: [] }],
   ["clean"],
 ];
 
@@ -31,16 +32,28 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
     (async () => {
       if (!containerRef.current || !mounted) return;
       const Quill = (await import("quill")).default;
+      const Table = (await import("quill-table-better")).default;
+      Quill.register({ "modules/table-better": Table }, true);
       if (!containerRef.current || !mounted) return;
-
-      const editorDiv = containerRef.current.querySelector(".ql-editor");
-      if (editorDiv && value) {
-        editorDiv.innerHTML = value;
-      }
 
       quillInstance = new Quill(containerRef.current, {
         theme: "snow",
-        modules: { toolbar: TOOLBAR_OPTIONS },
+        modules: {
+          toolbar: TOOLBAR_OPTIONS,
+          "table-better": {
+            operationMenu: {
+              items: {
+                insertColumnAbove: true,
+                insertColumnBelow: true,
+                insertRowAbove: true,
+                insertRowBelow: true,
+                deleteColumn: true,
+                deleteRow: true,
+                deleteTable: true,
+              },
+            },
+          },
+        },
         placeholder: placeholder || "Start writing...",
       });
 

@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { ArrowLeft, Check, Spinner } from "@phosphor-icons/react";
+import { ArrowLeft, Check, Spinner, FileImage } from "@phosphor-icons/react";
 import Link from "next/link";
 import FileUpload from "@/components/ui/FileUpload";
-
 
 export default function PubmatEditPage() {
   const router = useRouter();
@@ -48,6 +47,7 @@ export default function PubmatEditPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!confirm("Are you sure you want to save this pubmat?")) return;
     setSaving(true);
     setError("");
 
@@ -79,16 +79,15 @@ export default function PubmatEditPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-2xl space-y-6">
+      <div className="space-y-6">
         <div className="animate-pulse space-y-4">
           <div className="h-8 w-48 rounded bg-slu-gray-100" />
-          <div className="rounded-2xl border border-slu-gray-200 bg-white p-6 space-y-4">
-            <div className="h-10 rounded-xl bg-slu-gray-100" />
-            <div className="h-20 rounded-xl bg-slu-gray-100" />
-            <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="rounded-2xl border border-slu-gray-200 bg-white p-6 space-y-4">
               <div className="h-10 rounded-xl bg-slu-gray-100" />
-              <div className="h-10 rounded-xl bg-slu-gray-100" />
+              <div className="h-20 rounded-xl bg-slu-gray-100" />
             </div>
+            <div className="h-[500px] rounded-2xl border border-slu-gray-200 bg-slu-gray-100" />
           </div>
         </div>
       </div>
@@ -96,7 +95,8 @@ export default function PubmatEditPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-center gap-3">
         <Link
           href="/admin/pubmats"
@@ -115,81 +115,104 @@ export default function PubmatEditPage() {
         </div>
       )}
 
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-5 rounded-2xl border border-slu-gray-200 bg-white p-6 shadow-sm"
-      >
-        <div>
-          <label className="mb-1 block text-sm font-medium text-slu-gray-700">Title</label>
-          <input
-            type="text"
-            required
-            value={form.title}
-            onChange={(e) => setForm({ ...form, title: e.target.value })}
-            className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
-          />
-        </div>
+      {/* Landscape two-column layout */}
+      <form onSubmit={handleSubmit} className="grid gap-6 lg:grid-cols-[1fr_1.5fr]">
+        {/* Left: Metadata */}
+        <div className="space-y-5 rounded-2xl border border-slu-gray-200 bg-white p-6 shadow-sm">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-slu-gray-500">Details</h2>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium text-slu-gray-700">Description</label>
-          <textarea
-            rows={3}
-            value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
-            className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
-          />
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1 block text-sm font-medium text-slu-gray-700">Category</label>
-            <select
-              value={form.category}
-              onChange={(e) => setForm({ ...form, category: e.target.value })}
-              className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
-            >
-              <option value="Event Poster">Event Poster</option>
-              <option value="Social Media">Social Media</option>
-              <option value="Scripture Card">Scripture Card</option>
-              <option value="Banner">Banner</option>
-              <option value="Flyer">Flyer</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-slu-gray-700">Linked Event ID</label>
+            <label className="mb-1 block text-sm font-medium text-slu-gray-700">Title</label>
             <input
               type="text"
-              value={form.eventId}
-              onChange={(e) => setForm({ ...form, eventId: e.target.value })}
-              placeholder="Optional"
+              required
+              value={form.title}
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
               className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
             />
           </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium text-slu-gray-700">Description</label>
+            <textarea
+              rows={2}
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              className="w-full resize-none rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
+            />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-sm font-medium text-slu-gray-700">Category</label>
+              <select
+                value={form.category}
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
+                className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
+              >
+                <option value="Event Poster">Event Poster</option>
+                <option value="Social Media">Social Media</option>
+                <option value="Scripture Card">Scripture Card</option>
+                <option value="Banner">Banner</option>
+                <option value="Flyer">Flyer</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-slu-gray-700">Linked Event ID</label>
+              <input
+                type="text"
+                value={form.eventId}
+                onChange={(e) => setForm({ ...form, eventId: e.target.value })}
+                placeholder="Optional"
+                className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
+              />
+            </div>
+          </div>
+
+          <FileUpload
+            value={form.imageUrl}
+            onChange={(url) => setForm({ ...form, imageUrl: url })}
+            folder="pubmats"
+            label="Image"
+          />
+
+          {/* Actions pinned to bottom */}
+          <div className="flex items-center gap-3 border-t border-slu-gray-100 pt-4">
+            <button
+              type="submit"
+              disabled={saving}
+              className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark disabled:opacity-50"
+            >
+              {saving ? <Spinner size={18} className="animate-spin" /> : <Check size={18} />}
+              {saving ? "Saving..." : "Save"}
+            </button>
+            <Link
+              href="/admin/pubmats"
+              className="rounded-xl border border-slu-gray-200 px-5 py-2.5 text-sm font-medium text-slu-gray-600 transition-colors hover:bg-slu-gray-100"
+            >
+              Cancel
+            </Link>
+          </div>
         </div>
 
-        <FileUpload
-          value={form.imageUrl}
-          onChange={(url) => setForm({ ...form, imageUrl: url })}
-          folder="pubmats"
-          label="Image"
-        />
-
-        <div className="flex items-center gap-3 pt-2">
-          <button
-            type="submit"
-            disabled={saving}
-            className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark disabled:opacity-50"
-          >
-            {saving ? <Spinner size={18} className="animate-spin" /> : <Check size={18} />}
-            {saving ? "Saving..." : "Save Pubmat"}
-          </button>
-          <Link
-            href="/admin/pubmats"
-            className="rounded-xl border border-slu-gray-200 px-5 py-2.5 text-sm font-medium text-slu-gray-600 transition-colors hover:bg-slu-gray-100"
-          >
-            Cancel
-          </Link>
+        {/* Right: Image Preview */}
+        <div className="rounded-2xl border border-slu-gray-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slu-gray-500">Image Preview</h2>
+          {form.imageUrl ? (
+            <div className="overflow-hidden rounded-xl border border-slu-gray-200" style={{ minHeight: "500px" }}>
+              <img
+                src={form.imageUrl}
+                alt="Pubmat preview"
+                className="h-auto w-full object-contain"
+              />
+            </div>
+          ) : (
+            <div className="flex h-[500px] flex-col items-center justify-center rounded-xl border-2 border-dashed border-slu-gray-200 bg-slu-gray-50 text-slu-gray-400">
+              <FileImage size={48} className="mb-3 opacity-40" />
+              <p className="text-sm">Upload an image to preview it here</p>
+            </div>
+          )}
         </div>
       </form>
     </div>

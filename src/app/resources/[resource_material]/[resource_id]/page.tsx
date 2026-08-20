@@ -169,7 +169,7 @@ export default function ResourceDetailPage() {
               </div>
               <h1 className="mb-4 text-3xl font-bold text-slu-black sm:text-4xl">{dev.title}</h1>
               {dev.scriptureRef && <p className="mb-6 text-base italic text-slu-gray-600">&ldquo;{dev.scriptureRef}&rdquo;</p>}
-              <div className="prose prose-lg max-w-none text-slu-gray-700" dangerouslySetInnerHTML={{ __html: dev.content }} />
+              <div className="resource-content text-slu-gray-700" dangerouslySetInnerHTML={{ __html: dev.content }} />
             </>
           );
         })()}
@@ -195,7 +195,7 @@ export default function ResourceDetailPage() {
                 </p>
               </div>
               <div className="mb-6 text-6xl leading-none text-slu-blue/20">&ldquo;</div>
-              <div className="prose prose-lg max-w-none text-slu-gray-700" dangerouslySetInnerHTML={{ __html: ts.content }} />
+              <div className="resource-content text-slu-gray-700" dangerouslySetInnerHTML={{ __html: ts.content }} />
             </>
           );
         })()}

@@ -8,7 +8,7 @@ const csp = [
   "img-src 'self' data: https: blob:",
   "font-src 'self' https://fonts.gstatic.com",
   "connect-src 'self' https: wss:",
-  "frame-src 'self' https://www.google.com/recaptcha/ https://assets.onedrive.com",
+  "frame-src 'self' https://www.google.com/recaptcha/ https://assets.onedrive.com https://*.public.blob.vercel-storage.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
