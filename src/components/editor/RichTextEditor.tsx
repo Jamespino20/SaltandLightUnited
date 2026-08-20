@@ -1,39 +1,41 @@
 "use client";
 
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
 import Placeholder from "@tiptap/extension-placeholder";
 import Image from "@tiptap/extension-image";
+import { Table } from "@tiptap/extension-table";
+import { TableRow } from "@tiptap/extension-table-row";
+import { TableCell } from "@tiptap/extension-table-cell";
+import { TableHeader } from "@tiptap/extension-table-header";
 
 function ToolbarButton({
-  onCommand,
+  command,
   active,
-  disabled,
   children,
   title,
 }: {
-  onCommand: () => void;
+  command: () => void;
   active?: boolean;
-  disabled?: boolean;
   children: React.ReactNode;
   title?: string;
 }) {
   return (
     <button
       type="button"
+      data-toolbar-btn
       onMouseDown={(e) => {
         e.preventDefault();
-        onCommand();
+        command();
       }}
-      disabled={disabled}
       title={title}
       className={`rounded-lg p-1.5 transition-colors ${
         active
           ? "bg-slu-blue text-white"
           : "text-slu-gray-500 hover:bg-slu-gray-100 hover:text-slu-black"
-      } ${disabled ? "opacity-40" : ""}`}
+      }`}
     >
       {children}
     </button>
@@ -68,6 +70,16 @@ function UnderlineIcon() {
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3" />
       <line x1="4" y1="21" x2="20" y2="21" />
+    </svg>
+  );
+}
+
+function StrikethroughIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 4H9a3 3 0 0 0-3 3c0 2 1 3 3 3" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <path d="M15 12c2 0 3 1 3 3a3 3 0 0 1-3 3H8" />
     </svg>
   );
 }
@@ -189,6 +201,54 @@ function ImageIcon() {
   );
 }
 
+function TableIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <line x1="3" y1="9" x2="21" y2="9" />
+      <line x1="3" y1="15" x2="21" y2="15" />
+      <line x1="9" y1="3" x2="9" y2="21" />
+      <line x1="15" y1="3" x2="15" y2="21" />
+    </svg>
+  );
+}
+
+function CodeBlockIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <polyline points="9,8 5,12 9,16" />
+      <polyline points="15,8 19,12 15,16" />
+    </svg>
+  );
+}
+
+function HorizontalRuleIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="3" y1="12" x2="21" y2="12" />
+    </svg>
+  );
+}
+
+function UndoIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="1,4 1,10 7,10" />
+      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+    </svg>
+  );
+}
+
+function RedoIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="23,4 23,10 17,10" />
+      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+    </svg>
+  );
+}
+
 interface RichTextEditorProps {
   value: string;
   onChange: (value: string) => void;
@@ -211,6 +271,10 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
         placeholder: placeholder || "Start writing...",
       }),
       Image,
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableCell,
+      TableHeader,
     ],
     content: value,
     onUpdate: ({ editor }) => {
@@ -218,8 +282,7 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
     },
     editorProps: {
       attributes: {
-        class:
-          "prose prose-sm sm:prose max-w-none min-h-[300px] px-8 py-6 focus:outline-none",
+        class: "prose prose-sm max-w-none min-h-[300px] px-8 py-6 focus:outline-none",
       },
     },
   });
@@ -253,33 +316,70 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
 
   if (!editor) return null;
 
+  const run = (cmd: () => void) => {
+    return () => {
+      editor.chain().focus().run();
+      cmd();
+    };
+  };
+
   return (
-    <div className="overflow-hidden rounded-xl border border-slu-gray-200 bg-white flex flex-col" style={{ height: "500px" }}>
-      {/* Fixed toolbar ribbon */}
-      <div className="flex-none flex flex-wrap items-center gap-0.5 border-b border-slu-gray-200 bg-slu-gray-50 px-3 py-2">
+    <div className="flex flex-col overflow-hidden rounded-xl border border-slu-gray-200 bg-white" style={{ height: "500px" }}>
+      {/* Fixed toolbar ribbon — preventDefault on wrapper catches ALL mousedown before buttons */}
+      <div
+        className="flex-none flex flex-wrap items-center gap-0.5 border-b border-slu-gray-200 bg-slu-gray-50 px-3 py-2"
+        onMouseDown={(e) => {
+          const target = e.target as HTMLElement;
+          if (target.closest("[data-toolbar-btn]")) {
+            e.preventDefault();
+          }
+        }}
+      >
         <ToolbarButton
-          onCommand={() => editor.chain().focus().toggleBold().run()}
+          command={() => editor.chain().focus().undo().run()}
+          title="Undo"
+        >
+          <UndoIcon />
+        </ToolbarButton>
+        <ToolbarButton
+          command={() => editor.chain().focus().redo().run()}
+          title="Redo"
+        >
+          <RedoIcon />
+        </ToolbarButton>
+
+        <ToolbarDivider />
+
+        <ToolbarButton
+          command={run(() => editor.chain().focus().toggleBold().run())}
           active={editor.isActive("bold")}
           title="Bold"
         >
           <BoldIcon />
         </ToolbarButton>
         <ToolbarButton
-          onCommand={() => editor.chain().focus().toggleItalic().run()}
+          command={run(() => editor.chain().focus().toggleItalic().run())}
           active={editor.isActive("italic")}
           title="Italic"
         >
           <ItalicIcon />
         </ToolbarButton>
         <ToolbarButton
-          onCommand={() => editor.chain().focus().toggleUnderline().run()}
+          command={run(() => editor.chain().focus().toggleUnderline().run())}
           active={editor.isActive("underline")}
           title="Underline"
         >
           <UnderlineIcon />
         </ToolbarButton>
         <ToolbarButton
-          onCommand={() => editor.chain().focus().toggleCode().run()}
+          command={run(() => editor.chain().focus().toggleStrike().run())}
+          active={editor.isActive("strike")}
+          title="Strikethrough"
+        >
+          <StrikethroughIcon />
+        </ToolbarButton>
+        <ToolbarButton
+          command={run(() => editor.chain().focus().toggleCode().run())}
           active={editor.isActive("code")}
           title="Inline code"
         >
@@ -289,21 +389,21 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
         <ToolbarDivider />
 
         <ToolbarButton
-          onCommand={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          command={run(() => editor.chain().focus().toggleHeading({ level: 1 }).run())}
           active={editor.isActive("heading", { level: 1 })}
           title="Heading 1"
         >
           <H1Icon />
         </ToolbarButton>
         <ToolbarButton
-          onCommand={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          command={run(() => editor.chain().focus().toggleHeading({ level: 2 }).run())}
           active={editor.isActive("heading", { level: 2 })}
           title="Heading 2"
         >
           <H2Icon />
         </ToolbarButton>
         <ToolbarButton
-          onCommand={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          command={run(() => editor.chain().focus().toggleHeading({ level: 3 }).run())}
           active={editor.isActive("heading", { level: 3 })}
           title="Heading 3"
         >
@@ -313,45 +413,52 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
         <ToolbarDivider />
 
         <ToolbarButton
-          onCommand={() => editor.chain().focus().toggleBulletList().run()}
+          command={run(() => editor.chain().focus().toggleBulletList().run())}
           active={editor.isActive("bulletList")}
           title="Bullet list"
         >
           <ListUnorderedIcon />
         </ToolbarButton>
         <ToolbarButton
-          onCommand={() => editor.chain().focus().toggleOrderedList().run()}
+          command={run(() => editor.chain().focus().toggleOrderedList().run())}
           active={editor.isActive("orderedList")}
           title="Numbered list"
         >
           <ListOrderedIcon />
         </ToolbarButton>
         <ToolbarButton
-          onCommand={() => editor.chain().focus().toggleBlockquote().run()}
+          command={run(() => editor.chain().focus().toggleBlockquote().run())}
           active={editor.isActive("blockquote")}
           title="Blockquote"
         >
           <QuoteIcon />
         </ToolbarButton>
+        <ToolbarButton
+          command={run(() => editor.chain().focus().toggleCodeBlock().run())}
+          active={editor.isActive("codeBlock")}
+          title="Code block"
+        >
+          <CodeBlockIcon />
+        </ToolbarButton>
 
         <ToolbarDivider />
 
         <ToolbarButton
-          onCommand={() => editor.chain().focus().setTextAlign("left").run()}
+          command={run(() => editor.chain().focus().setTextAlign("left").run())}
           active={editor.isActive({ textAlign: "left" })}
           title="Align left"
         >
           <AlignLeftIcon />
         </ToolbarButton>
         <ToolbarButton
-          onCommand={() => editor.chain().focus().setTextAlign("center").run()}
+          command={run(() => editor.chain().focus().setTextAlign("center").run())}
           active={editor.isActive({ textAlign: "center" })}
           title="Align center"
         >
           <AlignCenterIcon />
         </ToolbarButton>
         <ToolbarButton
-          onCommand={() => editor.chain().focus().setTextAlign("right").run()}
+          command={run(() => editor.chain().focus().setTextAlign("right").run())}
           active={editor.isActive({ textAlign: "right" })}
           title="Align right"
         >
@@ -360,14 +467,76 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
 
         <ToolbarDivider />
 
-        <ToolbarButton onCommand={handleImageUpload} title="Insert image">
+        <ToolbarButton
+          command={run(() => editor.chain().focus().setHorizontalRule().run())}
+          title="Horizontal rule"
+        >
+          <HorizontalRuleIcon />
+        </ToolbarButton>
+        <ToolbarButton
+          command={handleImageUpload}
+          title="Insert image"
+        >
           <ImageIcon />
+        </ToolbarButton>
+        <ToolbarButton
+          command={run(() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run())}
+          title="Insert table"
+        >
+          <TableIcon />
         </ToolbarButton>
       </div>
 
+      {/* Table actions bar — shown only when cursor is inside a table */}
+      {editor.isActive("table") && (
+        <div className="flex-none flex items-center gap-1 border-b border-slu-gray-200 bg-slu-gray-50 px-3 py-1.5 text-xs text-slu-gray-500">
+          <span className="mr-2 font-medium text-slu-gray-600">Table</span>
+          <button
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => editor.chain().focus().addColumnAfter().run()}
+            className="rounded px-2 py-1 hover:bg-slu-gray-100"
+          >
+            + Column
+          </button>
+          <button
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => editor.chain().focus().addRowAfter().run()}
+            className="rounded px-2 py-1 hover:bg-slu-gray-100"
+          >
+            + Row
+          </button>
+          <button
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => editor.chain().focus().deleteColumn().run()}
+            className="rounded px-2 py-1 hover:bg-slu-gray-100"
+          >
+            - Column
+          </button>
+          <button
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => editor.chain().focus().deleteRow().run()}
+            className="rounded px-2 py-1 hover:bg-slu-gray-100"
+          >
+            - Row
+          </button>
+          <button
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => editor.chain().focus().deleteTable().run()}
+            className="rounded px-2 py-1 text-red-600 hover:bg-red-50"
+          >
+            Delete Table
+          </button>
+        </div>
+      )}
+
       {/* Scrollable content area */}
       <div className="flex-1 overflow-y-auto bg-white">
-        <EditorContent editor={editor} className="h-full [&_.ProseMirror]:h-full [&_.ProseMirror]:outline-none" />
+        <EditorContent editor={editor} className="h-full [&_.ProseMirror]:h-full [&_.ProseMirror]:outline-none [&_.ProseMirror_table]:border-collapse [&_.ProseMirror_table]:border [&_.ProseMirror_table]:border-slu-gray-300 [&_.ProseMirror_td]:border [&_.ProseMirror_td]:border-slu-gray-300 [&_.ProseMirror_td]:px-3 [&_.ProseMirror_td]:py-2 [&_.ProseMirror_th]:border [&_.ProseMirror_th]:border-slu-gray-300 [&_.ProseMirror_th]:bg-slu-gray-50 [&_.ProseMirror_th]:px-3 [&_.ProseMirror_th]:py-2 [&_.ProseMirror_th]:font-semibold" />
       </div>
 
       {/* Hidden file input for image upload */}
