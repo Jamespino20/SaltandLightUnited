@@ -119,7 +119,6 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const editorRef = useRef<Editor | null>(null);
   const savedSelection = useRef<unknown>(null);
 
   // Create editor once
@@ -144,11 +143,6 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
       },
     },
   }, [value]); // Include value to reset when content changes
-
-  // Keep editor reference
-  useEffect(() => {
-    if (editor) editorRef.current = editor;
-  }, [editor]);
 
   // Save selection on changes
   useEffect(() => {
@@ -189,146 +183,41 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
 
   if (!editor) return null;
 
-  // Toolbar commands that will preserve selection
-  const undoCommand = useCallback(() => editor.chain().focus().undo().run(), [editor]);
-  const redoCommand = useCallback(() => editor.chain().focus().redo().run(), [editor]);
-  const toggleBold = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().toggleBold().run();
-  }, [editor]);
+  // Base command executor that preserves selection and focuses editor
+  const runCommandWithFrame = useCallback(
+    (command: () => void) => {
+      if (!editor) return;
+      // Restore saved selection if available
+      if (savedSelection.current) {
+        const { state } = editor;
+        const tr = state.tr.setSelection(savedSelection.current as any);
+        editor.view.dispatch(tr);
+      }
+      // Execute the command after selection is restored
+      requestAnimationFrame(() => command());
+    },
+    [editor]
+  );
 
-  const toggleItalic = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().toggleItalic().run();
-  }, [editor]);
-
-  const toggleUnderline = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().toggleUnderline().run();
-  }, [editor]);
-
-  const toggleStrike = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().toggleStrike().run();
-  }, [editor]);
-
-  const toggleCode = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().toggleCode().run();
-  }, [editor]);
-
-  const toggleHeading1 = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().toggleHeading({ level: 1 }).run();
-  }, [editor]);
-
-  const toggleHeading2 = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().toggleHeading({ level: 2 }).run();
-  }, [editor]);
-
-  const toggleHeading3 = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().toggleHeading({ level: 3 }).run();
-  }, [editor]);
-
-  const toggleBulletList = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().toggleBulletList().run();
-  }, [editor]);
-
-  const toggleOrderedList = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().toggleOrderedList().run();
-  }, [editor]);
-
-  const toggleBlockquote = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().toggleBlockquote().run();
-  }, [editor]);
-
-  const toggleCodeBlock = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().toggleCodeBlock().run();
-  }, [editor]);
-
-  const setTextAlignLeft = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().setTextAlign("left").run();
-  }, [editor]);
-
-  const setTextAlignCenter = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().setTextAlign("center").run();
-  }, [editor]);
-
-  const setTextAlignRight = useCallback(() => {
-    if (savedSelection.current) {
-      const { state } = editor;
-      const tr = state.tr.setSelection(savedSelection.current as any);
-      editor.view.dispatch(tr);
-    }
-    editor.chain().focus().setTextAlign("right").run();
-  }, [editor]);
-
-  const setHorizontalRule = useCallback(() => editor.chain().focus().setHorizontalRule().run(), [editor]);
-  const insertTable = useCallback(() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(), [editor]);
+  const undoCommand = useCallback(() => runCommandWithFrame(() => editor.chain().focus().undo().run()), [editor, runCommandWithFrame]);
+  const redoCommand = useCallback(() => runCommandWithFrame(() => editor.chain().focus().redo().run()), [editor, runCommandWithFrame]);
+  const toggleBold = useCallback(() => runCommandWithFrame(() => editor.chain().focus().toggleBold().run()), [editor, runCommandWithFrame]);
+  const toggleItalic = useCallback(() => runCommandWithFrame(() => editor.chain().focus().toggleItalic().run()), [editor, runCommandWithFrame]);
+  const toggleUnderline = useCallback(() => runCommandWithFrame(() => editor.chain().focus().toggleUnderline().run()), [editor, runCommandWithFrame]);
+  const toggleStrike = useCallback(() => runCommandWithFrame(() => editor.chain().focus().toggleStrike().run()), [editor, runCommandWithFrame]);
+  const toggleCode = useCallback(() => runCommandWithFrame(() => editor.chain().focus().toggleCode().run()), [editor, runCommandWithFrame]);
+  const toggleHeading1 = useCallback(() => runCommandWithFrame(() => editor.chain().focus().toggleHeading({ level: 1 }).run()), [editor, runCommandWithFrame]);
+  const toggleHeading2 = useCallback(() => runCommandWithFrame(() => editor.chain().focus().toggleHeading({ level: 2 }).run()), [editor, runCommandWithFrame]);
+  const toggleHeading3 = useCallback(() => runCommandWithFrame(() => editor.chain().focus().toggleHeading({ level: 3 }).run()), [editor, runCommandWithFrame]);
+  const toggleBulletList = useCallback(() => runCommandWithFrame(() => editor.chain().focus().toggleBulletList().run()), [editor, runCommandWithFrame]);
+  const toggleOrderedList = useCallback(() => runCommandWithFrame(() => editor.chain().focus().toggleOrderedList().run()), [editor, runCommandWithFrame]);
+  const toggleBlockquote = useCallback(() => runCommandWithFrame(() => editor.chain().focus().toggleBlockquote().run()), [editor, runCommandWithFrame]);
+  const toggleCodeBlock = useCallback(() => runCommandWithFrame(() => editor.chain().focus().toggleCodeBlock().run()), [editor, runCommandWithFrame]);
+  const setTextAlignLeft = useCallback(() => runCommandWithFrame(() => editor.chain().focus().setTextAlign("left").run()), [editor, runCommandWithFrame]);
+  const setTextAlignCenter = useCallback(() => runCommandWithFrame(() => editor.chain().focus().setTextAlign("center").run()), [editor, runCommandWithFrame]);
+  const setTextAlignRight = useCallback(() => runCommandWithFrame(() => editor.chain().focus().setTextAlign("right").run()), [editor, runCommandWithFrame]);
+  const setHorizontalRule = useCallback(() => runCommandWithFrame(() => editor.chain().focus().setHorizontalRule().run()), [editor, runCommandWithFrame]);
+  const insertTable = useCallback(() => runCommandWithFrame(() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()), [editor, runCommandWithFrame]);
 
   return (
     <div className="flex flex-col overflow-hidden rounded-xl border border-slu-gray-200 bg-white" style={{ height: "500px" }}>
