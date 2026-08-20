@@ -252,8 +252,6 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
     },
   });
 
-  if (!editor) return null;
-
   const handleImageUpload = useCallback(() => {
     fileInputRef.current?.click();
   }, []);
@@ -276,6 +274,8 @@ export function RichTextEditor({ value, onChange, placeholder, accept = "image/*
     },
     [editor]
   );
+
+  if (!editor) return null;
 
   return (
     <div className="flex flex-col overflow-hidden rounded-xl border border-slu-gray-200 bg-white" style={{ height: "500px" }}>
