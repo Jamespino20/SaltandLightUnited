@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash } from "@phosphor-icons/react";
 import { usePermissions } from "@/lib/usePermissions";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 import type { Group } from "@/types";
 
@@ -11,6 +12,7 @@ export default function GroupsPage() {
   const { canCreate, canUpdate, canDelete } = usePermissions();
   const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/groups")
@@ -20,10 +22,11 @@ export default function GroupsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  async function handleDelete(id: string) {
-    if (!confirm("Are you sure you want to delete this group?")) return;
-    await fetch(`/api/groups/${id}`, { method: "DELETE" });
-    setGroups((prev) => prev.filter((g) => g.id !== id));
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    await fetch(`/api/groups/${deleteTarget}`, { method: "DELETE" });
+    setGroups((prev) => prev.filter((g) => g.id !== deleteTarget));
+    setDeleteTarget(null);
   }
 
   return (
@@ -113,7 +116,7 @@ export default function GroupsPage() {
                           {canDelete("groups") && (
                             <button
                               type="button"
-                              onClick={() => handleDelete(group.id)}
+                              onClick={() => setDeleteTarget(group.id)}
                               className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-rose-50 hover:text-rose-600"
                             >
                               <Trash size={16} />
@@ -135,6 +138,15 @@ export default function GroupsPage() {
           </div>
         )}
       </div>
+      <ConfirmModal
+        open={deleteTarget !== null}
+        title="Delete Group"
+        message="Are you sure you want to delete this group? This cannot be undone."
+        variant="danger"
+        confirmLabel="Delete"
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

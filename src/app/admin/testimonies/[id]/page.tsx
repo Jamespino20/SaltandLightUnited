@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Check, Spinner } from "@phosphor-icons/react";
 import Link from "next/link";
 import { RichTextEditor } from "@/components/editor/RichTextEditor";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 export default function TestimonyEditPage() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function TestimonyEditPage() {
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const [form, setForm] = useState({
     authorName: "",
     authorAge: 0,
@@ -47,8 +49,11 @@ export default function TestimonyEditPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const label = form.approved ? "save and approve" : "save as pending";
-    if (!confirm(`Are you sure you want to ${label} this testimony?`)) return;
+    setShowSaveConfirm(true);
+  };
+
+  const doSubmit = async () => {
+    setShowSaveConfirm(false);
     setSaving(true);
     setError("");
 
@@ -204,6 +209,16 @@ export default function TestimonyEditPage() {
           />
         </div>
       </form>
+
+      <ConfirmModal
+        open={showSaveConfirm}
+        title={form.approved ? "Approve Testimony" : "Save Testimony"}
+        message={form.approved ? "This testimony will be approved and visible to all visitors. Continue?" : "Save this testimony as pending review?"}
+        variant="info"
+        confirmLabel={form.approved ? "Approve & Save" : "Save"}
+        onConfirm={doSubmit}
+        onCancel={() => setShowSaveConfirm(false)}
+      />
     </div>
   );
 }

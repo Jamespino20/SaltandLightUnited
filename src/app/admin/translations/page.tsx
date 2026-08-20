@@ -11,6 +11,7 @@ import {
   X,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 interface TranslationsData {
   locale: string;
@@ -32,6 +33,7 @@ export default function TranslationsPage() {
   const [edits, setEdits] = useState<Record<string, string>>({});
   const [notice, setNotice] = useState("");
   const [hasChanges, setHasChanges] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
 
   const fetchTranslations = useCallback(async () => {
     setLoading(true);
@@ -107,7 +109,7 @@ export default function TranslationsPage() {
   };
 
   const handleReset = async () => {
-    if (!confirm("Reset all overrides for this namespace to the JSON defaults?")) return;
+    setShowResetModal(false);
     setSaving(true);
     try {
       await fetch(`/api/translations?locale=${locale}&namespace=${currentNs}`, {
@@ -140,6 +142,15 @@ export default function TranslationsPage() {
 
   return (
     <div className="space-y-6">
+      <ConfirmModal
+        open={showResetModal}
+        title="Reset Translations"
+        message="This will remove all database overrides for this namespace and revert to the JSON defaults. This cannot be undone."
+        variant="warning"
+        confirmLabel="Reset"
+        onConfirm={handleReset}
+        onCancel={() => setShowResetModal(false)}
+      />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slu-blue/10 text-slu-blue">
@@ -244,7 +255,7 @@ export default function TranslationsPage() {
               />
             </div>
             <button
-              onClick={handleReset}
+              onClick={() => setShowResetModal(true)}
               className="inline-flex items-center gap-1.5 rounded-lg border border-slu-gray-200 px-3 py-2 text-sm text-slu-gray-600 transition-colors hover:bg-slu-gray-100"
               title="Reset to JSON defaults"
             >

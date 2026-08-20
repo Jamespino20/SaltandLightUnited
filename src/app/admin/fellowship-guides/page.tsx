@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash, FilePdf, Spinner } from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePermissions } from "@/lib/usePermissions";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 type FellowshipGuide = {
   id: string;
@@ -19,6 +20,7 @@ export default function FellowshipGuidesAdminPage() {
   const [guides, setGuides] = useState<FellowshipGuide[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const perms = usePermissions();
 
   async function loadGuides() {
@@ -36,15 +38,16 @@ export default function FellowshipGuidesAdminPage() {
     void loadGuides();
   }, []);
 
-  async function handleDelete(id: string) {
-    if (!confirm("Delete this fellowship guide?")) return;
-    setDeleting(id);
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeleting(deleteTarget);
     try {
-      const res = await fetch(`/api/fellowship-guides/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/fellowship-guides/${deleteTarget}`, { method: "DELETE" });
       const data = await res.json();
-      if (data.success) setGuides((prev) => prev.filter((g) => g.id !== id));
+      if (data.success) setGuides((prev) => prev.filter((g) => g.id !== deleteTarget));
     } finally {
       setDeleting(null);
+      setDeleteTarget(null);
     }
   }
 
@@ -113,7 +116,7 @@ export default function FellowshipGuidesAdminPage() {
                 {perms.canDelete("pubmats") && (
                   <button
                     type="button"
-                    onClick={() => handleDelete(guide.id)}
+                    onClick={() => setDeleteTarget(guide.id)}
                     disabled={deleting === guide.id}
                     className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-rose-50 hover:text-rose-600 disabled:opacity-50"
                   >
@@ -125,6 +128,15 @@ export default function FellowshipGuidesAdminPage() {
           ))}
         </div>
       )}
+      <ConfirmModal
+        open={deleteTarget !== null}
+        title="Delete Fellowship Guide"
+        message="Are you sure you want to delete this fellowship guide? This cannot be undone."
+        variant="danger"
+        confirmLabel="Delete"
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Plus, Pencil, Trash } from "@phosphor-icons/react";
 import type { Devotional } from "@/types";
 import { usePermissions } from "@/lib/usePermissions";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 function TableSkeleton() {
   return (
@@ -60,6 +61,7 @@ export default function DevotionalsPage() {
   const [devotionals, setDevotionals] = useState<Devotional[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   const fetchDevotionals = useCallback(async () => {
     try {
@@ -80,14 +82,16 @@ export default function DevotionalsPage() {
     fetchDevotionals();
   }, [fetchDevotionals]);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this devotional?")) return;
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      const res = await fetch(`/api/devotionals/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/devotionals/${deleteTarget}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete devotional");
-      setDevotionals((prev) => prev.filter((d) => d.id !== id));
+      setDevotionals((prev) => prev.filter((d) => d.id !== deleteTarget));
     } catch (err) {
       alert(err instanceof Error ? err.message : "Failed to delete devotional");
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -197,7 +201,7 @@ export default function DevotionalsPage() {
                         {canDelete("devotionals") && (
                           <button
                             type="button"
-                            onClick={() => handleDelete(dev.id)}
+                            onClick={() => setDeleteTarget(dev.id)}
                             className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-rose-50 hover:text-rose-600"
                           >
                             <Trash size={16} />
@@ -212,6 +216,15 @@ export default function DevotionalsPage() {
           </div>
         </div>
       )}
+      <ConfirmModal
+        open={deleteTarget !== null}
+        title="Delete Devotional"
+        message="Are you sure you want to delete this devotional? This cannot be undone."
+        variant="danger"
+        confirmLabel="Delete"
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

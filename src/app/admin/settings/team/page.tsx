@@ -11,6 +11,7 @@ import {
   Spinner,
   ShieldCheck,
 } from "@phosphor-icons/react";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 
 interface User {
@@ -35,6 +36,7 @@ export default function TeamManagementPage() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [form, setForm] = useState({ email: "", name: "", role: "editor", password: "" });
   const [saving, setSaving] = useState(false);
+  const [removingUser, setRemovingUser] = useState<User | null>(null);
 
   const fetchUsers = () => {
     fetch("/api/users")
@@ -88,7 +90,6 @@ export default function TeamManagementPage() {
   };
 
   const handleDelete = async (user: User) => {
-    if (!confirm(`Remove ${user.email}?`)) return;
     try {
       const res = await fetch(`/api/users/${user.id}`, { method: "DELETE" });
       const data = await res.json();
@@ -96,6 +97,8 @@ export default function TeamManagementPage() {
       fetchUsers();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete");
+    } finally {
+      setRemovingUser(null);
     }
   };
 
@@ -128,6 +131,15 @@ export default function TeamManagementPage() {
 
   return (
     <div className="space-y-6">
+      <ConfirmModal
+        open={removingUser !== null}
+        title="Remove User"
+        message={`Are you sure you want to remove ${removingUser?.email}? This cannot be undone.`}
+        variant="danger"
+        confirmLabel="Remove"
+        onConfirm={() => removingUser && handleDelete(removingUser)}
+        onCancel={() => setRemovingUser(null)}
+      />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-slu-black">Team Management</h1>
@@ -186,7 +198,7 @@ export default function TeamManagementPage() {
                         </button>
                         {user.id !== session?.user?.id && (
                           <button
-                            onClick={() => handleDelete(user)}
+                            onClick={() => setRemovingUser(user)}
                             className="rounded-lg p-1.5 text-slu-gray-400 hover:bg-rose-50 hover:text-rose-600"
                           >
                             <Trash size={14} />

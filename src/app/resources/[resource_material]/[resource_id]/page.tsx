@@ -223,17 +223,24 @@ export default function ResourceDetailPage() {
               <h1 className="mb-2 text-3xl font-bold text-slu-black sm:text-4xl">{guide.title}</h1>
               {guide.category && <p className="mb-4 text-sm font-semibold text-slu-blue">{guide.category}</p>}
               {guide.description && <p className="mb-6 text-lg text-slu-gray-600">{guide.description}</p>}
-              <div className="rounded-2xl border border-slu-gray-200 bg-white p-8 text-center">
-                <FilePdf size={48} className="mx-auto mb-4 text-rose-500" />
-                <p className="mb-4 text-sm text-slu-gray-500">PDF Document</p>
-                <a
-                  href={guide.fileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
-                >
-                  Open PDF <ArrowRight size={16} />
-                </a>
+              <div className="overflow-hidden rounded-2xl border border-slu-gray-200 bg-white">
+                <div className="flex items-center justify-between border-b border-slu-gray-200 bg-slu-gray-50 px-4 py-2">
+                  <span className="text-sm font-medium text-slu-gray-600">PDF Document</span>
+                  <a
+                    href={guide.fileUrl}
+                    download
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-slu-blue px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-slu-blue-dark"
+                  >
+                    <ArrowRight size={12} />
+                    Download
+                  </a>
+                </div>
+                <iframe
+                  src={guide.fileUrl}
+                  className="w-full border-0"
+                  style={{ height: "700px" }}
+                  title={guide.title}
+                />
               </div>
             </>
           );

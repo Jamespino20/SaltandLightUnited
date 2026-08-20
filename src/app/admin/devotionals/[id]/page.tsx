@@ -6,6 +6,7 @@ import { ArrowLeft, Check, Spinner } from "@phosphor-icons/react";
 import Link from "next/link";
 import FileUpload from "@/components/ui/FileUpload";
 import { RichTextEditor } from "@/components/editor/RichTextEditor";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 export default function DevotionalEditPage() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function DevotionalEditPage() {
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -52,8 +54,11 @@ export default function DevotionalEditPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const label = form.published ? "publish" : "save as draft";
-    if (!confirm(`Are you sure you want to ${label} this devotional?`)) return;
+    setShowSaveConfirm(true);
+  };
+
+  const doSubmit = async () => {
+    setShowSaveConfirm(false);
     setSaving(true);
     setError("");
 
@@ -232,6 +237,16 @@ export default function DevotionalEditPage() {
           />
         </div>
       </form>
+
+      <ConfirmModal
+        open={showSaveConfirm}
+        title={form.published ? "Publish Devotional" : "Save as Draft"}
+        message={form.published ? "This devotional will be published and visible to all visitors. Continue?" : "Save this devotional as a draft?"}
+        variant="info"
+        confirmLabel={form.published ? "Publish" : "Save Draft"}
+        onConfirm={doSubmit}
+        onCancel={() => setShowSaveConfirm(false)}
+      />
     </div>
   );
 }

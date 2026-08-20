@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, Check, Spinner, FileImage } from "@phosphor-icons/react";
 import Link from "next/link";
 import FileUpload from "@/components/ui/FileUpload";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 export default function PubmatEditPage() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function PubmatEditPage() {
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -47,7 +49,11 @@ export default function PubmatEditPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!confirm("Are you sure you want to save this pubmat?")) return;
+    setShowSaveConfirm(true);
+  };
+
+  const doSubmit = async () => {
+    setShowSaveConfirm(false);
     setSaving(true);
     setError("");
 
@@ -215,6 +221,16 @@ export default function PubmatEditPage() {
           )}
         </div>
       </form>
+
+      <ConfirmModal
+        open={showSaveConfirm}
+        title="Save Pubmat"
+        message="Save this pubmat? It will be visible in the resources section."
+        variant="info"
+        confirmLabel="Save"
+        onConfirm={doSubmit}
+        onCancel={() => setShowSaveConfirm(false)}
+      />
     </div>
   );
 }

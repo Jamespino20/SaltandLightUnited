@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash } from "@phosphor-icons/react";
 import { usePermissions } from "@/lib/usePermissions";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 import type { Pubmat } from "@/types";
 
@@ -11,6 +12,7 @@ export default function PubmatsPage() {
   const { canCreate, canUpdate, canDelete } = usePermissions();
   const [pubmats, setPubmats] = useState<Pubmat[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/pubmats")
@@ -21,19 +23,28 @@ export default function PubmatsPage() {
   }, []);
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this pubmat?")) return;
-
     try {
       const res = await fetch(`/api/pubmats/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Delete failed");
       setPubmats((prev) => prev.filter((p) => p.id !== id));
     } catch (err) {
       console.error("Failed to delete pubmat:", err);
+    } finally {
+      setDeletingId(null);
     }
   };
 
   return (
     <div className="space-y-6">
+      <ConfirmModal
+        open={deletingId !== null}
+        title="Delete Pubmat"
+        message="Are you sure you want to delete this pubmat? This cannot be undone."
+        variant="danger"
+        confirmLabel="Delete"
+        onConfirm={() => deletingId && handleDelete(deletingId)}
+        onCancel={() => setDeletingId(null)}
+      />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slu-black">
@@ -128,7 +139,7 @@ export default function PubmatsPage() {
                           {canDelete("pubmats") && (
                             <button
                               type="button"
-                              onClick={() => handleDelete(pub.id!)}
+                              onClick={() => setDeletingId(pub.id!)}
                               className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-rose-50 hover:text-rose-600"
                             >
                               <Trash size={16} />

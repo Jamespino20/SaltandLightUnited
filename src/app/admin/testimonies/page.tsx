@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash, CheckCircle, XCircle } from "@phosphor-icons/react";
 import { usePermissions } from "@/lib/usePermissions";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 import type { Testimony } from "@/types";
 
@@ -12,6 +13,7 @@ export default function TestimoniesPage() {
   const [testimonies, setTestimonies] = useState<Testimony[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const fetchTestimonies = async () => {
     try {
@@ -51,13 +53,22 @@ export default function TestimoniesPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this testimony?")) return;
     await fetch(`/api/testimonies/${id}`, { method: "DELETE" });
     fetchTestimonies();
+    setDeletingId(null);
   };
 
   return (
     <div className="space-y-6">
+      <ConfirmModal
+        open={deletingId !== null}
+        title="Delete Testimony"
+        message="Are you sure you want to delete this testimony? This cannot be undone."
+        variant="danger"
+        confirmLabel="Delete"
+        onConfirm={() => deletingId && handleDelete(deletingId)}
+        onCancel={() => setDeletingId(null)}
+      />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slu-black">Testimonies</h1>
@@ -174,7 +185,7 @@ export default function TestimoniesPage() {
                         {canDelete("testimonies") && (
                           <button
                             type="button"
-                            onClick={() => handleDelete(t.id)}
+                            onClick={() => setDeletingId(t.id)}
                             className="rounded-lg p-2 text-slu-gray-500 transition-colors hover:bg-rose-50 hover:text-rose-600"
                           >
                             <Trash size={16} />

@@ -12,6 +12,7 @@ import {
   Check,
   FloppyDisk,
 } from "@phosphor-icons/react";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 
 interface RoleConfig {
@@ -100,6 +101,7 @@ export default function RolesPage() {
   const [formDisplayName, setFormDisplayName] = useState("");
   const [saving, setSaving] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [deletingRole, setDeletingRole] = useState<RoleConfig | null>(null);
 
   const fetchRoles = () => {
     fetch("/api/roles")
@@ -190,7 +192,6 @@ export default function RolesPage() {
       setError("Cannot delete system roles");
       return;
     }
-    if (!confirm(`Delete role "${role.displayName}"?`)) return;
     try {
       const res = await fetch(`/api/roles/${role.id}`, { method: "DELETE" });
       const data = await res.json();
@@ -198,6 +199,8 @@ export default function RolesPage() {
       fetchRoles();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete role");
+    } finally {
+      setDeletingRole(null);
     }
   };
 
@@ -216,6 +219,15 @@ export default function RolesPage() {
 
   return (
     <div className="space-y-6">
+      <ConfirmModal
+        open={deletingRole !== null}
+        title="Delete Role"
+        message={`Are you sure you want to delete the role "${deletingRole?.displayName}"? This cannot be undone.`}
+        variant="danger"
+        confirmLabel="Delete"
+        onConfirm={() => deletingRole && handleDelete(deletingRole)}
+        onCancel={() => setDeletingRole(null)}
+      />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-slu-black">Role Management</h1>
@@ -286,7 +298,7 @@ export default function RolesPage() {
                     </button>
                     {canDeleteRoles && !role.isSystem && (
                       <button
-                        onClick={() => handleDelete(role)}
+                        onClick={() => setDeletingRole(role)}
                         className="rounded-lg p-1.5 text-slu-gray-400 hover:bg-rose-50 hover:text-rose-600"
                       >
                         <Trash size={14} />
