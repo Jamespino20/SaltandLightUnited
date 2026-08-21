@@ -1,8 +1,34 @@
 "use client";
 
-import { useState } from "react";
-import { HandsPraying, X, PaperPlaneRight, Check,Spinner } from "@phosphor-icons/react";
+import { useState, useEffect } from "react";
+import { HandsPraying, X, PaperPlaneRight, Check, Spinner } from "@phosphor-icons/react";
 import { useSiteConfig } from "@/lib/useSiteConfig";
+
+function getLuminance(hex: string): number {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  const linear = (c: number) =>
+    c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  return 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
+}
+
+function getEffectiveBg(el: HTMLElement | null): string {
+  while (el && el !== document.body) {
+    const bg = getComputedStyle(el).backgroundColor;
+    if (bg && bg !== "rgba(0, 0, 0, 0)" && bg !== "transparent") {
+      const m = bg.match(/[\d.]+/g);
+      if (m && m.length >= 3) {
+        const r = parseInt(m[0]);
+        const g = parseInt(m[1]);
+        const b = parseInt(m[2]);
+        return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+      }
+    }
+    el = el.parentElement;
+  }
+  return "#F0F0F0";
+}
 
 export function PrayerWidget() {
   const config = useSiteConfig();
@@ -10,6 +36,45 @@ export function PrayerWidget() {
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  useEffect(() => {
+    let raf = 0;
+
+    const update = () => {
+      raf = 0;
+      const btn = document.querySelector("[data-prayer-btn]");
+      if (!btn) return;
+      const rect = btn.getBoundingClientRect();
+      const probeY = rect.top + rect.height / 2;
+      const sections = document.querySelectorAll("section");
+      let bg = "#F0F0F0";
+
+      for (const section of Array.from(sections)) {
+        const sRect = (section as HTMLElement).getBoundingClientRect();
+        if (sRect.top <= probeY && sRect.bottom > probeY) {
+          bg = getEffectiveBg(section as HTMLElement);
+          break;
+        }
+      }
+
+      const lum = getLuminance(bg);
+      setTheme(lum < 0.4 ? "dark" : "light");
+    };
+
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
 
   const handleSubmit = async () => {
     if (!message.trim() || submitting) return;
@@ -43,10 +108,17 @@ export function PrayerWidget() {
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-label="Open prayer request"
-        className="fixed bottom-20 right-5 z-40 inline-flex items-center gap-2 rounded-full border border-white/25 bg-slu-navy px-4 py-3 text-sm font-semibold text-white shadow-[0_8px_30px_rgba(10,25,47,0.45)] transition-all hover:-translate-y-1 hover:bg-slu-navy/90 hover:shadow-[0_12px_36px_rgba(10,25,47,0.5)] sm:bottom-24 sm:right-7 cursor-pointer"
+        data-prayer-btn
+        className={`fixed bottom-20 right-5 z-40 inline-flex items-center gap-2 rounded-full border px-4 py-3 text-sm font-semibold shadow-lg transition-all duration-500 hover:-translate-y-1 cursor-pointer sm:bottom-24 sm:right-7 ${
+          theme === "dark"
+            ? "border-white/25 bg-[#0A0A0A]/80 text-white shadow-[0_8px_30px_rgba(10,25,47,0.45)] hover:bg-[#0A0A0A]/90 hover:shadow-[0_12px_36px_rgba(10,25,47,0.5)]"
+            : "border-slu-gray-200 bg-white/85 text-slu-gray-700 shadow-sm hover:bg-white/95"
+        }`}
       >
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15">
-          <HandsPraying size={16} weight="fill" />
+        <span className={`flex h-7 w-7 items-center justify-center rounded-full ${
+          theme === "dark" ? "bg-white/15" : "bg-slu-blue/10"
+        }`}>
+          <HandsPraying size={16} weight="fill" className={theme === "dark" ? "text-white" : "text-slu-blue"} />
         </span>
         <span className="hidden sm:inline">Pray for Us</span>
       </button>
@@ -58,7 +130,7 @@ export function PrayerWidget() {
           onClick={handleClose}
         >
           <div
-            className="w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-2xl"
+            className="w-full max-w-sm max-h-[85vh] flex flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
@@ -77,7 +149,7 @@ export function PrayerWidget() {
             </div>
 
             {/* Body */}
-            <div className="p-5">
+            <div className="flex-1 overflow-y-auto p-5">
               {submitted ? (
                 <div className="space-y-4 text-center">
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
