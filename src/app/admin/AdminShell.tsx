@@ -268,7 +268,7 @@ function AdminShellInner({ children }: { children: React.ReactNode }) {
           <AdminUserChip />
         </header>
 
-        <main className="admin-scrollable flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <main className="admin-scrollable flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 lg:p-8">
           {children}
         </main>
       </div>

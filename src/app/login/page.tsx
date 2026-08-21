@@ -62,7 +62,7 @@ function LoginForm() {
   const disabled = loading || rateLimited;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slu-blue px-4">
+    <div className="flex min-h-screen items-center justify-center overflow-hidden bg-slu-blue px-4">
       <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-slu-blue-dark/30 blur-3xl" />
       <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-slu-blue-light/20 blur-3xl" />
 

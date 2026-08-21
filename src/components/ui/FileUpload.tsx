@@ -130,18 +130,18 @@ export default function FileUpload({
       <label className="block text-sm font-medium text-slu-gray-700">{label}</label>
 
       {value ? (
-        <div className="relative inline-block">
+        <div className="relative block max-w-full">
           {value.endsWith(".pdf") ? (
-            <div className="flex min-w-0 items-center gap-3 rounded-lg border border-slu-gray-200 bg-slu-gray-50 p-4">
-              <FilePdf size={32} className="text-rose-500" />
-              <div className="flex-1 truncate text-sm text-slu-black">
+            <div className="flex min-w-0 flex-1 items-center gap-3 rounded-lg border border-slu-gray-200 bg-slu-gray-50 p-4">
+              <FilePdf size={32} className="shrink-0 text-rose-500" />
+              <div className="min-w-0 flex-1 break-all text-sm text-slu-black">
                 {value.split("/").pop()}
               </div>
               <a
                 href={value}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs font-medium text-slu-blue hover:underline"
+                className="shrink-0 text-xs font-medium text-slu-blue hover:underline"
               >
                 Open
               </a>
