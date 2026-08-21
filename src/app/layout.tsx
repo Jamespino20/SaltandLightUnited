@@ -39,6 +39,31 @@ export const metadata: Metadata = {
     title: `SLU Fellowship`,
     description: brand.description,
     type: "website",
+    siteName: brand.name,
+    url: "https://saltandlightunited.vercel.app",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `SLU Fellowship`,
+    description: brand.description,
+  },
+  metadataBase: new URL("https://saltandlightunited.vercel.app"),
+  alternates: {
+    canonical: "/",
+  },
+  verification: {
+    google: "15qy5EIxSgP3HbsHLbKby4p4mi4IxMOZUwDN73LzAtw",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
