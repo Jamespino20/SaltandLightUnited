@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { HandsPraying, X, PaperPlaneRight, Check, Spinner } from "@phosphor-icons/react";
+import {
+  HandsPraying,
+  X,
+  PaperPlaneRight,
+  Check,
+  Spinner,
+} from "@phosphor-icons/react";
 import { useSiteConfig } from "@/lib/useSiteConfig";
 
 function getLuminance(hex: string): number {
@@ -115,10 +121,16 @@ export function PrayerWidget() {
             : "border-slu-gray-200 bg-white/85 text-slu-gray-700 shadow-sm hover:bg-white/95"
         }`}
       >
-        <span className={`flex h-7 w-7 items-center justify-center rounded-full ${
-          theme === "dark" ? "bg-white/15" : "bg-slu-blue/10"
-        }`}>
-          <HandsPraying size={16} weight="fill" className={theme === "dark" ? "text-white" : "text-slu-blue"} />
+        <span
+          className={`flex h-7 w-7 items-center justify-center rounded-full ${
+            theme === "dark" ? "bg-white/15" : "bg-slu-blue/10"
+          }`}
+        >
+          <HandsPraying
+            size={16}
+            weight="fill"
+            className={theme === "dark" ? "text-white" : "text-slu-blue"}
+          />
         </span>
         <span className="hidden sm:inline">Pray for Us</span>
       </button>
@@ -136,8 +148,14 @@ export function PrayerWidget() {
             {/* Header */}
             <div className="flex items-center justify-between bg-slu-navy px-5 py-4">
               <div className="flex items-center gap-2">
-                <HandsPraying size={18} className="text-slu-gold" weight="fill" />
-                <h3 className="text-sm font-bold text-white">How can we pray for you?</h3>
+                <HandsPraying
+                  size={18}
+                  className="text-slu-gold"
+                  weight="fill"
+                />
+                <h3 className="text-sm font-bold text-white">
+                  How can we pray for you?
+                </h3>
               </div>
               <button
                 type="button"
@@ -183,13 +201,14 @@ export function PrayerWidget() {
                     className="w-full resize-none rounded-xl border border-slu-gray-200 px-4 py-3 text-sm text-slu-black outline-none transition-colors placeholder:text-slu-gray-400 focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
                   />
                   <p className="mt-2 text-xs text-slu-gray-400">
-                    This is anonymous. Only our admin team will see your request.
+                    This is anonymous. Only our admin team will see your
+                    request.
                   </p>
                   <button
                     type="button"
                     onClick={handleSubmit}
                     disabled={!message.trim() || submitting}
-                    className="mt-4 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-slu-blue px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-slu-navy/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="mt-4 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-slu-blue px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-slu-blue/90 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {submitting ? (
                       <Spinner size={16} className="animate-spin" />
