@@ -189,7 +189,7 @@ export function PrayerWidget() {
                     type="button"
                     onClick={handleSubmit}
                     disabled={!message.trim() || submitting}
-                    className="mt-4 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-slu-navy px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-slu-navy/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="mt-4 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-slu-blue px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-slu-navy/90 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {submitting ? (
                       <Spinner size={16} className="animate-spin" />
