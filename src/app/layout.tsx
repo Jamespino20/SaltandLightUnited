@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   verification: {
-    google: "15qy5EIxSgP3HbsHLbKby4p4mi4IxMOZUwDN73LzAtw",
+    google: "x_toLt7B_bZkLOi6LsnFAblw0EMMvx__ZvStA__Zt4I",
   },
   robots: {
     index: true,
