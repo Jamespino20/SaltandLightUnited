@@ -8,6 +8,7 @@ import { LightOrb } from "@/components/animation/LightOrb";
 import { ScrollProgress } from "@/components/animation/ScrollProgress";
 import { PageTransition } from "@/components/transition/PageTransition";
 import { LampyWidget } from "./LampyWidget";
+import { PrayerWidget } from "@/components/widgets/PrayerWidget";
 import { MaintenanceCheck } from "@/components/MaintenanceCheck";
 
 export function MainSiteChrome({ children }: { children: React.ReactNode }) {
@@ -31,6 +32,7 @@ export function MainSiteChrome({ children }: { children: React.ReactNode }) {
         </PageTransition>
       </SmoothScroll>
       <LampyWidget />
+      <PrayerWidget />
     </MaintenanceCheck>
   );
 }

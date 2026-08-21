@@ -22,6 +22,13 @@ export function Footer() {
         { href: "/contact", label: "Contact Us" },
       ],
     },
+    {
+      title: "Legal",
+      links: [
+        { href: "/privacy", label: "Privacy Policy" },
+        { href: "/terms", label: "Terms of Service" },
+      ],
+    },
   ];
 
   return (

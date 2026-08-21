@@ -22,6 +22,7 @@ import {
   ShieldStar,
   Translate,
   FilePdf,
+  HandsPraying,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
@@ -81,6 +82,12 @@ const sidebarLinks = [
     label: "Translations",
     icon: Translate,
     perm: "translations:read",
+  },
+  {
+    href: "/admin/prayer-requests",
+    label: "Prayer Requests",
+    icon: HandsPraying,
+    perm: null,
   },
   { href: "/admin/settings", label: "Settings", icon: GearSix, perm: null },
 ];
