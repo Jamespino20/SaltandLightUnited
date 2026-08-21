@@ -11,22 +11,17 @@ import {
   Heart,
   Images,
   Users,
-  ShieldCheck,
   GearSix,
   List,
   X,
   SignOut,
   CaretLeft,
-  Database,
-  UserCircle,
-  ShieldStar,
-  Translate,
   FilePdf,
   HandsPraying,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
-const sidebarLinks = [
+const mainLinks = [
   { href: "/admin", label: "Dashboard", icon: House, perm: null },
   {
     href: "/admin/events",
@@ -59,30 +54,6 @@ const sidebarLinks = [
     perm: "pubmats:read",
   },
   { href: "/admin/groups", label: "Groups", icon: Users, perm: "groups:read" },
-  {
-    href: "/admin/database",
-    label: "Database",
-    icon: Database,
-    perm: "database:read",
-  },
-  {
-    href: "/admin/audit",
-    label: "Audit Log",
-    icon: ShieldCheck,
-    perm: "audit:read",
-  },
-  {
-    href: "/admin/roles",
-    label: "Roles",
-    icon: ShieldStar,
-    perm: "roles:read",
-  },
-  {
-    href: "/admin/translations",
-    label: "Translations",
-    icon: Translate,
-    perm: "translations:read",
-  },
   {
     href: "/admin/prayer-requests",
     label: "Prayer Requests",
@@ -169,7 +140,7 @@ function AdminShellInner({ children }: { children: React.ReactNode }) {
     role === "admin" || permissions.includes(perm);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const visibleLinks = sidebarLinks.filter(
+  const visibleMainLinks = mainLinks.filter(
     (link) => !link.perm || hasPerm(link.perm),
   );
 
@@ -213,7 +184,7 @@ function AdminShellInner({ children }: { children: React.ReactNode }) {
 
         <nav className="admin-scrollable flex-1 overflow-y-auto px-3 py-3">
           <ul className="space-y-0.5">
-            {visibleLinks.map((link) => {
+            {visibleMainLinks.map((link) => {
               const isActive =
                 link.href === "/admin"
                   ? pathname === "/admin"

@@ -14,6 +14,8 @@ const config: Config = {
           blue: "#0770BD",
           "blue-light": "#0A8FE0",
           "blue-dark": "#055A94",
+          navy: "#0A1929",
+          gold: "#D4A843",
           offwhite: "#F0F0F0",
           black: "#0A0A0A",
           "gray-100": "#F5F5F5",

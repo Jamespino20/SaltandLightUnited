@@ -38,12 +38,12 @@ export function PrayerWidget() {
 
   return (
     <>
-      {/* Toggle button — sits left of Lampy */}
+      {/* Toggle button — stacked above Lampy */}
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-label="Open prayer request"
-        className="fixed bottom-5 right-24 z-40 inline-flex items-center gap-2 rounded-full border border-white/25 bg-slu-navy px-4 py-3 text-sm font-semibold text-white shadow-[0_8px_30px_rgba(10,25,47,0.45)] transition-all hover:-translate-y-1 hover:bg-slu-navy/90 hover:shadow-[0_12px_36px_rgba(10,25,47,0.5)] sm:bottom-7 sm:right-28"
+        className="fixed bottom-20 right-5 z-40 inline-flex items-center gap-2 rounded-full border border-white/25 bg-slu-navy px-4 py-3 text-sm font-semibold text-white shadow-[0_8px_30px_rgba(10,25,47,0.45)] transition-all hover:-translate-y-1 hover:bg-slu-navy/90 hover:shadow-[0_12px_36px_rgba(10,25,47,0.5)] sm:bottom-24 sm:right-7 cursor-pointer"
       >
         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15">
           <HandsPraying size={16} weight="fill" />
@@ -117,7 +117,7 @@ export function PrayerWidget() {
                     type="button"
                     onClick={handleSubmit}
                     disabled={!message.trim() || submitting}
-                    className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slu-navy px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-slu-navy/90 disabled:opacity-50"
+                    className="mt-4 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-slu-navy px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-slu-navy/90 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {submitting ? (
                       <Spinner size={16} className="animate-spin" />

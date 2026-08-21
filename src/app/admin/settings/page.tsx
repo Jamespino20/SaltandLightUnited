@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { GearSix, Users, Globe, Bell, Warning, ArrowRight, Translate } from "@phosphor-icons/react";
+import { GearSix, Users, Globe, Bell, Warning, ArrowRight, Translate, Database, ShieldCheck, ShieldStar } from "@phosphor-icons/react";
 
 const settingSections = [
   {
@@ -33,6 +33,24 @@ const settingSections = [
     title: "Advanced",
     description: "Cache, maintenance mode, and system settings.",
     href: "/admin/settings/advanced",
+  },
+  {
+    icon: Database,
+    title: "Database",
+    description: "Manage database content and records.",
+    href: "/admin/database",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Audit Log",
+    description: "View system activity and change history.",
+    href: "/admin/audit",
+  },
+  {
+    icon: ShieldStar,
+    title: "Roles",
+    description: "Manage user roles and permissions.",
+    href: "/admin/roles",
   },
 ];
 
