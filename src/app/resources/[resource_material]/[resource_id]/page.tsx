@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Calendar, User, BookOpen, Heart, FilePdf, ArrowRight } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { MainSiteChrome } from "@/components/layout/MainSiteChrome";
 
 type Devotional = {
   id: string;
@@ -104,34 +103,30 @@ export default function ResourceDetailPage() {
 
   if (loading) {
     return (
-      <MainSiteChrome>
-        <div className="mx-auto max-w-3xl px-4 py-12">
-          <div className="animate-pulse space-y-6">
-            <div className="h-6 w-32 rounded bg-slu-gray-200" />
-            <div className="h-64 rounded-2xl bg-slu-gray-200" />
-            <div className="h-8 w-3/4 rounded bg-slu-gray-200" />
-            <div className="space-y-3">
-              <div className="h-4 rounded bg-slu-gray-200" />
-              <div className="h-4 rounded bg-slu-gray-200" />
-              <div className="h-4 w-2/3 rounded bg-slu-gray-200" />
-            </div>
+      <div className="mx-auto max-w-3xl px-4 py-12">
+        <div className="animate-pulse space-y-6">
+          <div className="h-6 w-32 rounded bg-slu-gray-200" />
+          <div className="h-64 rounded-2xl bg-slu-gray-200" />
+          <div className="h-8 w-3/4 rounded bg-slu-gray-200" />
+          <div className="space-y-3">
+            <div className="h-4 rounded bg-slu-gray-200" />
+            <div className="h-4 rounded bg-slu-gray-200" />
+            <div className="h-4 w-2/3 rounded bg-slu-gray-200" />
           </div>
         </div>
-      </MainSiteChrome>
+      </div>
     );
   }
 
   if (error || !item || !isValidType) {
     return (
-      <MainSiteChrome>
-        <div className="mx-auto max-w-3xl px-4 py-12 text-center">
-          <BookOpen className="mx-auto mb-4 text-slu-gray-400" size={48} />
-          <h1 className="mb-2 text-2xl font-bold text-slu-black">{error || "Not found"}</h1>
-          <Link href="/resources" className="mt-4 inline-flex items-center gap-2 text-slu-blue hover:underline">
-            <ArrowLeft size={16} /> Back to Resources
-          </Link>
-        </div>
-      </MainSiteChrome>
+      <div className="mx-auto max-w-3xl px-4 py-12 text-center">
+        <BookOpen className="mx-auto mb-4 text-slu-gray-400" size={48} />
+        <h1 className="mb-2 text-2xl font-bold text-slu-black">{error || "Not found"}</h1>
+        <Link href="/resources" className="mt-4 inline-flex items-center gap-2 text-slu-blue hover:underline">
+          <ArrowLeft size={16} /> Back to Resources
+        </Link>
+      </div>
     );
   }
 
@@ -139,7 +134,6 @@ export default function ResourceDetailPage() {
   const typeLabel = resourceType === "guides" ? "Fellowship Guide" : resourceType.charAt(0).toUpperCase() + resourceType.slice(1, -1);
 
   return (
-    <MainSiteChrome>
       <article className="mx-auto max-w-3xl px-4 py-12">
         {/* Back link */}
         <Link
@@ -273,6 +267,5 @@ export default function ResourceDetailPage() {
           </div>
         )}
       </article>
-    </MainSiteChrome>
   );
 }

@@ -429,11 +429,14 @@ body {
 .rte-light {
   border: 1px solid #e5e7eb;
   background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
 }
 .rte-light .ql-toolbar {
   border: none;
   border-bottom: 1px solid #e5e7eb;
   background: #f9fafb;
+  padding: 8px 12px;
 }
 .rte-light .ql-container {
   border: none;
@@ -453,11 +456,14 @@ body {
 .rte-dark {
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
 }
 .rte-dark .ql-toolbar {
   border: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.08);
+  padding: 8px 12px;
 }
 .rte-dark .ql-toolbar .ql-stroke {
   stroke: #cbd5e1;

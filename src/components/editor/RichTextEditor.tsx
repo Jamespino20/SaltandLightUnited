@@ -70,7 +70,7 @@ export function RichTextEditor({ value, onChange, placeholder, theme = "light" }
 
   return (
     <div
-      className={`rounded-xl overflow-hidden flex flex-col ${isDark ? "rte-dark" : "rte-light"}`}
+      className={`overflow-hidden flex flex-col ${isDark ? "rte-dark" : "rte-light"}`}
       style={{ height: "500px" }}
     >
       <div ref={containerRef} className="flex flex-col flex-1 min-h-0" />

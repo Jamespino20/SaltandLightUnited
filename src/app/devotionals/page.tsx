@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { Calendar, User, BookOpen, ArrowRight } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { MainSiteChrome } from "@/components/layout/MainSiteChrome";
-
 interface Devotional {
   id: string;
   title: string;
@@ -31,7 +29,7 @@ export default function DevotionalsPage() {
   }, []);
 
   return (
-    <MainSiteChrome>
+    <>
       <section className="bg-slu-navy py-16 text-white">
         <div className="mx-auto max-w-6xl px-4 text-center">
           <BookOpen className="mx-auto mb-4 text-slu-gold" size={48} />
@@ -108,6 +106,6 @@ export default function DevotionalsPage() {
           </div>
         )}
       </section>
-    </MainSiteChrome>
+    </>
   );
 }

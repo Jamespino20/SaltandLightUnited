@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Calendar, User, Heart, ArrowRight } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { MainSiteChrome } from "@/components/layout/MainSiteChrome";
 
 interface Testimony {
   id: string;
@@ -29,7 +28,7 @@ export default function TestimoniesPage() {
   }, []);
 
   return (
-    <MainSiteChrome>
+    <>
       <section className="bg-slu-navy py-16 text-white">
         <div className="mx-auto max-w-6xl px-4 text-center">
           <Heart className="mx-auto mb-4 text-slu-gold" size={48} />
@@ -96,6 +95,6 @@ export default function TestimoniesPage() {
           </div>
         )}
       </section>
-    </MainSiteChrome>
+    </>
   );
 }

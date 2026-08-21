@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Check, Spinner, Warning } from "@phosphor-icons/react";
 import Link from "next/link";
-import { MainSiteChrome } from "@/components/layout/MainSiteChrome";
 import { RichTextEditor } from "@/components/editor/RichTextEditor";
 import FileUpload from "@/components/ui/FileUpload";
 import ConfirmModal from "@/components/ui/ConfirmModal";
@@ -58,28 +57,25 @@ export default function SubmitDevotionalPage() {
 
   if (success) {
     return (
-      <MainSiteChrome>
-        <div className="mx-auto max-w-2xl px-4 py-16 text-center">
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
-            <Check size={32} className="text-emerald-600" />
-          </div>
-          <h1 className="mb-3 text-2xl font-bold text-slu-black">Devotional Submitted!</h1>
-          <p className="mb-8 text-slu-gray-600">
-            Thank you for sharing your devotional. It will be reviewed by our team before being published.
-          </p>
-          <Link
-            href="/devotionals"
-            className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
-          >
-            <ArrowLeft size={16} /> Back to Devotionals
-          </Link>
+      <div className="mx-auto max-w-2xl px-4 py-16 text-center">
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
+          <Check size={32} className="text-emerald-600" />
         </div>
-      </MainSiteChrome>
+        <h1 className="mb-3 text-2xl font-bold text-slu-black">Devotional Submitted!</h1>
+        <p className="mb-8 text-slu-gray-600">
+          Thank you for sharing your devotional. It will be reviewed by our team before being published.
+        </p>
+        <Link
+          href="/devotionals"
+          className="inline-flex items-center gap-2 rounded-xl bg-slu-blue px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-slu-blue-dark"
+        >
+          <ArrowLeft size={16} /> Back to Devotionals
+        </Link>
+      </div>
     );
   }
 
   return (
-    <MainSiteChrome>
       <div className="mx-auto max-w-3xl px-4 py-12">
         <Link
           href="/devotionals"
@@ -201,6 +197,5 @@ export default function SubmitDevotionalPage() {
           onCancel={() => setShowConfirm(false)}
         />
       </div>
-    </MainSiteChrome>
   );
 }
