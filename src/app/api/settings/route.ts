@@ -40,6 +40,7 @@ export async function PUT(request: Request) {
       "facebookUrl", "phones", "logoUrl", "faviconUrl",
       "heroTitle1", "heroTitle2", "heroSubtitle",
       "aboutTitle", "aboutDescription", "independenceNote",
+      "carouselSlides",
       "maintenanceMode", "maintenanceMessage",
       "notifyNewDevotional", "notifyNewTestimony", "notifyNewPubmat", "notifyNewUser",
     ] as const;

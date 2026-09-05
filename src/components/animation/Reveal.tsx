@@ -7,6 +7,7 @@ type RevealProps = {
   children: React.ReactNode;
   className?: string;
   y?: number;
+  x?: number;
   delay?: number;
   stagger?: boolean;
 };
@@ -15,6 +16,7 @@ export function Reveal({
   children,
   className,
   y = 20,
+  x = 0,
   delay = 0,
   stagger = false,
 }: RevealProps) {
@@ -27,8 +29,7 @@ export function Reveal({
 
     const targets = stagger ? Array.from(el.children) : [el];
 
-    // Set initial hidden state immediately
-    gsap.set(targets, { opacity: 0, y });
+    gsap.set(targets, { opacity: 0, y, x });
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -38,6 +39,7 @@ export function Reveal({
             gsap.to(targets, {
               opacity: 1,
               y: 0,
+              x: 0,
               duration: 0.8,
               delay,
               ease: "power3.out",
@@ -53,7 +55,7 @@ export function Reveal({
     observer.observe(el);
 
     return () => observer.disconnect();
-  }, [y, delay, stagger]);
+  }, [y, x, delay, stagger]);
 
   return (
     <div ref={ref} className={className}>

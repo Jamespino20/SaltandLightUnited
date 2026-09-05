@@ -49,11 +49,12 @@ export default function ContactPage() {
                 <iframe
                   src="https://docs.google.com/forms/d/e/1FAIpQLSfd-uRxe5WYB6gaiH_mSm4rLhGTdmajDXEq3vL1BQssB6Co_A/viewform?embedded=true"
                   title="Salt and Light United contact form"
-                  className="h-[720px] w-full border-0"
+                  className="h-full min-h-[600px] w-full border-0"
                   loading="lazy"
-                >
+                />
+                <div className="hidden py-12 text-center text-slu-gray-500">
                   {t("formLoading")}
-                </iframe>
+                </div>
               </div>
 
               <p className="mt-3 text-sm text-slu-gray-400">

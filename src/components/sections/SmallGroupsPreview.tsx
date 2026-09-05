@@ -4,37 +4,19 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { CaretLeft, CaretRight, Pause, Play } from "@phosphor-icons/react";
 import { Reveal } from "@/components/animation/Reveal";
 
-const slides = [
-  {
-    id: "1",
-    label: "Teen Nights",
-    caption: "Ages 13–17 · Hanging out and growing together",
-    image: "/images/history/first_pic.jpg",
-  },
-  {
-    id: "2",
-    label: "Tween Hangout",
-    caption: "Ages 10–12 · Games, faith, and friendships",
-    image: "/images/history/second_pic.jpg",
-  },
-  {
-    id: "3",
-    label: "Jam Sessions",
-    caption: "Music, songs, and creative worship",
-    image: "/images/history/third_pic.jpg",
-  },
-  {
-    id: "4",
-    label: "Real Talk",
-    caption: "Deep conversations about faith and life",
-    image: "/images/history/fourth_pic.webp",
-  },
-  {
-    id: "5",
-    label: "Street Team",
-    caption: "Serving the community together",
-    image: "/images/history/fifth_pic.jpg",
-  },
+interface Slide {
+  id: string;
+  label: string;
+  caption: string;
+  image: string;
+}
+
+const fallbackSlides: Slide[] = [
+  { id: "1", label: "Teen Nights", caption: "Ages 13–17 · Hanging out and growing together", image: "/images/history/first_pic.jpg" },
+  { id: "2", label: "Tween Hangout", caption: "Ages 10–12 · Games, faith, and friendships", image: "/images/history/second_pic.jpg" },
+  { id: "3", label: "Jam Sessions", caption: "Music, songs, and creative worship", image: "/images/history/third_pic.jpg" },
+  { id: "4", label: "Real Talk", caption: "Deep conversations about faith and life", image: "/images/history/fourth_pic.webp" },
+  { id: "5", label: "Street Team", caption: "Serving the community together", image: "/images/history/fifth_pic.jpg" },
 ];
 
 function wrapOffset(index: number, current: number, total: number) {
@@ -46,10 +28,28 @@ function wrapOffset(index: number, current: number, total: number) {
 }
 
 export function SmallGroupsPreview() {
+  const [slides, setSlides] = useState<Slide[]>(fallbackSlides);
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const touchStart = useRef<number | null>(null);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((res) => {
+        if (res.success && res.data?.carouselSlides) {
+          const raw = res.data.carouselSlides;
+          const parsed: Slide[] = Array.isArray(raw)
+            ? raw
+            : typeof raw === "string"
+              ? (() => { try { return JSON.parse(raw); } catch { return fallbackSlides; } })()
+              : fallbackSlides;
+          if (parsed.length > 0) setSlides(parsed);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const next = useCallback(() => {
     setCurrent((c) => (c + 1) % slides.length);
@@ -105,7 +105,7 @@ export function SmallGroupsPreview() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal className="mb-6 text-center sm:mb-10">
+        <Reveal className="mb-2 text-center sm:mb-10">
           <h2 className="text-2xl font-bold text-slu-black sm:text-3xl md:text-4xl lg:text-5xl">
             Want to see us wave?{" "}
             <span className="text-slu-blue">
@@ -138,7 +138,7 @@ export function SmallGroupsPreview() {
 
           {/* Card-fan carousel */}
           <div
-            className="relative mx-auto mt-12 max-w-3xl sm:mt-20 md:mt-24"
+            className="relative mx-auto mt-6 max-w-3xl sm:mt-20 md:mt-24"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onMouseEnter={() => setPaused(true)}

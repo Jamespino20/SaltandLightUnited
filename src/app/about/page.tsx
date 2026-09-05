@@ -15,9 +15,32 @@ import { useTranslations } from "next-intl";
 
 const leaders = [
   {
-    name: "Community-Led",
-    role: "SLU is led by its community of young people serving together",
-    image: "/images/history/first_pic.jpg",
+    name: "Jhulia Cassandra B. Baduria",
+    role: "Executive Directives Lead",
+    image: "/images/leads/cassy.png",
+    description:
+      "Founded Salt and Light United in the year 2025 with a heart to build a Christ-centered community where students can know Christ, grow together in faith, and be a light to those around them.",
+  },
+  {
+    name: "Rain Timothy Raymundo",
+    role: "OIC Assist Directives / Creatives Lead",
+    image: "/images/leads/rain.png",
+    description:
+      "One of the core members of Salt and Light United, led many fellowships and gatherings as well as inviting members.",
+  },
+  {
+    name: "James Bryant Espino",
+    role: "Publications Assist Lead",
+    image: "/images/leads/james.png",
+    description:
+      "Handles SLU's web development and published materials. Also the author of Dawn of Dilemmas, a fiction writing project.",
+  },
+  {
+    name: "Nia Dela Cruz",
+    role: "Publications Assist Lead",
+    image: "/images/leads/nia.png",
+    description:
+      "Manages SLU's social media captions and contributes to small creatives work across the community.",
   },
 ];
 
@@ -129,30 +152,63 @@ export default function AboutPage() {
 
       {/* Leaders */}
       <section className="bg-[#F0F0F0] py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Reveal className="mb-10 text-center">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <Reveal className="mb-12 text-center">
             <h2 className="text-3xl font-bold text-slu-black sm:text-4xl">
               {t("leaders.title")}
             </h2>
             <p className="mt-2 text-slu-gray-500">{t("leaders.subtitle")}</p>
           </Reveal>
-          <Reveal className="mx-auto max-w-2xl text-center" stagger>
-            <div className="rounded-2xl border border-slu-gray-200 bg-white p-8 transition-all hover:shadow-md">
-              <div className="mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full bg-slu-gray-200">
-                <img
-                  src="/images/history/first_pic.jpg"
-                  alt="SLU community"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <h3 className="text-lg font-bold text-slu-black">
-                {t("leaders.cardTitle")}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-slu-gray-500">
-                {t("leaders.cardText")}
-              </p>
-            </div>
-          </Reveal>
+          <div className="space-y-12 sm:space-y-16">
+            {leaders.map((leader, i) => {
+              const photoLeft = i % 2 === 0;
+              return (
+                <Reveal
+                  key={leader.name}
+                  x={photoLeft ? -60 : 60}
+                  delay={i * 0.05}
+                >
+                  <div
+                    className={`flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:gap-12 ${
+                      photoLeft ? "" : "sm:flex-row-reverse"
+                    }`}
+                  >
+                    {/* Photo */}
+                    <div className="shrink-0">
+                      <div className="h-36 w-36 overflow-hidden rounded-full ring-4 ring-slu-blue/20 ring-offset-4 ring-offset-[#F0F0F0] sm:h-40 sm:w-40">
+                        <img
+                          src={leader.image}
+                          alt={leader.name}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      className={`flex-1 text-center sm:text-left ${
+                        photoLeft
+                          ? ""
+                          : "sm:ml-auto sm:text-right"
+                      }`}
+                    >
+                      <h3 className="text-xl font-bold text-slu-black sm:text-2xl">
+                        {leader.name}
+                      </h3>
+                      <p className="mt-1 text-xs font-semibold uppercase tracking-widest text-slu-blue sm:text-sm">
+                        {leader.role}
+                      </p>
+                      <p
+                        className={`mt-3 text-sm leading-relaxed text-slu-gray-500 sm:text-base ${
+                          photoLeft ? "max-w-md" : "sm:ml-auto sm:max-w-md"
+                        }`}
+                      >
+                        {leader.description}
+                      </p>
+                    </div>
+                  </div>
+                </Reveal>
+              );
+            })}
+          </div>
         </div>
       </section>
 

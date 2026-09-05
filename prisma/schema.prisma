@@ -39,6 +39,8 @@ model SiteConfig {
 
   independenceNote String @default("Salt and Light United (SLU) is not related nor affiliated to any school, college, university, organizations, churches, or denominations; as it is an independent Christian community as of 2026.")
 
+  carouselSlides Json @default("[{\"id\":\"1\",\"label\":\"Teen Nights\",\"caption\":\"Ages 13–17 · Hanging out and growing together\",\"image\":\"/images/history/first_pic.jpg\"},{\"id\":\"2\",\"label\":\"Tween Hangout\",\"caption\":\"Ages 10–12 · Games, faith, and friendships\",\"image\":\"/images/history/second_pic.jpg\"},{\"id\":\"3\",\"label\":\"Jam Sessions\",\"caption\":\"Music, songs, and creative worship\",\"image\":\"/images/history/third_pic.jpg\"},{\"id\":\"4\",\"label\":\"Real Talk\",\"caption\":\"Deep conversations about faith and life\",\"image\":\"/images/history/fourth_pic.webp\"},{\"id\":\"5\",\"label\":\"Street Team\",\"caption\":\"Serving the community together\",\"image\":\"/images/history/fifth_pic.jpg\"}]")
+
   maintenanceMode Boolean @default(false)
   maintenanceMessage String @default("We're currently performing maintenance. Please check back soon.")
 
