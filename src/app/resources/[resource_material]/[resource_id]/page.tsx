@@ -6,6 +6,23 @@ import { ArrowLeft, Calendar, User, BookOpen, Heart, FilePdf, ArrowRight } from 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
+function decodeEntities(text: string): string {
+  return text
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)));
+}
+
+function decodeText(text: string | null | undefined): string {
+  if (!text) return "";
+  return decodeEntities(text);
+}
+
 type Devotional = {
   id: string;
   title: string;
@@ -204,7 +221,7 @@ export default function ResourceDetailPage() {
               </div>
               <h1 className="mb-2 text-3xl font-bold text-slu-black sm:text-4xl">{pub.title}</h1>
               {pub.category && <p className="mb-4 text-sm font-semibold text-slu-blue">{pub.category}</p>}
-              {pub.description && <p className="text-lg text-slu-gray-600">{pub.description}</p>}
+              {pub.description && <p className="text-lg text-slu-gray-600">{decodeText(pub.description)}</p>}
             </>
           );
         })()}
@@ -216,7 +233,7 @@ export default function ResourceDetailPage() {
             <>
               <h1 className="mb-2 text-3xl font-bold text-slu-black sm:text-4xl">{guide.title}</h1>
               {guide.category && <p className="mb-4 text-sm font-semibold text-slu-blue">{guide.category}</p>}
-              {guide.description && <p className="mb-6 text-lg text-slu-gray-600">{guide.description}</p>}
+              {guide.description && <p className="mb-6 text-lg text-slu-gray-600">{decodeText(guide.description)}</p>}
               <div className="overflow-hidden rounded-2xl border border-slu-gray-200 bg-white">
                 <div className="flex items-center justify-between border-b border-slu-gray-200 bg-slu-gray-50 px-4 py-2">
                   <span className="text-sm font-medium text-slu-gray-600">PDF Document</span>
@@ -258,7 +275,7 @@ export default function ResourceDetailPage() {
                       {"title" in rel ? rel.title : "authorName" in rel ? rel.authorName : "Untitled"}
                     </h3>
                     <p className="mt-1 text-xs text-slu-gray-500 line-clamp-2">
-                      {"description" in rel ? rel.description || "" : ""}
+                      {"description" in rel ? decodeText(rel.description) : ""}
                     </p>
                   </Link>
                 );

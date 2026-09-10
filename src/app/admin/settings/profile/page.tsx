@@ -119,9 +119,14 @@ export default function ProfilePage() {
 
     try {
       const res = await fetch("/api/upload", { method: "POST", body: formData });
-      const data = await res.json();
-      if (data.success) {
-        setAvatarUrl(data.data.url);
+      const text = await res.text();
+      try {
+        const data = JSON.parse(text);
+        if (data.success) {
+          setAvatarUrl(data.data.url);
+        }
+      } catch {
+        // Non-JSON response — upload failed
       }
     } catch {
       // Upload failed silently

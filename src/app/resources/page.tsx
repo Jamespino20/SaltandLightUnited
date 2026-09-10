@@ -43,8 +43,25 @@ type FellowshipGuide = {
   category?: string | null;
 };
 
+function decodeEntities(text: string): string {
+  return text
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)));
+}
+
 function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+  return decodeEntities(html.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim());
+}
+
+function decodeText(text: string | null | undefined): string {
+  if (!text) return "";
+  return decodeEntities(text);
 }
 
 /* ── Infinite Carousel ── */
@@ -357,7 +374,7 @@ export default function ResourcesPage() {
                         <p className="text-xs font-semibold text-slu-blue">{item.scriptureRef || "Community reflection"}</p>
                         <h3 className="mt-2 text-lg font-bold text-slu-black">{item.title}</h3>
                         <p className="mt-2 text-sm leading-relaxed text-slu-gray-600 line-clamp-3">
-                          {item.description || stripHtml(item.content)}
+                          {decodeText(item.description) || stripHtml(item.content)}
                         </p>
                         {item.author && <p className="mt-3 text-xs font-semibold text-slu-gray-500">By {item.author}</p>}
                       </Link>
@@ -384,7 +401,7 @@ export default function ResourcesPage() {
                         className="block w-full rounded-2xl border border-slu-gray-200 bg-slu-gray-50 p-6 transition-all hover:shadow-md"
                       >
                         <p className="text-sm leading-relaxed text-slu-gray-600 line-clamp-3">
-                          {item.description || stripHtml(item.content)}
+                          {decodeText(item.description) || stripHtml(item.content)}
                         </p>
                         <p className="mt-3 text-xs font-semibold text-slu-gray-500">Shared by {item.authorName}</p>
                       </Link>
@@ -414,7 +431,7 @@ export default function ResourcesPage() {
                         <img src={item.imageUrl} alt={item.title} className="aspect-[4/5] w-full object-cover" />
                         <div className="p-4">
                           <h3 className="font-bold text-slu-black">{item.title}</h3>
-                          {item.description && <p className="mt-1 text-sm text-slu-gray-500 line-clamp-2">{item.description}</p>}
+                          {item.description && <p className="mt-1 text-sm text-slu-gray-500 line-clamp-2">{decodeText(item.description)}</p>}
                           {item.category && <p className="mt-2 text-xs font-semibold text-slu-blue">{item.category}</p>}
                         </div>
                       </Link>
@@ -450,7 +467,7 @@ export default function ResourcesPage() {
                         )}
                         <div className="p-4">
                           <h3 className="font-bold text-slu-black">{item.title}</h3>
-                          {item.description && <p className="mt-1 text-sm text-slu-gray-500 line-clamp-2">{item.description}</p>}
+                          {item.description && <p className="mt-1 text-sm text-slu-gray-500 line-clamp-2">{decodeText(item.description)}</p>}
                           {item.category && <p className="mt-2 text-xs font-semibold text-slu-blue">{item.category}</p>}
                         </div>
                       </Link>
@@ -519,7 +536,7 @@ export default function ResourcesPage() {
                           <div className="absolute bottom-0 left-0 p-6 sm:p-8 lg:p-10">
                             <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slu-gold">Testimony</p>
                             <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl lg:text-4xl">{ts.authorName}&apos;s Story</h2>
-                            <p className="line-clamp-2 text-sm text-white/70">{ts.description || stripHtml(ts.content)}</p>
+                            <p className="line-clamp-2 text-sm text-white/70">{decodeText(ts.description) || stripHtml(ts.content)}</p>
                           </div>
                         </Link>
                       );
@@ -594,7 +611,7 @@ export default function ResourcesPage() {
                                     {devDate && <span>{devDate.toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" })}</span>}
                                   </div>
                                   <h3 className="truncate text-base font-bold text-slu-black group-hover:text-slu-blue sm:text-lg">{dev.title}</h3>
-                                  <p className="mt-1 line-clamp-2 text-sm text-slu-gray-600">{dev.description || stripHtml(dev.content)}</p>
+                                  <p className="mt-1 line-clamp-2 text-sm text-slu-gray-600">{decodeText(dev.description) || stripHtml(dev.content)}</p>
                                   {dev.author && <p className="mt-1 text-xs text-slu-gray-500">{dev.author}</p>}
                                 </div>
                               </Link>
@@ -619,7 +636,7 @@ export default function ResourcesPage() {
                                     <span>{tsDate.toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" })}</span>
                                   </div>
                                   <h3 className="truncate text-base font-bold text-slu-black group-hover:text-slu-blue sm:text-lg">{ts.authorName}</h3>
-                                  <p className="mt-1 line-clamp-2 text-sm text-slu-gray-600">{ts.description || stripHtml(ts.content)}</p>
+                                  <p className="mt-1 line-clamp-2 text-sm text-slu-gray-600">{decodeText(ts.description) || stripHtml(ts.content)}</p>
                                 </div>
                               </Link>
                             );
@@ -641,7 +658,7 @@ export default function ResourcesPage() {
                                     {pub.category && <span>{pub.category}</span>}
                                   </div>
                                   <h3 className="truncate text-base font-bold text-slu-black group-hover:text-slu-blue sm:text-lg">{pub.title}</h3>
-                                  {pub.description && <p className="mt-1 line-clamp-2 text-sm text-slu-gray-600">{pub.description}</p>}
+                                  {pub.description && <p className="mt-1 line-clamp-2 text-sm text-slu-gray-600">{decodeText(pub.description)}</p>}
                                 </div>
                               </Link>
                             );
@@ -668,7 +685,7 @@ export default function ResourcesPage() {
                                   {guide.category && <span>{guide.category}</span>}
                                 </div>
                                 <h3 className="truncate text-base font-bold text-slu-black group-hover:text-slu-blue sm:text-lg">{guide.title}</h3>
-                                {guide.description && <p className="mt-1 line-clamp-2 text-sm text-slu-gray-600">{guide.description}</p>}
+                                {guide.description && <p className="mt-1 line-clamp-2 text-sm text-slu-gray-600">{decodeText(guide.description)}</p>}
                               </div>
                             </Link>
                           );

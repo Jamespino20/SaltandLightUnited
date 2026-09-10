@@ -12,7 +12,7 @@ interface FileUploadProps {
   previewClassName?: string;
 }
 
-const MAX_SIZE_MB = 20;
+const MAX_SIZE_MB = 4;
 const ALLOWED_TYPES: Record<string, string[]> = {
   "image/*": ["image/png", "image/jpeg", "image/gif", "image/svg+xml", "image/webp"],
   "application/pdf": ["application/pdf"],
@@ -91,9 +91,17 @@ export default function FileUpload({
           method: "POST",
           body: formData,
         });
-        const data = await res.json();
+        const text = await res.text();
+        let data: { success?: boolean; error?: string; data?: { url?: string } };
+        try {
+          data = JSON.parse(text);
+        } catch {
+          throw new Error(res.status === 413
+            ? `File is too large. Maximum size is ${MAX_SIZE_MB}MB.`
+            : `Upload failed (${res.status})`);
+        }
         if (!data.success) throw new Error(data.error || "Upload failed");
-        onChange(data.data.url);
+        onChange(data.data!.url!);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Upload failed");
       } finally {
