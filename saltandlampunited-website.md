@@ -1,56 +1,58 @@
 # Salt and Light United — Website Build
 
 ## Goal
+
 Build a modern, youthful Next.js website for SLU (Christian youth fellowship for teens and tweens at National University Baliwag Inc), deployed on Vercel. Includes a hidden admin panel for content management, Facebook feed embedding, and a Gemini-powered AI assistant.
 
 ---
 
 ## Design Read
+
 Reading this as: **Youth fellowship landing site for teens and tweens**, with a **modern, energetic, faith-centered** language, leaning toward **shadcn/ui + Tailwind + Motion** with a blue-dominant palette matching the SLU brand.
 
 ## Design Dials
 
-| Dial | Value | Reasoning |
-|------|-------|-----------|
-| DESIGN_VARIANCE | 7 | Youthful — offset layouts, varied section compositions, not stiff |
-| MOTION_INTENSITY | 7 | Teens expect motion — scroll reveals, hover effects, page transitions |
-| VISUAL_DENSITY | 4 | Airy, clean, lots of breathing room — not cramped |
+| Dial             | Value | Reasoning                                                             |
+| ---------------- | ----- | --------------------------------------------------------------------- |
+| DESIGN_VARIANCE  | 7     | Youthful — offset layouts, varied section compositions, not stiff     |
+| MOTION_INTENSITY | 7     | Teens expect motion — scroll reveals, hover effects, page transitions |
+| VISUAL_DENSITY   | 4     | Airy, clean, lots of breathing room — not cramped                     |
 
 ## Brand Tokens
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--slu-blue` | `#0770BD` | Primary accent, CTAs, links |
-| `--slu-offwhite` | `#F0F0F0` | Page backgrounds, cards |
-| `--slu-black` | `#0A0A0A` | Text, dark sections |
-| Font | Aileron | Headings + body (via `next/font` or self-host) |
+| Token            | Value     | Usage                                          |
+| ---------------- | --------- | ---------------------------------------------- |
+| `--slu-blue`     | `#0770BD` | Primary accent, CTAs, links                    |
+| `--slu-offwhite` | `#F0F0F0` | Page backgrounds, cards                        |
+| `--slu-black`    | `#0A0A0A` | Text, dark sections                            |
+| Font             | Aileron   | Headings + body (via `next/font` or self-host) |
 
 ---
 
 ## Tech Stack
 
-| Layer | Choice | Rationale |
-|-------|--------|-----------|
-| Framework | Next.js 14+ (App Router) | Vercel-native, RSC, SEO |
-| Styling | Tailwind CSS v4 | Utility-first, matches shadcn |
-| Components | shadcn/ui | Owned code, accessible, customizable |
-| Animation | **Motion** (MIT, 18kb) | Scroll triggers, layout animations, declarative React API |
-| Icons | @phosphor-icons/react | Clean, consistent, one family |
-| Database | **NeonDB** (Postgres) + **Prisma** | Already configured in Vercel env; Prisma for type-safe queries + migrations |
-| File Storage | **Vercel Blob** | Already configured in env.local |
-| Auth | **NextAuth.js** + **Authy TOTP** | Admin auth; TOTP triggered only during long inactivity |
-| AI | **Gemini API** (Flash free tier) | RAG chatbot — answer questions about SLU |
-| Social | **Facebook oEmbed** | Embed page feed, no posting needed |
-| Fonts | Aileron (self-host via `next/font`) | Brand requirement |
-| Language | TypeScript | Type safety, better DX |
-| Deployment | Vercel | Already configured |
+| Layer        | Choice                              | Rationale                                                                   |
+| ------------ | ----------------------------------- | --------------------------------------------------------------------------- |
+| Framework    | Next.js 14+ (App Router)            | Vercel-native, RSC, SEO                                                     |
+| Styling      | Tailwind CSS v4                     | Utility-first, matches shadcn                                               |
+| Components   | shadcn/ui                           | Owned code, accessible, customizable                                        |
+| Animation    | **Motion** (MIT, 18kb)              | Scroll triggers, layout animations, declarative React API                   |
+| Icons        | @phosphor-icons/react               | Clean, consistent, one family                                               |
+| Database     | **NeonDB** (Postgres) + **Prisma**  | Already configured in Vercel env; Prisma for type-safe queries + migrations |
+| File Storage | **Vercel Blob**                     | Already configured in env.local                                             |
+| Auth         | **NextAuth.js** + **Authy TOTP**    | Admin auth; TOTP triggered only during long inactivity                      |
+| AI           | **Gemini API** (Flash free tier)    | RAG chatbot — answer questions about SLU                                    |
+| Social       | **Facebook oEmbed**                 | Embed page feed, no posting needed                                          |
+| Fonts        | Aileron (self-host via `next/font`) | Brand requirement                                                           |
+| Language     | TypeScript                          | Type safety, better DX                                                      |
+| Deployment   | Vercel                              | Already configured                                                          |
 
 ---
 
 ## Architecture (MVC in Next.js App Router)
 
 ```
-saltandlightunited/
+saltandlampunited/
 ├── app/                          # Views — Routes + Pages
 │   ├── layout.tsx                # Root layout (nav, footer, fonts, theme provider)
 │   ├── page.tsx                  # Home
@@ -275,106 +277,116 @@ model SiteSetting {
 ## Pages & Sections (CCF-inspired, youthified)
 
 ### 1. Home (`/`)
-| Section | Content | Layout |
-|---------|---------|--------|
-| Hero | SLU logo + tagline + CTA ("Join Us") | Full-width, split (text left, visual right) |
-| About Strip | One-liner about SLU + "Learn More" link | Centered, minimal |
-| Upcoming Events | 3 featured event cards (from DB) | 3-col grid (stacks on mobile) |
-| Facebook Feed | Recent SLU Facebook posts (oEmbed) | 2-3 column grid |
-| Small Groups Preview | 2-3 group cards with images | Bento-style (1 large + 2 small) |
-| Scripture Banner | John 3:16 in branded styling | Full-width blue background |
-| Call to Action | "Be Part of SLU" + join button | Centered, clean |
+
+| Section              | Content                                 | Layout                                      |
+| -------------------- | --------------------------------------- | ------------------------------------------- |
+| Hero                 | SLU logo + tagline + CTA ("Join Us")    | Full-width, split (text left, visual right) |
+| About Strip          | One-liner about SLU + "Learn More" link | Centered, minimal                           |
+| Upcoming Events      | 3 featured event cards (from DB)        | 3-col grid (stacks on mobile)               |
+| Facebook Feed        | Recent SLU Facebook posts (oEmbed)      | 2-3 column grid                             |
+| Small Groups Preview | 2-3 group cards with images             | Bento-style (1 large + 2 small)             |
+| Scripture Banner     | John 3:16 in branded styling            | Full-width blue background                  |
+| Call to Action       | "Be Part of SLU" + join button          | Centered, clean                             |
 
 ### 2. About (`/about`)
-| Section | Content |
-|---------|---------|
-| Hero | "About Salt and Light United" |
-| Mission & Vision | Two-column, icon-supported |
-| Story | Brief origin/background paragraph |
-| Leaders | Leader cards (photo, name, role) |
-| Affiliation | National University Baliwag note |
+
+| Section          | Content                           |
+| ---------------- | --------------------------------- |
+| Hero             | "About Salt and Light United"     |
+| Mission & Vision | Two-column, icon-supported        |
+| Story            | Brief origin/background paragraph |
+| Leaders          | Leader cards (photo, name, role)  |
+| Affiliation      | National University Baliwag note  |
 
 ### 3. Events (`/events`)
-| Section | Content |
-|---------|---------|
-| Hero | "Upcoming Events" |
-| Event Grid | Cards with date, title, description, image (from DB) |
-| Past Events | Collapsed/expandable section |
+
+| Section     | Content                                              |
+| ----------- | ---------------------------------------------------- |
+| Hero        | "Upcoming Events"                                    |
+| Event Grid  | Cards with date, title, description, image (from DB) |
+| Past Events | Collapsed/expandable section                         |
 
 ### 4. Small Groups (`/groups`)
-| Section | Content |
-|---------|---------|
-| Hero | "Our Groups" |
+
+| Section     | Content                                                 |
+| ----------- | ------------------------------------------------------- |
+| Hero        | "Our Groups"                                            |
 | Group Cards | Image + name + description + meeting schedule (from DB) |
-| How to Join | Steps or CTA |
+| How to Join | Steps or CTA                                            |
 
 ### 5. Resources (`/resources`)
-| Section | Content |
-|---------|---------|
-| Hero | "Resources" |
+
+| Section             | Content                                          |
+| ------------------- | ------------------------------------------------ |
+| Hero                | "Resources"                                      |
 | Resource Categories | Tabs or grid (Sermons, Devotionals, Testimonies) |
-| Featured Items | Cards with title, date, thumbnail (from DB) |
+| Featured Items      | Cards with title, date, thumbnail (from DB)      |
 
 ### 6. Contact (`/contact`)
-| Section | Content |
-|---------|---------|
-| Hero | "Get in Touch" |
+
+| Section      | Content                            |
+| ------------ | ---------------------------------- |
+| Hero         | "Get in Touch"                     |
 | Contact Form | Name, email, message (shadcn Form) |
-| Location | Map or address (NU Baliwag) |
-| Social Links | Facebook, etc. |
+| Location     | Map or address (NU Baliwag)        |
+| Social Links | Facebook, etc.                     |
 
 ### 7. AI Chat (`/chat`)
-| Section | Content |
-|---------|---------|
-| Chat Interface | Gemini-powered Q&A about SLU |
+
+| Section           | Content                                                |
+| ----------------- | ------------------------------------------------------ |
+| Chat Interface    | Gemini-powered Q&A about SLU                           |
 | Suggested Prompts | "What groups are available?", "When's the next event?" |
 
 ### 8. Admin Panel (`/admin`) — HIDDEN
-| Page | Functionality |
-|------|---------------|
-| Dashboard | Overview — recent content, quick actions |
-| Events CRUD | Create, edit, delete events |
-| Devotionals CRUD | Create, edit, publish devotionals |
-| Testimonies CRUD | Manage testimonies, approve/reject |
-| Pubmats CRUD | Upload and manage publication materials |
-| Groups CRUD | Manage small group info |
-| Settings | Site settings, admin management |
+
+| Page             | Functionality                            |
+| ---------------- | ---------------------------------------- |
+| Dashboard        | Overview — recent content, quick actions |
+| Events CRUD      | Create, edit, delete events              |
+| Devotionals CRUD | Create, edit, publish devotionals        |
+| Testimonies CRUD | Manage testimonies, approve/reject       |
+| Pubmats CRUD     | Upload and manage publication materials  |
+| Groups CRUD      | Manage small group info                  |
+| Settings         | Site settings, admin management          |
 
 ---
 
 ## Shared Components
 
-| Component | Purpose |
-|-----------|---------|
-| `Header` | Responsive nav — logo left, links right, hamburger on mobile |
-| `Footer` | Site links, social icons, copyright, SLU branding |
-| `Hero` | Reusable hero section (title, subtitle, CTA, optional image) |
-| `EventCard` | Event preview card |
-| `GroupCard` | Small group preview card |
-| `LeaderCard` | Leader profile card |
-| `ScriptureBanner` | Branded scripture display |
-| `FacebookFeed` | oEmbed-based Facebook post grid |
-| `ScrollReveal` | Motion scroll-triggered entrance wrapper |
-| `PageTransition` | Route change animation |
-| `ChatInterface` | Gemini AI chat UI |
-| `AdminSidebar` | Admin panel navigation |
-| `DataTable` | Reusable admin data table (shadcn) |
-| `FileUploader` | Vercel Blob file upload component |
-| `ContentEditor` | Rich text editor for devotionals/testimonies |
-| `AuditTable` | Filterable audit log viewer (admin) |
-| `ScopeGuard` | AI chat scope validation wrapper |
+| Component         | Purpose                                                      |
+| ----------------- | ------------------------------------------------------------ |
+| `Header`          | Responsive nav — logo left, links right, hamburger on mobile |
+| `Footer`          | Site links, social icons, copyright, SLU branding            |
+| `Hero`            | Reusable hero section (title, subtitle, CTA, optional image) |
+| `EventCard`       | Event preview card                                           |
+| `GroupCard`       | Small group preview card                                     |
+| `LeaderCard`      | Leader profile card                                          |
+| `ScriptureBanner` | Branded scripture display                                    |
+| `FacebookFeed`    | oEmbed-based Facebook post grid                              |
+| `ScrollReveal`    | Motion scroll-triggered entrance wrapper                     |
+| `PageTransition`  | Route change animation                                       |
+| `ChatInterface`   | Gemini AI chat UI                                            |
+| `AdminSidebar`    | Admin panel navigation                                       |
+| `DataTable`       | Reusable admin data table (shadcn)                           |
+| `FileUploader`    | Vercel Blob file upload component                            |
+| `ContentEditor`   | Rich text editor for devotionals/testimonies                 |
+| `AuditTable`      | Filterable audit log viewer (admin)                          |
+| `ScopeGuard`      | AI chat scope validation wrapper                             |
 
 ---
 
 ## API Integrations
 
 ### Facebook oEmbed
+
 - Route: `GET /api/facebook`
 - Fetches embed HTML for SLU's Facebook Page posts
 - Proxied server-side to avoid CORS + token exposure
 - No App Review needed for read-only oEmbed (Meta oEmbed Read)
 
 ### Gemini AI Chat
+
 - Route: `POST /api/chat`
 - Model: Gemini Flash (free tier — 5-15 RPM, ~1000 req/day)
 - RAG approach: system prompt includes SLU content (events, groups, beliefs, schedule)
@@ -382,17 +394,20 @@ model SiteSetting {
 - Fallback: polite "I don't have that information" when unsure
 
 ### Vercel Blob (File Upload)
+
 - Used for: pubmat images, testimony images, devotional images
 - Admin uploads via `/api/upload` → stored in Vercel Blob
 - Public URLs stored in NeonDB
 
 ### Auth (NextAuth + Authy)
+
 - NextAuth handles session management
 - Authy TOTP only triggered during long inactivity (not every login)
 - Admin roles: `admin` (full access), `editor` (content only)
 - Hidden admin route — not linked in navigation
 
 ### Audit Logging + IP/Geo Tracking
+
 - **Middleware**: `middleware.ts` captures IP + user-agent on every request
 - **Geo lookup**: Free `ip-api.com` batch endpoint (no key needed, 45 req/min limit) — or `ipinfo.io` (50k req/month free)
 - **Admin actions**: Every CRUD operation in admin panel writes to `audit_logs` with user, action, target, IP, geo
@@ -402,6 +417,7 @@ model SiteSetting {
 - **Implementation**: `lib/audit.ts` helper + `lib/geo.ts` IP lookup utility
 
 ### AI Assistant Scoping (SLU-Only)
+
 - **System prompt lock**: Gemini receives a system prompt that explicitly restricts it to SLU-related topics only
 - **Scope definition**: The system prompt includes all SLU content (events, groups, beliefs, schedule, mission, contact info) and instructs the model to refuse anything outside this scope
 - **Refusal response**: When asked about non-SLU topics, the assistant responds with a polite redirect: "I'm here to help with Salt and Light United questions. For other topics, I'd recommend searching the web."
@@ -415,6 +431,7 @@ model SiteSetting {
 ## Implementation Order
 
 ### Phase 1: Scaffold
+
 - [ ] Initialize Next.js project with TypeScript + Tailwind
 - [ ] Install and configure shadcn/ui
 - [ ] Install Motion, @phosphor-icons/react, prisma, @prisma/client
@@ -424,11 +441,13 @@ model SiteSetting {
 - [ ] Create initial schema + run migration
 
 ### Phase 2: Layout Shell
+
 - [ ] Build `Header` component (responsive nav, hamburger)
 - [ ] Build `Footer` component (links, branding, social)
 - [ ] Create `app/layout.tsx` with Header + Footer + theme provider
 
 ### Phase 3: Home Page
+
 - [ ] Build `Hero` section (split layout, CTA)
 - [ ] Build About Strip section
 - [ ] Build Upcoming Events section (data from DB)
@@ -438,6 +457,7 @@ model SiteSetting {
 - [ ] Build CTA section
 
 ### Phase 4: Inner Pages
+
 - [ ] About page (mission, vision, leaders)
 - [ ] Events page (event grid from DB)
 - [ ] Groups page (group cards from DB)
@@ -445,6 +465,7 @@ model SiteSetting {
 - [ ] Contact page (form + info)
 
 ### Phase 5: Admin Panel
+
 - [ ] Set up NextAuth with credentials provider
 - [ ] Build admin layout (auth gate, sidebar)
 - [ ] Build admin dashboard
@@ -453,6 +474,7 @@ model SiteSetting {
 - [ ] Build content editor (rich text)
 
 ### Phase 6: API Integrations
+
 - [ ] Facebook oEmbed proxy route
 - [ ] Gemini AI chat endpoint + RAG system prompt + SLU-only scope guard
 - [ ] Chat interface UI
@@ -463,12 +485,14 @@ model SiteSetting {
 - [ ] Admin audit log viewer (`/admin/audit`)
 
 ### Phase 7: Animation
+
 - [ ] Create `ScrollReveal` wrapper (Motion)
 - [ ] Add entrance animations to all sections
 - [ ] Add hover effects to cards and buttons
 - [ ] Add page transition animations
 
 ### Phase 8: Content & Polish
+
 - [ ] Add placeholder images (Picsum or generated)
 - [ ] Fill in real copy content
 - [ ] Dark mode support
@@ -476,6 +500,7 @@ model SiteSetting {
 - [ ] Accessibility check (contrast, focus states, labels)
 
 ### Phase 9: Verification
+
 - [ ] `npm run build` — no errors
 - [ ] `npm run lint` — clean
 - [ ] Lighthouse audit (Performance, A11y, SEO)
@@ -492,6 +517,7 @@ model SiteSetting {
 ---
 
 ## Done When
+
 - [ ] All 8 pages render correctly (6 public + chat + admin)
 - [ ] Admin panel functional with full CRUD
 - [ ] Audit logging captures all admin actions with IP/geo
@@ -510,6 +536,7 @@ model SiteSetting {
 ---
 
 ## Notes
+
 - **POTENTIAL NAME CHANGE**: "Salt and Light United" may become "Salt and Lamp United". All branding strings MUST be in a single config file (`lib/brand.ts`) for easy swap. Do NOT hardcode the name in components.
 - Aileron font: check Google Fonts availability or self-host from brand assets
 - Placeholder images: use `https://picsum.photos/seed/{section}/{w}/{h}` until real assets provided

@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("SALTANDLIGHTUNITED_DATABASE_URL")
+  url      = env("SALTANDLAMPNITED_DATABASE_URL")
 }
 
 enum Role {
@@ -27,17 +27,18 @@ model RoleConfig {
 model SiteConfig {
   id String @id @default("singleton")
 
-  siteName       String  @default("Salt and Light United")
+  siteName       String  @default("Salt and Lamp United")
   siteShortName  String  @default("SLU")
   tagline        String  @default("Be the Salt. Be the Light")
   description    String  @default("A Christ-centered community of students and young people based in Baliwag City, Philippines who desire to know Jesus, grow in His Word, and live out our faith together.")
   city           String  @default("Baliwag City, Bulacan, Philippines")
   facebookUrl    String  @default("https://www.facebook.com/profile.php?id=61577421402391")
+  discordUrl     String  @default("https://discord.gg/7Ma47W5BV")
   phones         Json    @default("[\"+63 945 442 0780\", \"+63 942 444 7444\"]")
   logoUrl        String?
   faviconUrl     String?
 
-  independenceNote String @default("Salt and Light United (SLU) is not related nor affiliated to any school, college, university, organizations, churches, or denominations; as it is an independent Christian community as of 2026.")
+  independenceNote String @default("Salt and Lamp United (SLU) is not related nor affiliated to any school, college, university, organizations, churches, or denominations; as it is an independent Christian community as of 2026.")
 
   carouselSlides Json @default("[{\"id\":\"1\",\"label\":\"Teen Nights\",\"caption\":\"Ages 13–17 · Hanging out and growing together\",\"image\":\"/images/history/first_pic.jpg\"},{\"id\":\"2\",\"label\":\"Tween Hangout\",\"caption\":\"Ages 10–12 · Games, faith, and friendships\",\"image\":\"/images/history/second_pic.jpg\"},{\"id\":\"3\",\"label\":\"Jam Sessions\",\"caption\":\"Music, songs, and creative worship\",\"image\":\"/images/history/third_pic.jpg\"},{\"id\":\"4\",\"label\":\"Real Talk\",\"caption\":\"Deep conversations about faith and life\",\"image\":\"/images/history/fourth_pic.webp\"},{\"id\":\"5\",\"label\":\"Street Team\",\"caption\":\"Serving the community together\",\"image\":\"/images/history/fifth_pic.jpg\"}]")
 

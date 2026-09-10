@@ -19,6 +19,7 @@ interface SiteConfig {
   description: string;
   city: string;
   facebookUrl: string;
+  discordUrl: string;
   phones: string[];
   logoUrl: string | null;
   faviconUrl: string | null;
@@ -27,12 +28,13 @@ interface SiteConfig {
 }
 
 const defaultConfig: SiteConfig = {
-  siteName: "Salt and Light United",
+  siteName: "Salt and Lamp United",
   siteShortName: "SLU",
   tagline: "Be the Salt. Be the Light",
   description: "",
   city: "Baliwag City, Bulacan, Philippines",
   facebookUrl: "",
+  discordUrl: "",
   phones: [],
   logoUrl: null,
   faviconUrl: null,
@@ -73,6 +75,7 @@ export default function SiteConfigPage() {
             description: d.description ?? defaultConfig.description,
             city: d.city ?? defaultConfig.city,
             facebookUrl: d.facebookUrl ?? defaultConfig.facebookUrl,
+            discordUrl: d.discordUrl ?? defaultConfig.discordUrl,
             phones: Array.isArray(d.phones) ? d.phones : [],
             logoUrl: d.logoUrl ?? null,
             faviconUrl: d.faviconUrl ?? null,
@@ -232,6 +235,14 @@ export default function SiteConfigPage() {
               className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm outline-none focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
             />
           </Field>
+          <Field label="Discord URL" hint="Invite link to your Discord server">
+            <input
+              value={config.discordUrl}
+              onChange={(e) => update("discordUrl", e.target.value)}
+              placeholder="https://discord.gg/..."
+              className="w-full rounded-xl border border-slu-gray-200 px-4 py-2.5 text-sm outline-none focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
+            />
+          </Field>
         </div>
         <Field label="Phone Numbers" hint="Comma-separated list of contact numbers">
           <input
@@ -254,7 +265,7 @@ export default function SiteConfigPage() {
       {/* Carousel Slides */}
       <Section title="Homepage Carousel" icon={Images}>
         <p className="text-sm text-slu-gray-500">
-          Manage the &ldquo;Salt and Lighters&rdquo; slides shown on the homepage.
+          Manage the &ldquo;Salt and Lampers&rdquo; slides shown on the homepage.
         </p>
         <div className="space-y-3">
           {config.carouselSlides.map((slide, i) => (

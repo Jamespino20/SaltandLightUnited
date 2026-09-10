@@ -88,7 +88,7 @@ export function Header() {
   const isDark = theme === "dark";
 
   return (
-    <div className="fixed top-8 left-0 right-0 z-50 flex justify-center px-4 sm:px-6">
+    <div className="fixed top-8 left-0 right-0 z-[100] flex justify-center px-4 sm:px-6">
       <header
         className={`flex w-full max-w-5xl items-center justify-between rounded-full px-4 py-2.5 backdrop-blur-md transition-all duration-500 sm:px-6 ${
           isDark
@@ -102,10 +102,10 @@ export function Header() {
             <img
               src={
                 isDark
-                  ? "/images/SaltandLightWhiteTransparent.svg"
-                  : "/images/SaltandLightBlueTransparent.svg"
+                  ? "/images/SaltandLampWhiteTransparent.svg"
+                  : "/images/SaltandLampBlueTransparent.svg"
               }
-              alt="Salt and Light United"
+              alt="Salt and Lamp United"
               className="h-full w-full object-contain"
             />
           </div>

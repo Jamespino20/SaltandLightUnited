@@ -11,7 +11,7 @@ export async function getFacebookEmbed(url: string): Promise<FacebookEmbed> {
   const oembedUrl = `https://www.facebook.com/plugins/oembed_params/?url=${encodeURIComponent(url)}`;
 
   const res = await fetch(oembedUrl, {
-    headers: { "User-Agent": "SaltAndLightUnited/1.0" },
+    headers: { "User-Agent": "SaltandLampUnited/1.0" },
     next: { revalidate: 3600 },
   });
 

@@ -37,7 +37,7 @@ export async function PUT(request: Request) {
 
     const allowedFields = [
       "siteName", "siteShortName", "tagline", "description", "city",
-      "facebookUrl", "phones", "logoUrl", "faviconUrl",
+      "facebookUrl", "discordUrl", "phones", "logoUrl", "faviconUrl",
       "heroTitle1", "heroTitle2", "heroSubtitle",
       "aboutTitle", "aboutDescription", "independenceNote",
       "carouselSlides",

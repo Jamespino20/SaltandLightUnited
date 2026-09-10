@@ -3,6 +3,8 @@ import { uploadFile } from "@/lib/blob";
 import { requireSession, requirePermission } from "@/lib/api-auth";
 import { logAudit, AUDIT_ACTIONS } from "@/lib/audit";
 
+const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB — safe margin under Vercel's 4.5MB serverless limit
+
 export async function POST(request: Request) {
   const authResult = await requireSession();
   if (authResult instanceof NextResponse) return authResult;
@@ -19,6 +21,14 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { success: false, error: "File is required" },
         { status: 400 }
+      );
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      const maxMB = (MAX_FILE_SIZE / (1024 * 1024)).toFixed(0);
+      return NextResponse.json(
+        { success: false, error: `File is too large. Maximum size is ${maxMB}MB.` },
+        { status: 413 }
       );
     }
 

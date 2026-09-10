@@ -161,7 +161,7 @@ function AdminShellInner({ children }: { children: React.ReactNode }) {
       >
         <div className="flex h-16 items-center gap-3 border-b border-white/10 px-5">
           <img
-            src="/images/SaltandLightWhiteTransparent.svg"
+            src="/images/SaltandLampWhiteTransparent.svg"
             alt="SLU"
             className="h-8 w-auto"
           />

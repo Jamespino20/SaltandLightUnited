@@ -57,15 +57,24 @@ export default function EventsPage() {
   }, []);
 
   const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const upcomingEvents = events
-    .filter((e) => new Date(e.date) >= now)
+    .filter((e) => {
+      const eventDate = new Date(e.date);
+      const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+      return eventDay >= todayStart;
+    })
     .sort((a, b) => {
       if (a.featured && !b.featured) return -1;
       if (!a.featured && b.featured) return 1;
       return new Date(a.date).getTime() - new Date(b.date).getTime();
     });
   const pastEvents = events
-    .filter((e) => new Date(e.date) < now)
+    .filter((e) => {
+      const eventDate = new Date(e.date);
+      const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+      return eventDay < todayStart;
+    })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (

@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="1000mm"
-   height="210mm"
-   viewBox="0 0 1000 210"
+   width="988mm"
+   height="183mm"
+   viewBox="0 0 988 183"
    version="1.1"
    id="svg1"
    xmlns="http://www.w3.org/2000/svg"
@@ -13,7 +13,8 @@
      id="defs1" />
   <g
      id="g27"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(-6.9124363,-17.004158)">
     <path
        style="display:inline;fill:#0a0a0a;fill-opacity:1;stroke-width:0.264999"
        id="path22"
@@ -51,19 +52,20 @@
        transform="matrix(0.50843475,0,0,0.50843475,-63.206419,-51.87023)" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:93.3714px;line-height:0;font-family:Aileron;-inkscape-font-specification:'Aileron Semi-Bold';font-variant-ligatures:discretionary-ligatures;text-align:start;letter-spacing:-8.64333px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#f0f0f0;fill-opacity:1;stroke-width:0.324716"
-       x="252.6647"
-       y="128.51712"
-       id="text27"
+       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:93.1325px;line-height:0;font-family:Aileron;-inkscape-font-specification:'Aileron, Semi-Bold';font-variant-ligatures:discretionary-ligatures;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:-8.62123px;writing-mode:lr-tb;direction:ltr;text-anchor:start;display:inline;fill:#f0f0f0;fill-opacity:1;stroke-width:0.323885"
+       x="241.26979"
+       y="128.34158"
+       id="text5"
        transform="scale(0.98965464,1.0104535)"><tspan
-         id="tspan27"
-         style="font-size:93.3714px;letter-spacing:-8.64333px;fill:#f0f0f0;fill-opacity:1;stroke-width:0.324717"
-         x="252.6647"
-         y="128.51712">Salt and Light United</tspan></text>
+         id="tspan5"
+         x="241.26979"
+         y="128.34158"
+         style="stroke-width:0.323885">Salt and Lamp United</tspan></text>
   </g>
   <g
      id="g7"
-     style="display:none">
+     style="display:none"
+     transform="translate(-6.9124363,-17.004158)">
     <path
        style="display:inline;fill:#0770bd;fill-opacity:1;stroke-width:0.264999"
        id="path2"
@@ -101,19 +103,20 @@
        transform="matrix(0.50843475,0,0,0.50843475,-63.206419,-51.87023)" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:93.3714px;line-height:0;font-family:Aileron;-inkscape-font-specification:'Aileron Semi-Bold';font-variant-ligatures:discretionary-ligatures;text-align:start;letter-spacing:-8.64333px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#0770bd;fill-opacity:1;stroke-width:0.324716"
-       x="252.6647"
-       y="128.51712"
-       id="text7"
+       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:93.1325px;line-height:0;font-family:Aileron;-inkscape-font-specification:'Aileron, Semi-Bold';font-variant-ligatures:discretionary-ligatures;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:-8.62123px;writing-mode:lr-tb;direction:ltr;text-anchor:start;display:inline;fill:#0770bd;fill-opacity:1;stroke-width:0.323885"
+       x="241.26979"
+       y="128.34158"
+       id="text4"
        transform="scale(0.98965464,1.0104535)"><tspan
-         id="tspan7"
-         style="font-size:93.3714px;letter-spacing:-8.64333px;fill:#0770bd;fill-opacity:1;stroke-width:0.324717"
-         x="252.6647"
-         y="128.51712">Salt and Light United</tspan></text>
+         id="tspan4"
+         x="241.26979"
+         y="128.34158"
+         style="fill:#0770bd;fill-opacity:1;stroke-width:0.323885">Salt and Lamp United</tspan></text>
   </g>
   <g
      id="g37"
-     style="display:none">
+     style="display:none"
+     transform="translate(-6.9124363,-17.004158)">
     <path
        style="display:inline;fill:#0770bd;fill-opacity:1;stroke-width:0.264999"
        id="path32"
@@ -151,14 +154,14 @@
        transform="matrix(0.50843475,0,0,0.50843475,-63.206419,-51.87023)" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:93.3714px;line-height:0;font-family:Aileron;-inkscape-font-specification:'Aileron Semi-Bold';font-variant-ligatures:discretionary-ligatures;text-align:start;letter-spacing:-8.64333px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#f0f0f0;fill-opacity:1;stroke-width:0.324716"
-       x="252.6647"
-       y="128.51712"
-       id="text37"
+       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:93.1325px;line-height:0;font-family:Aileron;-inkscape-font-specification:'Aileron, Semi-Bold';font-variant-ligatures:discretionary-ligatures;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:-8.62123px;writing-mode:lr-tb;direction:ltr;text-anchor:start;display:inline;fill:#f0f0f0;fill-opacity:1;stroke-width:0.323885"
+       x="241.26979"
+       y="128.34158"
+       id="text3"
        transform="scale(0.98965464,1.0104535)"><tspan
-         id="tspan37"
-         style="font-size:93.3714px;letter-spacing:-8.64333px;fill:#f0f0f0;fill-opacity:1;stroke-width:0.324717"
-         x="252.6647"
-         y="128.51712">Salt and Light United</tspan></text>
+         id="tspan3"
+         x="241.26979"
+         y="128.34158"
+         style="stroke-width:0.323885">Salt and Lamp United</tspan></text>
   </g>
 </svg>

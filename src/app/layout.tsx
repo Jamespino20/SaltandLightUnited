@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   keywords: [
     "youth fellowship",
     "Christian youth",
-    "Salt and Light United",
+    "Salt and Lamp United",
     "SLU",
     "Baliwag City",
     "teens",
@@ -52,14 +52,14 @@ export const metadata: Metadata = {
     description: brand.description,
     type: "website",
     siteName: brand.name,
-    url: "https://saltandlightunited.vercel.app",
+    url: "https://saltandlampunited.vercel.app",
   },
   twitter: {
     card: "summary_large_image",
     title: `SLU Fellowship`,
     description: brand.description,
   },
-  metadataBase: new URL("https://saltandlightunited.vercel.app"),
+  metadataBase: new URL("https://saltandlampunited.vercel.app"),
   alternates: {
     canonical: "/",
   },

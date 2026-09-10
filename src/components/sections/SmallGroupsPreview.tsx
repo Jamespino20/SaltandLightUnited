@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { CaretLeft, CaretRight, Pause, Play } from "@phosphor-icons/react";
-import { Reveal } from "@/components/animation/Reveal";
 
 interface Slide {
   id: string;
@@ -105,14 +104,12 @@ export function SmallGroupsPreview() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal className="mb-2 text-center sm:mb-10">
-          <h2 className="text-2xl font-bold text-slu-black sm:text-3xl md:text-4xl lg:text-5xl">
-            Want to see us wave?{" "}
-            <span className="text-slu-blue">
-              Here&apos;s the Salt and Lighters for you.
-            </span>
-          </h2>
-        </Reveal>
+        <h2 className="mb-8 text-center text-2xl font-bold text-slu-black sm:mb-10 sm:text-3xl md:text-4xl lg:text-5xl">
+          Want to see us wave?{" "}
+          <span className="text-slu-blue">
+            Here&apos;s the Salt and Lampers for you.
+          </span>
+        </h2>
 
         {/* Carousel with outer arrows */}
         <div className="relative">
@@ -138,7 +135,7 @@ export function SmallGroupsPreview() {
 
           {/* Card-fan carousel */}
           <div
-            className="relative mx-auto mt-6 max-w-3xl sm:mt-20 md:mt-24"
+            className="relative mx-auto mt-10 max-w-3xl sm:mt-28 md:mt-32"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onMouseEnter={() => setPaused(true)}
@@ -150,8 +147,8 @@ export function SmallGroupsPreview() {
                 const offset = wrapOffset(i, current, slides.length);
                 const abs = Math.abs(offset);
                 const visible = abs <= 2;
-                const translateX = offset * 46;
-                const rotate = offset * 9;
+                const translateX = offset * 40;
+                const rotate = offset * 7;
                 const scale = 1 - abs * 0.08;
                 const zIndex = 50 - abs * 10;
 

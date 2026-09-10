@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Salt and Light United",
+    "appName": "Salt and Lamp United",
     "appShortName": "SLU",
     "tagline": "Be the Salt. Be the Light.",
     "description": "Isang komunidad ng mga estudyante at kabataan na nakasentro kay Kristo na nakabase sa Lungsod ng Baliwag, Pilipinas, na nagnanais na makilala si Hesus at maging asin ng lupa at liwanag ng mundo sa pamamagitan ng pagpapasinag ng katotohanan ng Diyos, pamumuno nang may layunin, at pag-iisa ng mga puso para kay Kristo sa loob at labas ng kampus.",
@@ -28,11 +28,11 @@
     "hero": {
       "title1": "Be the Salt.",
       "title2": "Be the Light.",
-      "subtitle": "Ang Salt and Light United ay isang komunidad ng mga mag-aaral at kabataan sa Baliwag City, Bulacan, Pilipinas na nakasentro kay Kristo. Nakikilala namin si Kristo, lumalaki na magkasama, at sinisingning ang Kanyang liwanag sa aming mga paaralan at kalye."
+      "subtitle": "Ang Salt and Lamp United ay isang komunidad ng mga mag-aaral at kabataan sa Baliwag City, Bulacan, Pilipinas na nakasentro kay Kristo. Nakikilala namin si Kristo, lumalaki na magkasama, at sinisingning ang Kanyang liwanag sa aming mga paaralan at kalye."
     },
     "about": {
       "title": "Hindi nag-iisa sa paglakad.",
-      "description": "Ang Salt and Light United ay isang pamilya ng mga estudyante at indibidwal na nananampalataya kay Kristo sa Baliwag City — nagkakaisa sa pananampalataya, lumalaki kasama Niya, at dala ang Kanyang liwanag sa aming mga paaralan, tahanan, at kalye. Hindi ka kailanman nilayon na sumunod sa Kanya mag-isa."
+      "description": "Ang Salt and Lamp United ay isang pamilya ng mga estudyante at indibidwal na nananampalataya kay Kristo sa Baliwag City — nagkakaisa sa pananampalataya, lumalaki kasama Niya, at dala ang Kanyang liwanag sa aming mga paaralan, tahanan, at kalye. Hindi ka kailanman nilayon na sumunod sa Kanya mag-isa."
     },
     "events": {
       "title": "Maglaan ng oras para sa komunidad.",
@@ -40,11 +40,11 @@
     },
     "facebook": {
       "title": "Sali sa FB page para sa mga update at para sumali.",
-      "description": "Manatiling konektado sa Salt and Light United sa pamamagitan ng aming opisyal na Facebook page. Makakuha ng mga pinakabagong update sa mga kaganapan, fellowship nights, at mga aktibidad ng komunidad — direkta mula sa aming feed."
+      "description": "Manatiling konektado sa Salt and Lamp United sa pamamagitan ng aming opisyal na Facebook page. Makakuha ng mga pinakabagong update sa mga kaganapan, fellowship nights, at mga aktibidad ng komunidad — direkta mula sa aming feed."
     },
     "groups": {
       "title": "Gusto mo kaming makita?",
-      "subtitle": "Narito ang mga Salt and Lighters para sa iyo."
+      "subtitle": "Narito ang mga Salt and Lampers para sa iyo."
     },
     "scripture": {
       "title": "Isang paalala para sa iyo na magbasa ng Bibliya ngayon."
@@ -57,11 +57,11 @@
     }
   },
   "about": {
-    "title": "Tungkol sa Salt and Light United",
+    "title": "Tungkol sa Salt and Lamp United",
     "subtitle": "Alamin kung sino kami, ano ang aming pinaniniwalaan, at bakit kami narito.",
     "us": {
       "title": "Tungkol sa Amin",
-      "p1": "Kami ang Salt and Light United! Isang Christ-centered na komunidad ng mga mag-aaral at kabataan sa Baliwag City na nagnanais na makilala si Hesus, lumaki sa Kanyang Salita, at mabuhay ng magkasama sa pananampalataya.",
+      "p1": "Kami ang Salt and Lamp United! Isang Christ-centered na komunidad ng mga mag-aaral at kabataan sa Baliwag City na nagnanais na makilala si Hesus, lumaki sa Kanyang Salita, at mabuhay ng magkasama sa pananampalataya.",
       "p2": "Pinaniniwalaan namin na ang mga buhay ay nababago sa pamamagitan ni Kristo, at ang bawat nananampalataya ay tinawag na maging asin ng lupa at liwanag ng mundo (Mateo 5:13–16).",
       "p3": "Ikaw man ay naghahanap ng pananampalataya, bumabalik sa Diyos, o naghahanap ng lugar upang lumaki, malugod kang tinatanggap dito."
     },
@@ -71,7 +71,7 @@
     "visionText": "Isang namumuong komunidad ng mga batang nananampalataya na nagbabago ng kanilang henerasyon para kay Kristo — nabubuhay ng may layunin, lumalakad sa pananampalataya, at sinisingning ang liwanag ng Diyos saan man sila magpunta.",
     "story": {
       "title": "Aming Kwento",
-      "p1": "Nagsimula ang Salt and Light United bilang isang maliit na pagtitipon ng mga kabataan sa Baliwag na may pare-parehong puso — na makilala nang mas malalim ang Diyos at mabuhay ng magkasama sa pananampalataya. Ang nagsimula bilang ilang mga kabataan na nagkikita pagkatapos ng klase ay naging isang masiglang youth fellowship.",
+      "p1": "Nagsimula ang Salt and Lamp United bilang isang maliit na pagtitipon ng mga kabataan sa Baliwag na may pare-parehong puso — na makilala nang mas malalim ang Diyos at mabuhay ng magkasama sa pananampalataya. Ang nagsimula bilang ilang mga kabataan na nagkikita pagkatapos ng klase ay naging isang masiglang youth fellowship.",
       "p2": "Pinangalanan batay sa mga salita ni Hesus sa Mateo 5:13–16, ang SLU ay palaging tungkol sa higit pa sa mga lingguhang pagpupulong. Ito ay tungkol sa pagbuo ng isang pamilya kung saan ang mga kabataan ay nararamdaman na nakikita, kilala, at hinihikayat na maging kung sino ang nilikha ng Diyos na maging sila."
     },
     "leaders": {
@@ -80,7 +80,7 @@
     },
     "reachUs": "Makipag-ugnayan Ngayon!",
     "facebook": "Facebook",
-    "independence": "*Ang Salt and Light United (SLU) ay hindi kaugnay o kaakibat sa anumang paaralan, kolehiyo, unibersidad, organisasyon, simbahan, o denominasyon; ito ay isang independiyenteng Kristong komunidad noong 2026."
+    "independence": "*Ang Salt and Lamp United (SLU) ay hindi kaugnay o kaakibat sa anumang paaralan, kolehiyo, unibersidad, organisasyon, simbahan, o denominasyon; ito ay isang independiyenteng Kristong komunidad noong 2026."
   },
   "events": {
     "title": "Mga Kaganapan",
@@ -138,8 +138,9 @@
     "followUs": "Sundan Kami",
     "followDescription": "Manatiling updated sa mga kaganapan at anunsyo.",
     "loveToMeet": "Gusto naming makilala ka",
-    "loveDescription": "May tanong ka man, nangangailangan ng panalangin, o gusto lang mag-hello — makipag-ugnayan. Malugod kang tinatanggap sa Salt and Light United.",
-    "messageFacebook": "Magpadala ng mensahe sa Facebook"
+    "loveDescription": "May tanong ka ba, kailangan ng panalangin, o gusto lang magpaalam — makipag-ugnayan. Laging welcome sa Salt and Lamp United.",
+    "messageFacebook": "Magpadala ng mensahe sa Facebook",
+    "joinDiscord": "Sali sa aming Discord"
   },
   "bible": {
     "title": "Bible Reader",
@@ -159,7 +160,7 @@
     "placeholder": "Mag-type ng mensahe...",
     "thinking": "Nag-iisip...",
     "howCanWeHelp": "Paano kami makakatulong?",
-    "askAnything": "Magtanong tungkol sa Salt and Light United.",
+    "askAnything": "Magtanong tungkol sa Salt and Lamp United.",
     "close": "Isara",
     "minimize": "I-minimize",
     "expand": "Palawakin"
@@ -168,13 +169,17 @@
     "quickLinks": "Mabilis na Links",
     "connect": "Kumonekta",
     "contactUs": "Makipag-ugnayan sa Amin",
+    "joinDiscord": "Sali sa aming Discord",
     "aboutUs": "Tungkol sa Amin",
     "events": "Mga Kaganapan",
     "community": "Komunidad",
     "resources": "Mga Mapagkukunan",
     "followFacebook": "Sundan kami sa Facebook",
+    "legal": "Legal",
+    "privacyPolicy": "Patakaran sa Pagkapribado",
+    "termsOfService": "Mga Tuntunin ng Serbisyo",
     "allRights": "Lahat ng karapatan ay nakalaan.",
-    "independence": "Ang Salt and Light United (SLU) ay hindi kaugnay o kaakibat sa anumang paaralan, kolehiyo, unibersidad, organisasyon, simbahan, o denominasyon; ito ay isang independiyenteng Kristong komunidad noong 2026."
+    "independence": "Ang Salt and Lamp United (SLU) ay hindi kaugnay o kaakibat sa anumang paaralan, kolehiyo, unibersidad, organisasyon, simbahan, o denominasyon; ito ay isang independiyenteng Kristong komunidad noong 2026."
   },
   "language": {
     "en": "English",

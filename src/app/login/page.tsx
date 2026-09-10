@@ -91,7 +91,7 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-xl border border-slu-gray-200 px-3 py-2.5 text-sm text-slu-black outline-none transition-colors focus:border-slu-blue"
-              placeholder="you@saltandlightunited.org"
+              placeholder="you@saltandlampunited.org"
               disabled={disabled}
             />
           </div>

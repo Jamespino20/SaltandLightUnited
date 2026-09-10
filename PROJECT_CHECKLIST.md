@@ -3,14 +3,16 @@
 > Living tracker for outstanding work. Tick boxes as items land. Keep this file in sync with PRs/commits.
 
 ## How to read
+
 - **[ ]** = todo | **[x]** = done | **◐** = in progress / partial
-- Sections match the phases in `saltandlightunited-website.md` plus new features added since.
+- Sections match the phases in `saltandlampunited-website.md` plus new features added since.
 
 ---
 
 ## 0. Homepage presentation & storytelling
 
 **Done so far (see git history):**
+
 - [x] Scripted, animated homepage — LIGHT → COMMUNITY → GROWTH → GATHER → MISSION → INVITATION
 - [x] GSAP + ScrollTrigger + Lenis smooth scroll, `prefers-reduced-motion` respected
 - [x] Recurring warm "light" motif travels the page; scroll-progress light bar
@@ -18,9 +20,11 @@
 - [x] Events as a scroll-lit timeline; Scripture as a cinematic pause
 
 **Waiting on James — homepage expectations (basis for the "done" definition):**
+
 - [ ] **HOME PAGE EXPECTATIONS** — James to author his own list of how each homepage section should present (feel, order, imagery, copy). Template below.
 
 > ### Homepage — James's expectations (self-author here)
+>
 > - Hero:
 > - About / Community:
 > - Groups:
@@ -29,6 +33,7 @@
 > - CTA / Footer:
 > - Overall mood (1 line):
 > - "Done when" for the homepage:
+
 - [ ] QA re-review of the redesigned homepage after photos land
 
 ---
@@ -60,6 +65,7 @@ Current: `src/lib/auth.ts` has `providers: []` — empty. No login route, no ses
 - [ ] Audit-log login/logout events (`lib/audit.ts`)
 
 **Runtime setup still required (cannot run without the DB/env):**
+
 - [x] Set `AUTH_SECRET` in `.env.local` + Vercel (Production + Preview) — verified present in both; confirmed working production login
 - [x] `npm run db:push` (or `db:migrate`) to add `User.passwordHash`
 - [x] `npm run db:seed` to create the first admin (override with `ADMIN_EMAIL` / `ADMIN_PASSWORD` / `ADMIN_NAME` / `ADMIN_ROLE`)
@@ -157,7 +163,7 @@ Not in the original plan — scoping needed.
 ## 11. Deployment & environment
 
 - [ ] Add env vars to **Vercel** (Project Settings → Environment Variables):
-  - `SALTANDLIGHTUNITED_DATABASE_URL`, `SALTANDLIGHTUNITED_DATABASE_URL_UNPOOLED`
+  - `SALTANDLAMPNITED_DATABASE_URL`, `SSALTANDLAMPITED_DATABASE_URL_UNPOOLED`
   - `BLOB_STORE_ID`, `BLOB_READ_WRITE_TOKEN`
   - `GEMINI_API_KEY`
   - NextAuth secret (`AUTH_SECRET`/`NEXTAUTH_SECRET`)

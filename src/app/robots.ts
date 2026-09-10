@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/api/"],
       },
     ],
-    sitemap: "https://saltandlightunited.vercel.app/sitemap.xml",
+    sitemap: "https://saltandlampunited.vercel.app/sitemap.xml",
   };
 }

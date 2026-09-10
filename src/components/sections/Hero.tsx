@@ -3,6 +3,7 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { useTranslations } from "next-intl";
+import { brand } from "@/lib/brand";
 
 export function Hero() {
   const t = useTranslations("home.hero");
@@ -66,6 +67,11 @@ export function Hero() {
         className="relative z-10 mx-auto mt-6 max-w-xl px-4 text-base leading-relaxed text-white/70 sm:text-lg"
       >
         {t("subtitle")}
+      </p>
+
+      {/* Brand disclaimer */}
+      <p className="relative z-10 mx-auto mt-4 max-w-lg px-4 text-xs text-white/40 sm:text-sm">
+        {brand.brandDisclaimer}
       </p>
 
       {/* Scroll cue */}
