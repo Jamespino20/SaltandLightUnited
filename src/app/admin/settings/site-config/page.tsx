@@ -30,7 +30,7 @@ interface SiteConfig {
 const defaultConfig: SiteConfig = {
   siteName: "Salt and Lamp United",
   siteShortName: "SLU",
-  tagline: "Be the Salt. Be the Light",
+  tagline: "Be the Salt. Be the Lamp",
   description: "",
   city: "Baliwag City, Bulacan, Philippines",
   facebookUrl: "",

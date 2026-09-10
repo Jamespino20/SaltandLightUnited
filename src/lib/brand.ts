@@ -1,7 +1,7 @@
 export const brand = {
   name: "Salt and Lamp United",
   shortName: "SLU",
-  tagline: "Be the Salt. Be the Light",
+  tagline: "Be the Salt. Be the Lamp",
   description:
     "A Christ-centered community of students and young people based in Baliwag City, Philippines, who desire to know Jesus and be the salt of the earth and light of the world by shining God's truth, leading with purpose, and uniting hearts for Christ on campuses and beyond.",
   city: "Baliwag City, Bulacan, Philippines",

@@ -5,9 +5,6 @@ import path from "path";
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
-  serverActions: {
-    bodySizeLimit: "4mb",
-  },
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.resolve = config.resolve || {};

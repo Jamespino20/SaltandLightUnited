@@ -2,7 +2,7 @@
   "common": {
     "appName": "Salt and Lamp United",
     "appShortName": "SLU",
-    "tagline": "Be the Salt. Be the Light.",
+    "tagline": "Be the Salt. Be the Lamp.",
     "description": "Isang komunidad ng mga estudyante at kabataan na nakasentro kay Kristo na nakabase sa Lungsod ng Baliwag, Pilipinas, na nagnanais na makilala si Hesus at maging asin ng lupa at liwanag ng mundo sa pamamagitan ng pagpapasinag ng katotohanan ng Diyos, pamumuno nang may layunin, at pag-iisa ng mga puso para kay Kristo sa loob at labas ng kampus.",
     "learnMore": "Alamin pa tungkol sa amin",
     "getInTouch": "Makipag-ugnayan",
@@ -27,7 +27,7 @@
   "home": {
     "hero": {
       "title1": "Be the Salt.",
-      "title2": "Be the Light.",
+      "title2": "Be the Lamp.",
       "subtitle": "Ang Salt and Lamp United ay isang komunidad ng mga mag-aaral at kabataan sa Baliwag City, Bulacan, Pilipinas na nakasentro kay Kristo. Nakikilala namin si Kristo, lumalaki na magkasama, at sinisingning ang Kanyang liwanag sa aming mga paaralan at kalye."
     },
     "about": {
@@ -53,7 +53,7 @@
       "seen": "Nakita mo na kaming magkasama.",
       "title": "Ngayon ay sumali ka na.",
       "salt": "Be the Salt.",
-      "light": "Be the Light."
+      "light": "Be the Lamp."
     }
   },
   "about": {

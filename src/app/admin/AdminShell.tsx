@@ -167,7 +167,7 @@ function AdminShellInner({ children }: { children: React.ReactNode }) {
           />
           <div className="flex flex-col">
             <span className="text-sm font-semibold leading-tight text-white">
-              Salt & Light
+              Salt & Lamp
             </span>
             <span className="text-[11px] leading-tight text-white/60">
               Admin Panel

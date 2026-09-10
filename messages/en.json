@@ -2,7 +2,7 @@
   "common": {
     "appName": "Salt and Lamp United",
     "appShortName": "SLU",
-    "tagline": "Be the Salt. Be the Light.",
+    "tagline": "Be the Salt. Be the Lamp.",
     "description": "A Christ-centered community of students and young people based in Baliwag City, Bulacan, Philippines.",
     "learnMore": "Learn more about us",
     "getInTouch": "Get in Touch",
@@ -27,7 +27,7 @@
   "home": {
     "hero": {
       "title1": "Be the Salt.",
-      "title2": "Be the Light.",
+      "title2": "Be the Lamp.",
       "subtitle": "Salt and Lamp United is a Christ-centered community of students and young people in Baliwag City, Bulacan, Philippines. We encounter Christ, grow together, and shine His light in our schools and streets."
     },
     "about": {
@@ -53,7 +53,7 @@
       "seen": "You've seen who we are.",
       "title": "Now come be part of it.",
       "salt": "Be the Salt.",
-      "light": "Be the Light."
+      "light": "Be the Lamp."
     }
   },
   "about": {
