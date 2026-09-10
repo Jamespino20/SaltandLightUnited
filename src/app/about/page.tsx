@@ -22,25 +22,25 @@ const leaders = [
       "Founded Salt and Lamp United in the year 2025 with a heart to build a Christ-centered community where students can know Christ, grow together in faith, and be a light to those around them.",
   },
   {
-    name: "Rain Timothy Raymundo",
+    name: "Rain Timothy D. Raymundo",
     role: "OIC Assist Directives / Creatives Lead",
     image: "/images/leads/rain.png",
     description:
       "One of the core members of Salt and Lamp United, led many fellowships and gatherings as well as inviting members.",
   },
   {
-    name: "James Bryant Espino",
+    name: "James Bryant D. Espino",
     role: "Publications Assist Lead",
     image: "/images/leads/james.png",
     description:
-      "Handles SLU's web development and published materials. Also the author of Dawn of Dilemmas, a fiction writing project.",
+      "Handles SLU's web development and published materials. Also the author of Dawn of Dilemmas, a Biblically-inspired sci-fantasy story saga project.",
   },
   {
-    name: "Nia Dela Cruz",
+    name: "Nia C. Dela Cruz",
     role: "Publications Assist Lead",
     image: "/images/leads/nia.png",
     description:
-      "Manages SLU's social media captions and contributes to small creatives work across the community.",
+      "Manages SLU's social media captions and contributes to small creatives work for Salt and Lamp United.",
   },
 ];
 
@@ -194,9 +194,7 @@ export default function AboutPage() {
                     </div>
                     <div
                       className={`flex-1 text-center sm:text-left ${
-                        photoLeft
-                          ? ""
-                          : "sm:ml-auto sm:text-right"
+                        photoLeft ? "" : "sm:ml-auto sm:text-right"
                       }`}
                     >
                       <h3 className="text-xl font-bold text-slu-black sm:text-2xl">
