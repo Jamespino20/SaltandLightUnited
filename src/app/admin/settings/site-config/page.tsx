@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Globe, FloppyDisk, Spinner, ArrowLeft, Plus, Trash, CaretUp, CaretDown, Images } from "@phosphor-icons/react";
 import Link from "next/link";
 import { Section, Field, SettingsNotice, SettingsSkeleton } from "../shared";
+import FileUpload from "@/components/ui/FileUpload";
 
 interface CarouselSlide {
   id: string;
@@ -288,11 +289,13 @@ export default function SiteConfigPage() {
                     className="rounded-lg border border-slu-gray-200 px-3 py-2 text-sm outline-none focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
                   />
                 </div>
-                <input
+                <FileUpload
                   value={slide.image}
-                  onChange={(e) => updateSlide(slide.id, "image", e.target.value)}
-                  placeholder="Image path (e.g. /images/history/first_pic.jpg)"
-                  className="w-full rounded-lg border border-slu-gray-200 px-3 py-2 text-sm outline-none focus:border-slu-blue focus:ring-2 focus:ring-slu-blue/20"
+                  onChange={(url) => updateSlide(slide.id, "image", url)}
+                  folder="carousel"
+                  accept="image/*"
+                  label="Slide Image"
+                  previewClassName="h-24 w-auto rounded-lg border border-slu-gray-200 object-cover"
                 />
               </div>
               <div className="flex shrink-0 items-center gap-1">
