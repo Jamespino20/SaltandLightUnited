@@ -20,9 +20,8 @@ const fallbackSlides: Slide[] = [
 
 function wrapOffset(index: number, current: number, total: number) {
   let offset = index - current;
-  const half = Math.floor(total / 2);
-  if (offset > half) offset -= total;
-  if (offset < -half) offset += total;
+  if (offset > total / 2) offset -= total;
+  if (offset < -total / 2) offset += total;
   return offset;
 }
 
@@ -146,7 +145,6 @@ export function SmallGroupsPreview() {
               {slides.map((slide, i) => {
                 const offset = wrapOffset(i, current, slides.length);
                 const abs = Math.abs(offset);
-                const visible = abs <= 2;
                 const translateX = offset * 40;
                 const rotate = offset * 7;
                 const scale = 1 - abs * 0.08;
@@ -160,8 +158,8 @@ export function SmallGroupsPreview() {
                       left: "50%",
                       transform: `translate(calc(-50% + ${translateX}%), -50%) rotate(${rotate}deg) scale(${scale})`,
                       zIndex,
-                      opacity: visible ? 1 : 0,
-                      pointerEvents: visible ? "auto" : "none",
+                      opacity: abs <= 3 ? 1 : 0,
+                      pointerEvents: abs <= 3 ? "auto" : "none",
                     }}
                   >
                     <div className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-slu-gray-200">
