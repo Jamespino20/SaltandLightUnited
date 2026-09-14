@@ -116,7 +116,7 @@ export function SmallGroupsPreview() {
           <button
             type="button"
             onClick={prev}
-            className="absolute -left-1 top-[120px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:-left-2 sm:top-[180px] sm:p-3 md:top-[200px] md:p-4"
+            className="absolute -left-1 top-[160px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:-left-2 sm:top-[180px] sm:p-3 md:top-[200px] md:p-4"
             aria-label="Previous slide"
           >
             <CaretLeft size={20} className="sm:hidden" />
@@ -125,7 +125,7 @@ export function SmallGroupsPreview() {
           <button
             type="button"
             onClick={next}
-            className="absolute -right-1 top-[120px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:-right-2 sm:top-[180px] sm:p-3 md:top-[200px] md:p-4"
+            className="absolute -right-1 top-[160px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:-right-2 sm:top-[180px] sm:p-3 md:top-[200px] md:p-4"
             aria-label="Next slide"
           >
             <CaretRight size={20} className="sm:hidden" />
@@ -134,7 +134,7 @@ export function SmallGroupsPreview() {
 
           {/* Card-fan carousel */}
           <div
-            className="relative mx-auto mt-10 max-w-3xl sm:mt-28 md:mt-32"
+            className="relative mx-auto mt-16 max-w-3xl sm:mt-28 md:mt-32"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onMouseEnter={() => setPaused(true)}
@@ -145,7 +145,7 @@ export function SmallGroupsPreview() {
               {slides.map((slide, i) => {
                 const offset = wrapOffset(i, current, slides.length);
                 const abs = Math.abs(offset);
-                const translateX = offset * 40;
+                const translateX = offset * 28;
                 const rotate = offset * 7;
                 const scale = 1 - abs * 0.08;
                 const zIndex = 50 - abs * 10;
@@ -153,7 +153,7 @@ export function SmallGroupsPreview() {
                 return (
                   <div
                     key={slide.id}
-                    className="absolute top-1/2 w-[90%] max-w-md -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out sm:w-[85%]"
+                    className="absolute top-1/2 w-[85%] max-w-md -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out"
                     style={{
                       left: "50%",
                       transform: `translate(calc(-50% + ${translateX}%), -50%) rotate(${rotate}deg) scale(${scale})`,

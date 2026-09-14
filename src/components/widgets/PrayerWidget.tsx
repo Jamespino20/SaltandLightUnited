@@ -153,7 +153,7 @@ export function PrayerWidget() {
                   className="text-slu-gold"
                   weight="fill"
                 />
-                <h3 className="text-sm font-bold text-white">
+                <h3 className="text-sm font-bold text-slu-gold">
                   How can we pray for you?
                 </h3>
               </div>
