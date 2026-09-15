@@ -608,7 +608,7 @@ export default function ResourcesPage() {
                                 <div className="flex min-w-0 flex-1 flex-col justify-center">
                                   <div className="mb-1 flex items-center gap-2 text-xs text-slu-gray-500">
                                     <span className="font-semibold uppercase tracking-wider text-slu-blue">Devotional</span>
-                                    {devDate && <span>{devDate.toLocaleDateString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", year: "numeric" })}</span>}
+                                    {devDate && <span>{devDate.toLocaleDateString("en-US", { timeZone: "Asia/Manila", month: "short", day: "numeric", year: "numeric" })}</span>}
                                   </div>
                                   <h3 className="truncate text-base font-bold text-slu-black group-hover:text-slu-blue sm:text-lg">{dev.title}</h3>
                                   <p className="mt-1 line-clamp-2 text-sm text-slu-gray-600">{decodeText(dev.description) || stripHtml(dev.content)}</p>
@@ -633,7 +633,7 @@ export default function ResourcesPage() {
                                 <div className="flex min-w-0 flex-1 flex-col justify-center">
                                   <div className="mb-1 flex items-center gap-2 text-xs text-slu-gray-500">
                                     <span className="font-semibold uppercase tracking-wider text-slu-blue">Testimony</span>
-                                    <span>{tsDate.toLocaleDateString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", year: "numeric" })}</span>
+                                    <span>{tsDate.toLocaleDateString("en-US", { timeZone: "Asia/Manila", month: "short", day: "numeric", year: "numeric" })}</span>
                                   </div>
                                   <h3 className="truncate text-base font-bold text-slu-black group-hover:text-slu-blue sm:text-lg">{ts.authorName}</h3>
                                   <p className="mt-1 line-clamp-2 text-sm text-slu-gray-600">{decodeText(ts.description) || stripHtml(ts.content)}</p>

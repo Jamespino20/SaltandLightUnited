@@ -35,14 +35,14 @@ export default function EventEditPage() {
           const d = res.data;
           const dt = new Date(d.date);
           const tzParts = new Intl.DateTimeFormat("en-CA", {
-            timeZone: "America/Los_Angeles",
+            timeZone: "Asia/Manila",
             year: "numeric",
             month: "2-digit",
             day: "2-digit",
           }).formatToParts(dt);
           const tzDate = `${tzParts.find((p) => p.type === "year")!.value}-${tzParts.find((p) => p.type === "month")!.value}-${tzParts.find((p) => p.type === "day")!.value}`;
           const tzTimeParts = new Intl.DateTimeFormat("en-US", {
-            timeZone: "America/Los_Angeles",
+            timeZone: "Asia/Manila",
             hour: "2-digit",
             minute: "2-digit",
             hour12: false,

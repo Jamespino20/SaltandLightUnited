@@ -175,7 +175,7 @@ export default function ResourceDetailPage() {
                 </div>
               )}
               <div className="mb-4 flex flex-wrap items-center gap-4 text-sm text-slu-gray-500">
-                <span className="inline-flex items-center gap-1.5"><Calendar size={14} />{devDate.toLocaleDateString("en-US", { timeZone: "America/Los_Angeles", year: "numeric", month: "long", day: "numeric" })}</span>
+                <span className="inline-flex items-center gap-1.5"><Calendar size={14} />{devDate.toLocaleDateString("en-US", { timeZone: "Asia/Manila", year: "numeric", month: "long", day: "numeric" })}</span>
                 {dev.author && <span className="inline-flex items-center gap-1.5"><User size={14} />{dev.author}</span>}
               </div>
               <h1 className="mb-4 text-3xl font-bold text-slu-black sm:text-4xl">{dev.title}</h1>
@@ -202,7 +202,7 @@ export default function ResourceDetailPage() {
                 </div>
                 <p className="text-sm text-slu-gray-500">
                   <Calendar size={14} className="mr-1 inline" />
-                  {date.toLocaleDateString("en-US", { timeZone: "America/Los_Angeles", year: "numeric", month: "long", day: "numeric" })}
+                  {date.toLocaleDateString("en-US", { timeZone: "Asia/Manila", year: "numeric", month: "long", day: "numeric" })}
                 </p>
               </div>
               <div className="mb-6 text-6xl leading-none text-slu-blue/20">&ldquo;</div>

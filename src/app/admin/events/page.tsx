@@ -103,7 +103,7 @@ export default function EventsPage() {
                     </td>
                     <td className="px-4 py-3 text-slu-gray-600">
                       {new Date(event.date).toLocaleDateString("en-US", {
-                        timeZone: "America/Los_Angeles",
+                        timeZone: "Asia/Manila",
                         month: "short",
                         day: "numeric",
                         year: "numeric",

@@ -16,7 +16,7 @@ interface Event {
   featured: boolean;
 }
 
-const TIMEZONE = "America/Los_Angeles";
+const TIMEZONE = "Asia/Manila";
 
 function todayKeyTZ(): string {
   const parts = new Intl.DateTimeFormat("en-US", {

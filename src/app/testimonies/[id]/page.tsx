@@ -93,7 +93,7 @@ export default function TestimonyPage() {
             <span className="inline-flex items-center gap-1.5">
               <Calendar size={14} />
               {date.toLocaleDateString("en-US", {
-                timeZone: "America/Los_Angeles",
+                timeZone: "Asia/Manila",
                 year: "numeric",
                 month: "long",
                 day: "numeric",

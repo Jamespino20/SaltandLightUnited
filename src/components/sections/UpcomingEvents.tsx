@@ -5,7 +5,7 @@ import { CaretLeft, CaretRight, Spinner } from "@phosphor-icons/react";
 import { Reveal } from "@/components/animation/Reveal";
 import { useTranslations } from "next-intl";
 
-const TIMEZONE = "America/Los_Angeles";
+const TIMEZONE = "Asia/Manila";
 
 function todayInTZ(): Date {
   const now = new Date();
