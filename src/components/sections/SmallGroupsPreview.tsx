@@ -46,7 +46,7 @@ export function SmallGroupsPreview() {
   const isMobile = vw < 640;
   const isTablet = vw >= 640 && vw < 768;
 
-  const translateXUnit = isMobile ? 14 : isTablet ? 18 : 22;
+  const translateXUnit = isMobile ? 14 : isTablet ? 18 : 24;
   const rotateUnit = isMobile ? 5 : 7;
   const scaleUnit = isMobile ? 0.06 : 0.08;
   const perspective = isMobile ? "1200px" : "1400px";
@@ -173,7 +173,7 @@ export function SmallGroupsPreview() {
                 return (
                   <div
                     key={slide.id}
-                    className="absolute top-1/2 w-[90%] max-w-md -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out sm:w-[85%]"
+                    className="absolute top-1/2 w-[90%] max-w-md -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out sm:w-[85%] lg:w-[90%]"
                     style={{
                       left: "50%",
                       transform: `translate(calc(-50% + ${translateX}%), -50%) rotate(${rotate}deg) scale(${scale})`,
