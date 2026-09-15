@@ -46,11 +46,9 @@ export function SmallGroupsPreview() {
   const isMobile = vw < 640;
   const isTablet = vw >= 640 && vw < 768;
 
-  const cardWidthPct = isMobile ? 70 : isTablet ? 80 : 85;
   const translateXUnit = isMobile ? 14 : isTablet ? 18 : 22;
   const rotateUnit = isMobile ? 5 : 7;
   const scaleUnit = isMobile ? 0.06 : 0.08;
-  const cardHeight = isMobile ? 190 : isTablet ? 280 : 340;
   const perspective = isMobile ? "1200px" : "1400px";
 
   useEffect(() => {
@@ -101,7 +99,7 @@ export function SmallGroupsPreview() {
   return (
     <section
       id="groups"
-      className="relative bg-[#F0F0F0] py-12 sm:py-16 md:py-20"
+      className="relative bg-[#F0F0F0] py-16 sm:py-24"
       style={{ overflow: "clip" }}
     >
       {/* Decorative waves */}
@@ -125,7 +123,7 @@ export function SmallGroupsPreview() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="mb-4 text-center text-xl font-bold text-slu-black sm:mb-6 sm:text-3xl md:text-4xl lg:text-5xl">
+        <h2 className="mb-8 text-center text-2xl font-bold text-slu-black sm:mb-10 sm:text-3xl md:text-4xl lg:text-5xl">
           Want to see us wave?{" "}
           <span className="text-slu-blue">
             Here&apos;s the Salt and Lampers for you.
@@ -138,7 +136,7 @@ export function SmallGroupsPreview() {
           <button
             type="button"
             onClick={prev}
-            className="absolute left-0 top-[90px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:left-0 sm:top-[150px] sm:p-3 md:top-[180px] md:p-4"
+            className="absolute -left-1 top-[120px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:-left-2 sm:top-[180px] sm:p-3 md:top-[200px] md:p-4"
             aria-label="Previous slide"
           >
             <CaretLeft size={20} className="sm:hidden" />
@@ -147,7 +145,7 @@ export function SmallGroupsPreview() {
           <button
             type="button"
             onClick={next}
-            className="absolute right-0 top-[90px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:right-0 sm:top-[150px] sm:p-3 md:top-[180px] md:p-4"
+            className="absolute -right-1 top-[120px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:-right-2 sm:top-[180px] sm:p-3 md:top-[200px] md:p-4"
             aria-label="Next slide"
           >
             <CaretRight size={20} className="sm:hidden" />
@@ -156,14 +154,14 @@ export function SmallGroupsPreview() {
 
           {/* Card-fan carousel */}
           <div
-            className="relative mx-auto max-w-3xl"
+            className="relative mx-auto mt-10 max-w-3xl sm:mt-28 md:mt-32"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             style={{ perspective }}
           >
-            <div className={`relative ${isMobile ? "h-[200px]" : isTablet ? "h-[320px]" : "h-[380px]"}`}>
+            <div className="relative h-[220px] sm:h-[300px] md:h-[360px]">
               {slides.map((slide, i) => {
                 const offset = wrapOffset(i, current, slides.length);
                 const abs = Math.abs(offset);
@@ -175,9 +173,8 @@ export function SmallGroupsPreview() {
                 return (
                   <div
                     key={slide.id}
-                    className="absolute top-1/2 -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out"
+                    className="absolute top-1/2 w-[90%] max-w-md -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out sm:w-[85%]"
                     style={{
-                      width: `${cardWidthPct}%`,
                       left: "50%",
                       transform: `translate(calc(-50% + ${translateX}%), -50%) rotate(${rotate}deg) scale(${scale})`,
                       zIndex,
@@ -220,7 +217,7 @@ export function SmallGroupsPreview() {
         </div>
 
         {/* Dots */}
-        <div className="mt-6 flex justify-center gap-1 sm:mt-8 sm:gap-1.5">
+        <div className="mt-4 flex justify-center gap-1 sm:mt-6 sm:gap-1.5">
           {slides.map((_, i) => (
             <button
               key={i}
