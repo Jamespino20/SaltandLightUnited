@@ -136,7 +136,7 @@ export function SmallGroupsPreview() {
           <button
             type="button"
             onClick={prev}
-            className="absolute -left-1 top-[120px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:-left-2 sm:top-[180px] sm:p-3 md:top-[200px] md:p-4"
+            className="absolute -left-1 top-[120px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:-left-2 sm:top-[190px] sm:p-3 md:top-[220px] md:p-4"
             aria-label="Previous slide"
           >
             <CaretLeft size={20} className="sm:hidden" />
@@ -145,7 +145,7 @@ export function SmallGroupsPreview() {
           <button
             type="button"
             onClick={next}
-            className="absolute -right-1 top-[120px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:-right-2 sm:top-[180px] sm:p-3 md:top-[200px] md:p-4"
+            className="absolute -right-1 top-[120px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:-right-2 sm:top-[190px] sm:p-3 md:top-[220px] md:p-4"
             aria-label="Next slide"
           >
             <CaretRight size={20} className="sm:hidden" />
@@ -154,14 +154,14 @@ export function SmallGroupsPreview() {
 
           {/* Card-fan carousel */}
           <div
-            className="relative mx-auto mt-10 max-w-3xl sm:mt-28 md:mt-32"
+            className="relative mx-auto mt-20 max-w-3xl sm:mt-40 md:mt-48"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             style={{ perspective }}
           >
-            <div className="relative h-[220px] sm:h-[300px] md:h-[360px]">
+            <div className="relative h-[240px] sm:h-[380px] md:h-[440px]">
               {slides.map((slide, i) => {
                 const offset = wrapOffset(i, current, slides.length);
                 const abs = Math.abs(offset);
