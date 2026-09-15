@@ -25,12 +25,33 @@ function wrapOffset(index: number, current: number, total: number) {
   return offset;
 }
 
+function useViewportWidth() {
+  const [vw, setVw] = useState(typeof window !== "undefined" ? window.innerWidth : 1024);
+  useEffect(() => {
+    const onResize = () => setVw(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  return vw;
+}
+
 export function SmallGroupsPreview() {
   const [slides, setSlides] = useState<Slide[]>(fallbackSlides);
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const touchStart = useRef<number | null>(null);
+  const vw = useViewportWidth();
+
+  const isMobile = vw < 640;
+  const isTablet = vw >= 640 && vw < 768;
+
+  const cardWidthPct = isMobile ? 70 : isTablet ? 80 : 85;
+  const translateXUnit = isMobile ? 14 : isTablet ? 18 : 22;
+  const rotateUnit = isMobile ? 5 : 7;
+  const scaleUnit = isMobile ? 0.06 : 0.08;
+  const cardHeight = isMobile ? 190 : isTablet ? 280 : 340;
+  const perspective = isMobile ? "1200px" : "1400px";
 
   useEffect(() => {
     fetch("/api/settings")
@@ -80,7 +101,8 @@ export function SmallGroupsPreview() {
   return (
     <section
       id="groups"
-      className="relative overflow-hidden bg-[#F0F0F0] py-16 sm:py-24"
+      className="relative bg-[#F0F0F0] py-12 sm:py-20 md:py-24"
+      style={{ overflow: "clip" }}
     >
       {/* Decorative waves */}
       <div className="absolute bottom-0 left-0 right-0 -z-10" aria-hidden>
@@ -103,7 +125,7 @@ export function SmallGroupsPreview() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="mb-8 text-center text-2xl font-bold text-slu-black sm:mb-10 sm:text-3xl md:text-4xl lg:text-5xl">
+        <h2 className="mb-6 text-center text-xl font-bold text-slu-black sm:mb-10 sm:text-3xl md:text-4xl lg:text-5xl">
           Want to see us wave?{" "}
           <span className="text-slu-blue">
             Here&apos;s the Salt and Lampers for you.
@@ -111,12 +133,12 @@ export function SmallGroupsPreview() {
         </h2>
 
         {/* Carousel with outer arrows */}
-        <div className="relative">
-          {/* Arrows at outer edges of the section */}
+        <div className="relative" style={{ overflow: "clip" }}>
+          {/* Arrows */}
           <button
             type="button"
             onClick={prev}
-            className="absolute -left-1 top-[160px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:-left-2 sm:top-[180px] sm:p-3 md:top-[200px] md:p-4"
+            className="absolute left-0 top-[100px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:left-0 sm:top-[160px] sm:p-3 md:top-[180px] md:p-4"
             aria-label="Previous slide"
           >
             <CaretLeft size={20} className="sm:hidden" />
@@ -125,7 +147,7 @@ export function SmallGroupsPreview() {
           <button
             type="button"
             onClick={next}
-            className="absolute -right-1 top-[160px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:-right-2 sm:top-[180px] sm:p-3 md:top-[200px] md:p-4"
+            className="absolute right-0 top-[100px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:right-0 sm:top-[160px] sm:p-3 md:top-[180px] md:p-4"
             aria-label="Next slide"
           >
             <CaretRight size={20} className="sm:hidden" />
@@ -134,32 +156,33 @@ export function SmallGroupsPreview() {
 
           {/* Card-fan carousel */}
           <div
-            className="relative mx-auto mt-16 max-w-3xl sm:mt-28 md:mt-32"
+            className="relative mx-auto max-w-3xl"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
-            style={{ perspective: "1400px" }}
+            style={{ perspective }}
           >
-            <div className="relative h-[220px] sm:h-[300px] md:h-[360px]">
+            <div className={`relative ${isMobile ? "h-[200px]" : isTablet ? "h-[290px]" : "h-[350px]"}`}>
               {slides.map((slide, i) => {
                 const offset = wrapOffset(i, current, slides.length);
                 const abs = Math.abs(offset);
-                const translateX = offset * 28;
-                const rotate = offset * 7;
-                const scale = 1 - abs * 0.08;
+                const translateX = offset * translateXUnit;
+                const rotate = offset * rotateUnit;
+                const scale = 1 - abs * scaleUnit;
                 const zIndex = 50 - abs * 10;
 
                 return (
                   <div
                     key={slide.id}
-                    className="absolute top-1/2 w-[85%] max-w-md -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out"
+                    className="absolute top-1/2 -translate-y-1/2 rounded-2xl shadow-xl transition-all duration-500 ease-out"
                     style={{
+                      width: `${cardWidthPct}%`,
                       left: "50%",
                       transform: `translate(calc(-50% + ${translateX}%), -50%) rotate(${rotate}deg) scale(${scale})`,
                       zIndex,
-                      opacity: abs <= 3 ? 1 : 0,
-                      pointerEvents: abs <= 3 ? "auto" : "none",
+                      opacity: abs <= (isMobile ? 2 : 3) ? 1 : 0,
+                      pointerEvents: abs <= (isMobile ? 2 : 3) ? "auto" : "none",
                     }}
                   >
                     <div className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-slu-gray-200">
@@ -170,11 +193,11 @@ export function SmallGroupsPreview() {
                         className="h-full w-full object-cover"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                      <div className="absolute bottom-0 left-0 p-3 sm:p-4 md:p-5">
+                      <div className="absolute bottom-0 left-0 p-2 sm:p-4 md:p-5">
                         <span className="inline-block rounded-full bg-slu-blue px-2 py-0.5 text-[10px] font-semibold text-white sm:px-3 sm:py-1 sm:text-xs">
                           {slide.label}
                         </span>
-                        <p className="mt-1 text-xs text-white/85 sm:mt-2 sm:text-sm">
+                        <p className="mt-1 text-[10px] text-white/85 sm:mt-2 sm:text-sm">
                           {slide.caption}
                         </p>
                       </div>
@@ -189,10 +212,10 @@ export function SmallGroupsPreview() {
           <button
             type="button"
             onClick={() => setPaused(!paused)}
-            className="absolute right-0 top-0 z-[60] rounded-full bg-white/90 p-2 text-slu-gray-600 shadow-md transition-colors hover:bg-white"
+            className="absolute right-2 top-2 z-[60] rounded-full bg-white/90 p-1.5 text-slu-gray-600 shadow-md transition-colors hover:bg-white sm:right-4 sm:top-4 sm:p-2"
             aria-label={paused ? "Resume autoplay" : "Pause autoplay"}
           >
-            {paused ? <Play size={16} /> : <Pause size={16} />}
+            {paused ? <Play size={14} /> : <Pause size={14} />}
           </button>
         </div>
 

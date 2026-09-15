@@ -79,7 +79,7 @@ export default function TestimoniesPage() {
                       </h2>
                       <p className="text-xs text-slu-gray-500">
                         <Calendar size={10} className="mr-1 inline" />
-                        {date.toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" })}
+                        {date.toLocaleDateString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", year: "numeric" })}
                       </p>
                     </div>
                   </div>

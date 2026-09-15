@@ -81,7 +81,7 @@ export default function DevotionalsPage() {
                     <div className="mb-2 flex items-center gap-3 text-xs text-slu-gray-500">
                       <span className="inline-flex items-center gap-1">
                         <Calendar size={12} />
-                        {date.toLocaleDateString("en-PH", { month: "short", day: "numeric", year: "numeric" })}
+                        {date.toLocaleDateString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", year: "numeric" })}
                       </span>
                       {d.author && (
                         <span className="inline-flex items-center gap-1">

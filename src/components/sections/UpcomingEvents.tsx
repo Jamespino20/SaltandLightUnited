@@ -5,6 +5,49 @@ import { CaretLeft, CaretRight, Spinner } from "@phosphor-icons/react";
 import { Reveal } from "@/components/animation/Reveal";
 import { useTranslations } from "next-intl";
 
+const TIMEZONE = "America/Los_Angeles";
+
+function todayInTZ(): Date {
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: TIMEZONE,
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  }).formatToParts(now);
+  const y = Number(parts.find((p) => p.type === "year")!.value);
+  const m = Number(parts.find((p) => p.type === "month")!.value) - 1;
+  const d = Number(parts.find((p) => p.type === "day")!.value);
+  return new Date(y, m, d);
+}
+
+function dateKeyTZ(date: Date): string {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: TIMEZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const y = parts.find((p) => p.type === "year")!.value;
+  const m = parts.find((p) => p.type === "month")!.value;
+  const d = parts.find((p) => p.type === "day")!.value;
+  return `${y}-${m}-${d}`;
+}
+
+function datePartsTZ(date: Date): { year: number; month: number; day: number } {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: TIMEZONE,
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  }).formatToParts(date);
+  return {
+    year: Number(parts.find((p) => p.type === "year")!.value),
+    month: Number(parts.find((p) => p.type === "month")!.value) - 1,
+    day: Number(parts.find((p) => p.type === "day")!.value),
+  };
+}
+
 interface Event {
   id: string;
   title: string;
@@ -33,6 +76,7 @@ function getFirstDayOfWeek(year: number, month: number) {
 function formatDateShort(dateStr: string): string {
   const date = new Date(dateStr);
   return date.toLocaleDateString("en-US", {
+    timeZone: TIMEZONE,
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -48,8 +92,14 @@ function Calendar({
   onSelect: (d: Date) => void;
   eventDays: Set<string>;
 }) {
-  const [viewMonth, setViewMonth] = useState(selectedDate.getMonth());
-  const [viewYear, setViewYear] = useState(selectedDate.getFullYear());
+  const sel = datePartsTZ(selectedDate);
+  const [viewMonth, setViewMonth] = useState(sel.month);
+  const [viewYear, setViewYear] = useState(sel.year);
+
+  useEffect(() => {
+    setViewMonth(sel.month);
+    setViewYear(sel.year);
+  }, [sel.month, sel.year]);
 
   const daysInMonth = getDaysInMonth(viewYear, viewMonth);
   const firstDay = getFirstDayOfWeek(viewYear, viewMonth);
@@ -90,9 +140,9 @@ function Calendar({
           const dateKey = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
           const hasEvent = eventDays.has(dateKey);
           const isSelected =
-            day === selectedDate.getDate() &&
-            viewMonth === selectedDate.getMonth() &&
-            viewYear === selectedDate.getFullYear();
+            day === sel.day &&
+            viewMonth === sel.month &&
+            viewYear === sel.year;
           const dayOfWeek = new Date(viewYear, viewMonth, day).getDay();
           const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
           return (
@@ -122,9 +172,13 @@ function Calendar({
 
 export function UpcomingEvents() {
   const t = useTranslations("home.events");
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setSelectedDate(todayInTZ());
+  }, []);
 
   useEffect(() => {
     fetch("/api/events")
@@ -137,9 +191,12 @@ export function UpcomingEvents() {
       .finally(() => setLoading(false));
   }, []);
 
-  const now = new Date();
+  const todayKey = dateKeyTZ(todayInTZ());
   const upcomingEvents = events
-    .filter((e) => new Date(e.date) >= now)
+    .filter((e) => {
+      const evKey = dateKeyTZ(new Date(e.date));
+      return evKey >= todayKey;
+    })
     .sort((a, b) => {
       if (a.featured && !b.featured) return -1;
       if (!a.featured && b.featured) return 1;
@@ -149,9 +206,7 @@ export function UpcomingEvents() {
   const eventDays = useMemo(() => {
     const days = new Set<string>();
     for (const event of events) {
-      const d = new Date(event.date);
-      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-      days.add(key);
+      days.add(dateKeyTZ(new Date(event.date)));
     }
     return days;
   }, [events]);
@@ -168,7 +223,15 @@ export function UpcomingEvents() {
 
         {/* Calendar — centered single column */}
         <Reveal className="mx-auto max-w-md">
-          <Calendar selectedDate={selectedDate} onSelect={setSelectedDate} eventDays={eventDays} />
+          {selectedDate ? (
+            <Calendar selectedDate={selectedDate} onSelect={setSelectedDate} eventDays={eventDays} />
+          ) : (
+            <div className="rounded-2xl border border-slu-gray-200 bg-white p-4 sm:p-6">
+              <div className="flex items-center justify-center py-8">
+                <Spinner size={28} className="animate-spin text-slu-blue" />
+              </div>
+            </div>
+          )}
         </Reveal>
 
         {/* Events — grid below calendar */}

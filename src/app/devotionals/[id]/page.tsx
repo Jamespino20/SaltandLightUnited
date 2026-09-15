@@ -96,7 +96,8 @@ export default function DevotionalPage() {
         <div className="mb-4 flex flex-wrap items-center gap-4 text-sm text-slu-gray-500">
           <span className="inline-flex items-center gap-1.5">
             <Calendar size={14} />
-            {date.toLocaleDateString("en-PH", {
+            {date.toLocaleDateString("en-US", {
+              timeZone: "America/Los_Angeles",
               year: "numeric",
               month: "long",
               day: "numeric",

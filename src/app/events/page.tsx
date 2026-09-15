@@ -16,9 +16,38 @@ interface Event {
   featured: boolean;
 }
 
+const TIMEZONE = "America/Los_Angeles";
+
+function todayKeyTZ(): string {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: TIMEZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const y = parts.find((p) => p.type === "year")!.value;
+  const m = parts.find((p) => p.type === "month")!.value;
+  const d = parts.find((p) => p.type === "day")!.value;
+  return `${y}-${m}-${d}`;
+}
+
+function dateKeyFromDate(date: Date): string {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: TIMEZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const y = parts.find((p) => p.type === "year")!.value;
+  const m = parts.find((p) => p.type === "month")!.value;
+  const d = parts.find((p) => p.type === "day")!.value;
+  return `${y}-${m}-${d}`;
+}
+
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
   return date.toLocaleDateString("en-US", {
+    timeZone: TIMEZONE,
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -27,10 +56,13 @@ function formatDate(dateStr: string): string {
 }
 
 function formatRelativeDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diff = date.getTime() - now.getTime();
-  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  const dateKey = dateKeyFromDate(new Date(dateStr));
+  const today = todayKeyTZ();
+
+  if (dateKey === today) return "Tomorrow";
+
+  const diffMs = new Date(dateStr).getTime() - new Date().getTime();
+  const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
   if (days === 0) return "Today";
   if (days === 1) return "Tomorrow";
@@ -56,13 +88,11 @@ export default function EventsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const now = new Date();
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const todayKey = todayKeyTZ();
   const upcomingEvents = events
     .filter((e) => {
-      const eventDate = new Date(e.date);
-      const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
-      return eventDay >= todayStart;
+      const evKey = dateKeyFromDate(new Date(e.date));
+      return evKey >= todayKey;
     })
     .sort((a, b) => {
       if (a.featured && !b.featured) return -1;
@@ -71,9 +101,8 @@ export default function EventsPage() {
     });
   const pastEvents = events
     .filter((e) => {
-      const eventDate = new Date(e.date);
-      const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
-      return eventDay < todayStart;
+      const evKey = dateKeyFromDate(new Date(e.date));
+      return evKey < todayKey;
     })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 

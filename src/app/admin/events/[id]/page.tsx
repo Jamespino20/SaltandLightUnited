@@ -34,11 +34,25 @@ export default function EventEditPage() {
         if (res.success && res.data) {
           const d = res.data;
           const dt = new Date(d.date);
+          const tzParts = new Intl.DateTimeFormat("en-CA", {
+            timeZone: "America/Los_Angeles",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          }).formatToParts(dt);
+          const tzDate = `${tzParts.find((p) => p.type === "year")!.value}-${tzParts.find((p) => p.type === "month")!.value}-${tzParts.find((p) => p.type === "day")!.value}`;
+          const tzTimeParts = new Intl.DateTimeFormat("en-US", {
+            timeZone: "America/Los_Angeles",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          }).formatToParts(dt);
+          const tzTime = `${tzTimeParts.find((p) => p.type === "hour")!.value}:${tzTimeParts.find((p) => p.type === "minute")!.value}`;
           setForm({
             title: d.title || "",
             description: d.description || "",
-            date: dt.toISOString().split("T")[0],
-            time: dt.toTimeString().slice(0, 5),
+            date: tzDate,
+            time: tzTime,
             location: d.location || "",
             imageUrl: d.imageUrl || "",
             featured: d.featured || false,

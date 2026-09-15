@@ -8,8 +8,9 @@ const csp = [
   "img-src 'self' data: https: blob:",
   "font-src 'self' https://fonts.gstatic.com",
   "connect-src 'self' https: wss:",
-  "frame-src 'self' https://www.google.com/recaptcha/ https://assets.onedrive.com https://*.public.blob.vercel-storage.com https://docs.google.com https://docs.google.com/forms",
-  "object-src 'none'",
+  "frame-src 'self' https://www.google.com/recaptcha/ https://assets.onedrive.com https://*.public.blob.vercel-storage.com https://docs.google.com https://docs.google.com/forms https://drive.google.com",
+  "frame-ancestors 'self'",
+  "object-src 'self'",
   "base-uri 'self'",
   "form-action 'self'",
 ].join("; ");
@@ -19,9 +20,8 @@ export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
   const headers = response.headers;
-  headers.set("X-Content-Type-Options", "nosniff");
-  headers.set("X-Frame-Options", "DENY");
-  headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    headers.set("X-Content-Type-Options", "nosniff");
+    headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   headers.set(
     "Permissions-Policy",
     "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), accelerometer=(), gyroscope=(), magnetometer=()",
