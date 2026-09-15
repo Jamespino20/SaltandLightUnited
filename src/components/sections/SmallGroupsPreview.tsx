@@ -101,7 +101,7 @@ export function SmallGroupsPreview() {
   return (
     <section
       id="groups"
-      className="relative bg-[#F0F0F0] py-16 sm:py-24 md:py-28"
+      className="relative bg-[#F0F0F0] py-12 sm:py-16 md:py-20"
       style={{ overflow: "clip" }}
     >
       {/* Decorative waves */}
@@ -125,7 +125,7 @@ export function SmallGroupsPreview() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="mb-6 text-center text-xl font-bold text-slu-black sm:mb-10 sm:text-3xl md:text-4xl lg:text-5xl">
+        <h2 className="mb-4 text-center text-xl font-bold text-slu-black sm:mb-6 sm:text-3xl md:text-4xl lg:text-5xl">
           Want to see us wave?{" "}
           <span className="text-slu-blue">
             Here&apos;s the Salt and Lampers for you.
@@ -133,12 +133,12 @@ export function SmallGroupsPreview() {
         </h2>
 
         {/* Carousel with outer arrows */}
-        <div className="relative" style={{ overflow: "clip" }}>
+        <div className="relative">
           {/* Arrows */}
           <button
             type="button"
             onClick={prev}
-            className="absolute left-0 top-[140px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:left-0 sm:top-[180px] sm:p-3 md:top-[210px] md:p-4"
+            className="absolute left-0 top-[90px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:left-0 sm:top-[150px] sm:p-3 md:top-[180px] md:p-4"
             aria-label="Previous slide"
           >
             <CaretLeft size={20} className="sm:hidden" />
@@ -147,7 +147,7 @@ export function SmallGroupsPreview() {
           <button
             type="button"
             onClick={next}
-            className="absolute right-0 top-[140px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:right-0 sm:top-[180px] sm:p-3 md:top-[210px] md:p-4"
+            className="absolute right-0 top-[90px] z-[60] rounded-full bg-white p-2 text-slu-gray-600 shadow-lg transition-all hover:bg-slu-blue hover:text-white sm:right-0 sm:top-[150px] sm:p-3 md:top-[180px] md:p-4"
             aria-label="Next slide"
           >
             <CaretRight size={20} className="sm:hidden" />
@@ -163,7 +163,7 @@ export function SmallGroupsPreview() {
             onMouseLeave={() => setPaused(false)}
             style={{ perspective }}
           >
-            <div className={`relative ${isMobile ? "h-[280px]" : isTablet ? "h-[360px]" : "h-[420px]"}`}>
+            <div className={`relative ${isMobile ? "h-[200px]" : isTablet ? "h-[320px]" : "h-[380px]"}`}>
               {slides.map((slide, i) => {
                 const offset = wrapOffset(i, current, slides.length);
                 const abs = Math.abs(offset);
@@ -220,7 +220,7 @@ export function SmallGroupsPreview() {
         </div>
 
         {/* Dots */}
-        <div className="mt-4 flex justify-center gap-1 sm:mt-6 sm:gap-1.5">
+        <div className="mt-6 flex justify-center gap-1 sm:mt-8 sm:gap-1.5">
           {slides.map((_, i) => (
             <button
               key={i}
