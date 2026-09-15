@@ -192,7 +192,7 @@ export default function FellowshipGuideEditPage() {
         <div className="rounded-2xl border border-slu-gray-200 bg-white p-6 shadow-sm">
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slu-gray-500">PDF Preview</h2>
           {form.fileUrl ? (
-            <div className="overflow-hidden rounded-xl border border-slu-gray-200" style={{ height: "500px" }}>
+            <div className="overflow-hidden rounded-xl border border-slu-gray-200" style={{ height: "500px" }} data-lenis-prevent>
               <iframe
                 src={form.fileUrl}
                 className="h-full w-full border-0"

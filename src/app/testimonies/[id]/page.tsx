@@ -108,6 +108,7 @@ export default function TestimonyPage() {
         {/* Content */}
         <div
           className="resource-content text-slu-gray-700"
+          data-lenis-prevent
           dangerouslySetInnerHTML={{ __html: testimony.content }}
         />
       </article>

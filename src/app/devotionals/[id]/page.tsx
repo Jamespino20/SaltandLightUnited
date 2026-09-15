@@ -126,6 +126,7 @@ export default function DevotionalPage() {
         {/* Content */}
         <div
           className="resource-content text-slu-gray-700"
+          data-lenis-prevent
           dangerouslySetInnerHTML={{ __html: devotional.content }}
         />
       </article>

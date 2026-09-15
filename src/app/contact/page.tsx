@@ -45,7 +45,7 @@ export default function ContactPage() {
                 {t("formDescription")}
               </p>
 
-              <div className="mt-8 overflow-hidden rounded-2xl border border-slu-gray-200 bg-white">
+              <div className="mt-8 overflow-hidden rounded-2xl border border-slu-gray-200 bg-white" data-lenis-prevent>
                 <iframe
                   src="https://docs.google.com/forms/d/e/1FAIpQLSfd-uRxe5WYB6gaiH_mSm4rLhGTdmajDXEq3vL1BQssB6Co_A/viewform?embedded=true"
                   title="Salt and Lamp United contact form"

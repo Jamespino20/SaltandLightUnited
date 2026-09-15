@@ -2,7 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Plus, Pencil, Trash, CheckCircle, XCircle } from "@phosphor-icons/react";
+import {
+  Plus,
+  Pencil,
+  Trash,
+  CheckCircle,
+  XCircle,
+} from "@phosphor-icons/react";
 import { usePermissions } from "@/lib/usePermissions";
 import ConfirmModal from "@/components/ui/ConfirmModal";
 
@@ -112,6 +118,15 @@ export default function TestimoniesPage() {
         ) : testimonies.length === 0 ? (
           <div className="px-4 py-12 text-center text-sm text-slu-gray-500">
             No testimonies yet.
+            {canCreate("testimonies") && (
+              <Link
+                href="/admin/testimonies/new"
+                className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-slu-blue hover:underline"
+              >
+                <Plus size={14} />
+                Share your first testimony
+              </Link>
+            )}
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -134,7 +149,10 @@ export default function TestimoniesPage() {
               </thead>
               <tbody className="divide-y divide-slu-gray-100">
                 {testimonies.map((t) => (
-                  <tr key={t.id} className="transition-colors hover:bg-slu-gray-50">
+                  <tr
+                    key={t.id}
+                    className="transition-colors hover:bg-slu-gray-50"
+                  >
                     <td className="px-4 py-3 font-medium text-slu-black">
                       {t.authorName}
                     </td>
